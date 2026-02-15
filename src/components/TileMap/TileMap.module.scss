@@ -1,0 +1,10 @@
+@use "@styles/variables" as *;
+
+.base {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: black;
+}

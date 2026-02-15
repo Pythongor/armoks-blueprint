@@ -1,9 +1,10 @@
 import { TileMap } from "@components/TileMap/TileMap";
 import { Sidebar } from "@components/Sidebar/Sidebar";
+import styles from "./App.module.scss";
 
 function App() {
   return (
-    <div style={{ display: "flex" }}>
+    <div className={styles.base}>
       <Sidebar />
       <TileMap />
     </div>

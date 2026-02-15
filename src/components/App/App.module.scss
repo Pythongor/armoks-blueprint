@@ -1,0 +1,17 @@
+@use "@styles/variables" as *;
+
+.base {
+  display: flex;
+  height: 100vh;
+  background-color: $bg-dark;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.canvasContainer {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: black;
+}

@@ -1,4 +1,5 @@
 import { EventBus } from "@tile-map/EventBus";
+import styles from "./Sidebar.module.scss";
 
 export function Sidebar() {
   const setBrush = (id: number) => {
@@ -6,18 +7,11 @@ export function Sidebar() {
   };
 
   return (
-    <div
-      style={{
-        width: "200px",
-        padding: "20px",
-        background: "#222",
-        color: "white",
-      }}
-    >
-      <h2>Armok's Blueprint</h2>
+    <div className={styles.base}>
+      <h1 className={styles.title}>Armok's Blueprint</h1>
       <button onClick={() => setBrush(1)}>Grass Brush</button>
       <button onClick={() => setBrush(0)}>Water Brush</button>
-      <hr />
+      <hr className={styles.divider} />
       <button onClick={() => console.log("Exporting logic goes here...")}>
         Export world_gen.txt
       </button>

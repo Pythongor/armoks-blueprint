@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import { MainScene } from "@tile-map/MainScene";
+import styles from "./TileMap.module.scss";
 
 export function TileMap() {
   const gameRef = useRef<Phaser.Game | null>(null);
@@ -19,5 +20,5 @@ export function TileMap() {
     };
   }, []);
 
-  return <div id="game-container"></div>;
+  return <div id="game-container" className={styles.base}></div>;
 }
