@@ -1,0 +1,23 @@
+@use "@styles/variables" as *;
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.valueDisplay {
+  color: $accent-gold;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.slider {
+  width: 100%;
+  margin-top: 8px;
+  background: $ui-gray;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}

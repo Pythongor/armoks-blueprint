@@ -1,0 +1,54 @@
+@use "@styles/variables" as *;
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.radioLabel {
+  cursor: pointer;
+  position: relative;
+}
+
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + .radioContent {
+    background: $ui-selected;
+    border-color: $accent-gold;
+    color: $accent-gold;
+  }
+}
+
+.radioContent {
+  background: $ui-gray;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+  user-select: none;
+
+  &:hover {
+    background: $ui-light-gray;
+  }
+}
+
+.indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 10px;
+
+  @each $layer, $color in $layer-colors {
+    &.#{$layer} {
+      background: $color;
+    }
+  }
+}

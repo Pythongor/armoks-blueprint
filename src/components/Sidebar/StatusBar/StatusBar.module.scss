@@ -1,0 +1,8 @@
+@use "@styles/variables" as *;
+
+.base {
+  margin-top: auto;
+  font-size: 0.75rem;
+  color: $text-gray;
+  padding-top: 10px;
+}
