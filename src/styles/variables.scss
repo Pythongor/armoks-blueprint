@@ -1,8 +1,23 @@
 $bg-dark: #1a1a1a;
 $panel-border: #4a4a4a;
 $accent-gold: #d4af37;
+
+$ui-dark: #2a2a2a;
+$ui-gray: #333;
+$ui-light-gray: #3a3a3a;
+$ui-selected: #443c24;
+
 $text-silver: #c0c0c0;
+$text-gray: #666;
 
 $color-mountain: #808080;
 $color-water: #005a9e;
 $color-grass: #355e3b;
+
+$layer-colors: (
+  "elevation": #8b5a2b,
+  "rainfall": #3498db,
+  "drainage": #95a5a6,
+  "temperature": #e74c3c,
+  "volcanism": #9b59b6,
+);

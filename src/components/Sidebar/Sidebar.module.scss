@@ -21,4 +21,116 @@
 
 .divider {
   width: 100%;
+  border-top: 1px solid $ui-gray;
+}
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.valueDisplay {
+  color: $accent-gold;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 10px;
+
+  @each $layer, $color in $layer-colors {
+    &.#{$layer} {
+      background: $color;
+    }
+  }
+}
+
+.statusBar {
+  margin-top: auto;
+  font-size: 0.75rem;
+  color: $text-gray;
+  padding-top: 10px;
+}
+
+.toggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $ui-dark;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.toggleInput {
+  appearance: none;
+  width: 34px;
+  height: 18px;
+  background: $ui-light-gray;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  &:checked {
+    background: $accent-gold;
+    &::before {
+      transform: translateX(16px);
+    }
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+  }
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.radioLabel {
+  cursor: pointer;
+  position: relative;
+}
+
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + .radioContent {
+    background: $ui-selected;
+    border-color: $accent-gold;
+    color: $accent-gold;
+  }
+}
+
+.radioContent {
+  background: $ui-gray;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+  user-select: none;
+
+  &:hover {
+    background: $ui-light-gray;
+  }
 }
