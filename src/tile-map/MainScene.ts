@@ -32,12 +32,18 @@ export class MainScene extends Phaser.Scene {
 
   private displayGraphics?: Phaser.GameObjects.Graphics;
 
+  private isPanning: boolean = false;
+
   constructor() {
     super("MainScene");
   }
 
   create() {
     this.displayGraphics = this.add.graphics();
+
+    const worldWidth = this.gridSize * this.tileSize;
+    const worldHeight = this.gridSize * this.tileSize;
+    this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
 
     EventBus.on("brush-updated", (state: BrushSettings) => {
       this.currentLayer = state.activeLayer;
@@ -52,11 +58,24 @@ export class MainScene extends Phaser.Scene {
     this.redrawMap();
 
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-      this.handleInput(pointer);
+      if (pointer.middleButtonDown()) {
+        this.isPanning = true;
+      } else {
+        this.handleInput(pointer);
+      }
+    });
+
+    this.input.on("pointerup", () => {
+      this.isPanning = false;
     });
 
     this.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
-      if (pointer.isDown) {
+      if (this.isPanning) {
+        this.cameras.main.scrollX -=
+          (pointer.x - pointer.prevPosition.x) / this.cameras.main.zoom;
+        this.cameras.main.scrollY -=
+          (pointer.y - pointer.prevPosition.y) / this.cameras.main.zoom;
+      } else if (pointer.isDown) {
         this.handleInput(pointer);
       }
 
@@ -64,6 +83,23 @@ export class MainScene extends Phaser.Scene {
       const tileY = Math.floor(pointer.worldY / this.tileSize);
       EventBus.emit("update-coords", { x: tileX, y: tileY });
     });
+
+    this.input.on(
+      "wheel",
+      (
+        _: Phaser.Input.Pointer,
+        __: Phaser.GameObjects.GameObject[],
+        ___: number,
+        deltaY: number,
+      ) => {
+        const zoomSpeed = 0.001;
+        const newZoom = this.cameras.main.zoom - deltaY * zoomSpeed;
+        this.cameras.main.setZoom(Phaser.Math.Clamp(newZoom, 0.2, 3));
+      },
+    );
+
+    this.redrawMap();
+    this.cameras.main.centerOn(worldWidth / 2, worldHeight / 2);
   }
 
   getTileColor(index: number): number {
