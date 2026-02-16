@@ -20,6 +20,7 @@ export class MainScene extends Phaser.Scene {
     drainage: new Uint16Array(this.gridSize * this.gridSize).fill(50),
     temperature: new Uint16Array(this.gridSize * this.gridSize).fill(50),
     volcanism: new Uint16Array(this.gridSize * this.gridSize).fill(0),
+    savagery: new Uint16Array(this.gridSize * this.gridSize).fill(0),
   };
 
   private displayGraphics?: Phaser.GameObjects.Graphics;

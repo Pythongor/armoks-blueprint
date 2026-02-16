@@ -6,6 +6,7 @@ export enum LayerType {
   Drainage = "drainage",
   Temperature = "temperature",
   Volcanism = "volcanism",
+  Savagery = "savagery",
 }
 
 interface BrushState {
@@ -25,6 +26,7 @@ const initialState: BrushState = {
     drainage: 50,
     temperature: 50,
     volcanism: 0,
+    savagery: 0,
   },
 };
 

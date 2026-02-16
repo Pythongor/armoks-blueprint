@@ -6,6 +6,7 @@ export const LayerPalettes = {
   drainage: { min: 0x333333, max: 0xcccccc }, // Dark Grey to Light Grey
   temperature: { min: 0x00ffff, max: 0xff0000 }, // Cyan (Cold) to Red (Hot)
   volcanism: { min: 0x4b0082, max: 0xff4500 }, // Indigo to Bright Orange/Lava
+  savagery: { min: 0x2ecc71, max: 0xe74c3c }, // Green to Red
 };
 
 function interpolateColor(
