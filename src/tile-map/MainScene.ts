@@ -2,16 +2,8 @@ import Phaser from "phaser";
 import { EventBus } from "./EventBus";
 import { LayerType } from "@store/brushSlice";
 import { type BrushSettings } from "@store/selectors";
-
-const BiomeColors = {
-  Ocean: 0x00008b,
-  Mountain: 0x808080,
-  Tundra: 0xffffff,
-  Grassland: 0x32cd32,
-  Desert: 0xedc9af,
-  Swamp: 0x228b22,
-  Jungle: 0x006400,
-} as const;
+import { identifyBiome, getBiomeColor } from "@/helpers/biomeResolver";
+import { getLayerColor } from "@/helpers/paletteResolver";
 
 export class MainScene extends Phaser.Scene {
   private gridSize: number = 129;
@@ -102,30 +94,27 @@ export class MainScene extends Phaser.Scene {
     this.cameras.main.centerOn(worldWidth / 2, worldHeight / 2);
   }
 
+  getPointData(index: number) {
+    return {
+      elevation: this.worldData.elevation[index],
+      rainfall: this.worldData.rainfall[index],
+      drainage: this.worldData.drainage[index],
+      temperature: this.worldData.temperature[index],
+      volcanism: this.worldData.volcanism[index],
+    };
+  }
+
   getTileColor(index: number): number {
-    if (this.viewMode !== "biomes") {
-      const val = this.worldData[this.viewMode][index];
-      const max = this.viewMode === LayerType.Elevation ? 400 : 100;
-      const brightness = Math.floor((val / max) * 255);
-      return Phaser.Display.Color.GetColor(brightness, brightness, brightness);
+    const pointData = this.getPointData(index);
+
+    if (this.viewMode === "biomes") {
+      const biomeType = identifyBiome(pointData);
+      const isVolcanic = pointData.volcanism > 90;
+
+      return getBiomeColor(biomeType, isVolcanic);
     }
 
-    const elevation = this.worldData.elevation[index];
-    const rainfall = this.worldData.rainfall[index];
-    const temperature = this.worldData.temperature[index];
-    const drainage = this.worldData.drainage[index];
-
-    if (elevation < 100) return BiomeColors.Ocean;
-
-    if (elevation > 300) return BiomeColors.Mountain;
-
-    if (temperature < 20) return BiomeColors.Tundra;
-    if (rainfall > 75) {
-      return drainage < 30 ? BiomeColors.Swamp : BiomeColors.Jungle;
-    }
-    if (rainfall < 20) return BiomeColors.Desert;
-
-    return BiomeColors.Grassland;
+    return getLayerColor(this.viewMode, this.worldData[this.viewMode][index]);
   }
 
   paintTile(tileX: number, tileY: number) {
