@@ -7,10 +7,17 @@ export enum Biome {
   Badlands = "Badlands",
   Swamp = "Swamp",
   Marsh = "Marsh",
-  Jungle = "Jungle",
-  Forest = "Forest",
+  Taiga = "Taiga",
+  TemperateConiferousForest = "TemperateConiferousForest",
+  TemperateBroadleafForest = "TemperateBroadleafForest",
+  TropicalMoistBroadleafForest = "TropicalMoistBroadleafForest",
+  TropicalDryBroadleafForest = "TropicalDryBroadleafForest",
+  TropicalConiferousForest = "TropicalConiferousForest",
   Grassland = "Grassland",
   Savanna = "Savanna",
+  TemperateShrubland = "TemperateShrubland",
+  TropicalShrubland = "TropicalShrubland",
+  RockyWasteland = "RockyWasteland",
 }
 
 export enum AlignmentTier {
