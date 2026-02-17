@@ -1,8 +1,8 @@
 @use "@styles/variables" as *;
 
 .base {
-  width: 260px;
-  border-right: 2px solid $panel-border;
+  width: 300px;
+  border-left: 2px solid $panel-border;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;

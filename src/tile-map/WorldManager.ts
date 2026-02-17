@@ -1,5 +1,5 @@
 import { LayerType } from "@store/brushSlice";
-import { identifyBiome } from "@/helpers/biomeResolver";
+import { identifyBiome, getMoralDescriptor } from "@/helpers/biomeResolver";
 
 export class WorldManager {
   public gridSize: number = 129;
@@ -13,6 +13,7 @@ export class WorldManager {
       temperature: new Uint16Array(this.gridSize * this.gridSize).fill(50),
       volcanism: new Uint16Array(this.gridSize * this.gridSize).fill(0),
       savagery: new Uint16Array(this.gridSize * this.gridSize).fill(0),
+      alignment: new Uint16Array(this.gridSize * this.gridSize).fill(50),
     };
   }
 
@@ -24,6 +25,7 @@ export class WorldManager {
       temperature: this.worldData.temperature[index],
       volcanism: this.worldData.volcanism[index],
       savagery: this.worldData.savagery[index],
+      alignment: this.worldData.alignment[index],
     };
   }
 
@@ -33,6 +35,11 @@ export class WorldManager {
 
   getBiome(index: number) {
     return identifyBiome(this.getPointData(index));
+  }
+
+  getBiomeDescriptor(index: number) {
+    const data = this.getPointData(index);
+    return getMoralDescriptor(data.savagery, data.alignment);
   }
 }
 

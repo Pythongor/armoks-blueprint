@@ -6,9 +6,9 @@ import {
   setViewMode,
   setLockedToBiomes,
 } from "./brushSlice";
-import { setCoords, setBiome } from "./coordsSlice";
+import { setCoords, setBiome, setBiomeDescriptor } from "./coordsSlice";
 import { selectBrushSettings } from "./selectors";
-import type { Biome } from "@/types";
+import type { Biome, BiomeDescriptor } from "@/types";
 
 export const phaserMiddleware: Middleware = (store) => {
   EventBus.on("update-coords", (coords: { x: number; y: number }) => {
@@ -17,6 +17,10 @@ export const phaserMiddleware: Middleware = (store) => {
 
   EventBus.on("update-biome", (biome: Biome) => {
     store.dispatch(setBiome(biome));
+  });
+
+  EventBus.on("update-biome-descriptor", (descriptor: BiomeDescriptor) => {
+    store.dispatch(setBiomeDescriptor(descriptor));
   });
 
   return (next) => (action) => {

@@ -1,9 +1,14 @@
 import { useSelector } from "react-redux";
+import cn from "classnames";
 import { type RootState } from "@store/index";
 import styles from "./StatusBar.module.scss";
 
 export function StatusBar() {
-  const { x, y, biome } = useSelector((state: RootState) => state.coords);
+  const { x, y, biome, biomeDescriptor } = useSelector(
+    (state: RootState) => state.coords,
+  );
+
+  const descriptorClass = biomeDescriptor.replace(/\s+/g, "_");
 
   return (
     <div className={styles.statusBar}>
@@ -11,7 +16,9 @@ export function StatusBar() {
 
       <div className={styles.section}>
         <span className={styles.label}>Biome:</span>
-        {/* We use the raw biome string as the class key */}
+        <span className={cn(styles.descriptor, styles[descriptorClass])}>
+          {biomeDescriptor}
+        </span>
         <span className={`${styles.biomeValue} ${styles[biome]}`}>
           {biome.replace(/([A-Z])/g, " $1").trim()}
         </span>

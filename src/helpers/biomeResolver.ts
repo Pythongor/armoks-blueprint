@@ -1,4 +1,5 @@
 import { Biome } from "@/types";
+import { AlignmentTier, SavageryTier, BiomeDescriptor } from "@/types";
 
 export interface WorldPointData {
   elevation: number;
@@ -24,6 +25,27 @@ export const BiomeColorMap: Record<Biome, number> = {
 };
 
 export const lavaColor = 0xff4500;
+
+export const biomeMoralityMatrix: Record<
+  SavageryTier,
+  Record<AlignmentTier, string>
+> = {
+  [SavageryTier.Calm]: {
+    [AlignmentTier.Good]: BiomeDescriptor.Serene,
+    [AlignmentTier.Neutral]: BiomeDescriptor.Calm,
+    [AlignmentTier.Evil]: BiomeDescriptor.Sinister,
+  },
+  [SavageryTier.Wild]: {
+    [AlignmentTier.Good]: BiomeDescriptor.Mirthful,
+    [AlignmentTier.Neutral]: BiomeDescriptor.Wilderness,
+    [AlignmentTier.Evil]: BiomeDescriptor.Haunted,
+  },
+  [SavageryTier.Untamed]: {
+    [AlignmentTier.Good]: BiomeDescriptor.JoyousWilds,
+    [AlignmentTier.Neutral]: BiomeDescriptor.UntamedWilds,
+    [AlignmentTier.Evil]: BiomeDescriptor.Terrifying,
+  },
+};
 
 export function identifyBiome(data: WorldPointData): Biome {
   const { elevation, rainfall, temperature, drainage } = data;
@@ -67,4 +89,29 @@ export function getBiomeColor(
     100,
     30,
   ).color;
+}
+
+export function getMoralTiers(savagery: number, alignment: number) {
+  const savageryTier =
+    savagery > 66
+      ? SavageryTier.Untamed
+      : savagery > 33
+        ? SavageryTier.Wild
+        : SavageryTier.Calm;
+  const alignmentTier =
+    alignment > 66
+      ? AlignmentTier.Good
+      : alignment > 33
+        ? AlignmentTier.Neutral
+        : AlignmentTier.Evil;
+  return { savageryTier, alignmentTier };
+}
+
+export function getMoralDescriptor(
+  savagery: number,
+  alignment: number,
+): string {
+  const { savageryTier, alignmentTier } = getMoralTiers(savagery, alignment);
+
+  return biomeMoralityMatrix[savageryTier][alignmentTier];
 }

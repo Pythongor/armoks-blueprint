@@ -21,6 +21,7 @@ $layer-colors: (
   "temperature": #e74c3c,
   "volcanism": #9b59b6,
   "savagery": #2ecc71,
+  "alignment": #ff69b4,
 );
 
 $biome-colors: (
@@ -37,3 +38,7 @@ $biome-colors: (
   "Grassland": #32cd32,
   "Savanna": #adff2f,
 );
+
+$descriptor-good: #f0f;
+$descriptor-neutral: #ccc;
+$descriptor-evil: #9b59b6;

@@ -12,3 +12,27 @@ export enum Biome {
   Grassland = "Grassland",
   Savanna = "Savanna",
 }
+
+export enum AlignmentTier {
+  Evil = "Evil",
+  Neutral = "Neutral",
+  Good = "Good",
+}
+
+export enum SavageryTier {
+  Calm = "Calm",
+  Wild = "Wild",
+  Untamed = "Untamed",
+}
+
+export enum BiomeDescriptor {
+  Serene = "Serene",
+  Calm = "Calm",
+  Sinister = "Sinister",
+  Mirthful = "Mirthful",
+  Wilderness = "Wilderness",
+  Haunted = "Haunted",
+  JoyousWilds = "Joyous Wilds",
+  UntamedWilds = "Untamed Wilds",
+  Terrifying = "Terrifying",
+}

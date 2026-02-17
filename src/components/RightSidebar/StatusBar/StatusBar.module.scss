@@ -35,6 +35,32 @@
   color: $text-silver;
 }
 
+.descriptor {
+  font-weight: bold;
+  margin-right: 4px;
+  text-transform: uppercase;
+
+  &.Serene,
+  &.Mirthful,
+  &.Joyous_Wilds {
+    color: $descriptor-good;
+    text-shadow: 0 0 5px rgba($descriptor-good, 0.4);
+  }
+
+  &.Sinister,
+  &.Haunted,
+  &.Terrifying {
+    color: $descriptor-evil;
+    text-shadow: 0 0 5px rgba($descriptor-evil, 0.4);
+  }
+
+  &.Calm,
+  &.Wilderness,
+  &.Untamed_Wilds {
+    color: $descriptor-neutral;
+  }
+}
+
 .biomeValue {
   font-weight: bold;
   text-transform: uppercase;

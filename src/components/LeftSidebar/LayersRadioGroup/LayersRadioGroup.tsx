@@ -11,6 +11,7 @@ const layers: Array<{ id: LayerType; label: string }> = [
   { id: LayerType.Temperature, label: "Temperature" },
   { id: LayerType.Volcanism, label: "Volcanism" },
   { id: LayerType.Savagery, label: "Savagery" },
+  { id: LayerType.Alignment, label: "Alignment" },
 ];
 
 export function LayersRadioGroup() {

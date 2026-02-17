@@ -1,12 +1,14 @@
 import { TileMap } from "@components/TileMap/TileMap";
-import { Sidebar } from "@components/Sidebar/Sidebar";
+import { LeftSidebar } from "@components/LeftSidebar/LeftSidebar";
+import { RightSidebar } from "@components/RightSidebar/RightSidebar";
 import styles from "./App.module.scss";
 
 function App() {
   return (
     <div className={styles.base}>
-      <Sidebar />
+      <LeftSidebar />
       <TileMap />
+      <RightSidebar />
     </div>
   );
 }

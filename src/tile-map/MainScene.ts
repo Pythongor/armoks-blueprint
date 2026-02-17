@@ -66,6 +66,10 @@ export class MainScene extends Phaser.Scene {
         const index = ty * worldManager.gridSize + tx;
         EventBus.emit("update-coords", { x: tx, y: ty });
         EventBus.emit("update-biome", worldManager.getBiome(index));
+        EventBus.emit(
+          "update-biome-descriptor",
+          worldManager.getBiomeDescriptor(index),
+        );
       }
     });
 
