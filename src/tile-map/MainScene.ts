@@ -74,7 +74,26 @@ export class MainScene extends Phaser.Scene {
 
       const tileX = Math.floor(pointer.worldX / this.tileSize);
       const tileY = Math.floor(pointer.worldY / this.tileSize);
-      EventBus.emit("update-coords", { x: tileX, y: tileY });
+
+      EventBus.emit("update-coords", {
+        x: tileX,
+        y: tileY,
+      });
+
+      if (
+        tileX >= 0 &&
+        tileX < this.gridSize &&
+        tileY >= 0 &&
+        tileY < this.gridSize
+      ) {
+        const index = tileY * this.gridSize + tileX;
+
+        const pointData = this.getPointData(index);
+
+        const biome = identifyBiome(pointData);
+
+        EventBus.emit("update-biome", biome);
+      }
     });
 
     this.input.on(
