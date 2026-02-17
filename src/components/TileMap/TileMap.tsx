@@ -4,6 +4,7 @@ import { MainScene } from "@tile-map/MainScene";
 import styles from "./TileMap.module.scss";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
+import { formatBiomeText } from "@helpers/biomeResolver";
 
 export function TileMap() {
   const { x, y, biome, biomeDescriptor } = useSelector(
@@ -11,7 +12,8 @@ export function TileMap() {
   );
   const gameRef = useRef<Phaser.Game | null>(null);
 
-  const title = `${x}:${y} - ${biomeDescriptor} ${biome}`;
+  const biomeText = formatBiomeText(biome);
+  const title = `${x}:${y} - ${biomeDescriptor} ${biomeText}`;
 
   useEffect(() => {
     gameRef.current = new Phaser.Game({

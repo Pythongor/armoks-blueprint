@@ -1,13 +1,10 @@
 import { Biome } from "@/types";
-import { AlignmentTier, SavageryTier, BiomeDescriptor } from "@/types";
-
-export interface WorldPointData {
-  elevation: number;
-  rainfall: number;
-  drainage: number;
-  temperature: number;
-  volcanism: number;
-}
+import {
+  AlignmentTier,
+  SavageryTier,
+  BiomeDescriptor,
+  type WorldPointData,
+} from "@/types";
 
 export const BiomeColorMap: Record<Biome, number> = {
   [Biome.Ocean]: 0x00008b,
@@ -114,4 +111,12 @@ export function getMoralDescriptor(
   const { savageryTier, alignmentTier } = getMoralTiers(savagery, alignment);
 
   return biomeMoralityMatrix[savageryTier][alignmentTier];
+}
+
+export function formatBiomeText(biome: string) {
+  return biome.replace(/([A-Z])/g, " $1").trim();
+}
+
+export function formatBiomeDescriptor(descriptor: string) {
+  return descriptor.replace(/\s+/g, "_");
 }

@@ -2,13 +2,14 @@ import { useSelector } from "react-redux";
 import cn from "classnames";
 import { type RootState } from "@store/index";
 import styles from "./StatusBar.module.scss";
+import { formatBiomeDescriptor, formatBiomeText } from "@helpers/biomeResolver";
 
 export function StatusBar() {
   const { x, y, biome, biomeDescriptor } = useSelector(
     (state: RootState) => state.coords,
   );
 
-  const descriptorClass = biomeDescriptor.replace(/\s+/g, "_");
+  const descriptorClass = formatBiomeDescriptor(biomeDescriptor);
 
   return (
     <div className={styles.statusBar}>
@@ -20,7 +21,7 @@ export function StatusBar() {
           {biomeDescriptor}
         </span>
         <span className={`${styles.biomeValue} ${styles[biome]}`}>
-          {biome.replace(/([A-Z])/g, " $1").trim()}
+          {formatBiomeText(biome)}
         </span>
       </div>
 

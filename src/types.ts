@@ -36,3 +36,13 @@ export enum BiomeDescriptor {
   UntamedWilds = "Untamed Wilds",
   Terrifying = "Terrifying",
 }
+
+export interface WorldPointData {
+  elevation: number;
+  rainfall: number;
+  drainage: number;
+  temperature: number;
+  volcanism: number;
+  savagery: number;
+  alignment: number;
+}
