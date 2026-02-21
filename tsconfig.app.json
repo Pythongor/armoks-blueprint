@@ -16,7 +16,8 @@
       "@helpers*": ["src/helpers/*"],
       "@store/*": ["./src/store/*"],
       "@styles/*": ["./src/styles/*"],
-      "@tile-map/*": ["./src/tile-map/*"]
+      "@tile-map/*": ["./src/tile-map/*"],
+      "@utils/*": ["./src/utils/*"]
     },
 
     /* Bundler mode */

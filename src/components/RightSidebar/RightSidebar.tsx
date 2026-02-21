@@ -1,4 +1,5 @@
 import { CompositeToggle } from "./CompositeToggle/CompositeToggle";
+import { ImageExporter } from "@utils/ImageExporter";
 import { StatusBar } from "./StatusBar/StatusBar";
 import styles from "./RightSidebar.module.scss";
 
@@ -10,7 +11,14 @@ export function RightSidebar() {
       </section>
 
       <div className={styles.divider} />
-      <button className={styles.exportBtn}>Export world_gen.txt</button>
+      <div className={styles.buttonGroup}>
+        <button
+          className={styles.exportButton}
+          onClick={() => ImageExporter.exportElevationForPerfectWorld()}
+        >
+          Export PerfectWorld Heightmap
+        </button>
+      </div>
 
       <div className={styles.divider} />
       <StatusBar />
