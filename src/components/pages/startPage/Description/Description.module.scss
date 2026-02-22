@@ -1,0 +1,22 @@
+@use "@styles/variables" as *;
+
+.base {
+  color: $text-gray;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  font-weight: 300;
+
+  strong {
+    color: $accent-gold;
+    font-weight: 600;
+  }
+
+  code {
+    background: $ui-dark;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: $text-silver;
+    font-size: 0.95rem;
+    margin: 0 4px;
+  }
+}

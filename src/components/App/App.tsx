@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { MainEditorLayout } from "../MainEditorLayout/MainEditorLayout";
 import { MapPage } from "../pages/mapPage/page";
 import type { RootState } from "@store/index";
-import { StartModal } from "@components/pages/startPage/StartModal/StartModal";
+import { StartPage } from "@/components/pages/startPage/page";
 import { useSelector } from "react-redux";
 
 export function App() {
@@ -16,7 +16,7 @@ export function App() {
       <Routes>
         <Route
           path="/"
-          element={!isInitialized ? <StartModal /> : <Navigate to="/map" />}
+          element={!isInitialized ? <StartPage /> : <Navigate to="/map" />}
         />
         <Route
           element={isInitialized ? <MainEditorLayout /> : <Navigate to="/" />}

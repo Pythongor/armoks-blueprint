@@ -1,0 +1,16 @@
+@use "@styles/variables" as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, $bg-dark 0%, #0a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  width: 800px;
+  text-align: center;
+}

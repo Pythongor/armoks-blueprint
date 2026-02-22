@@ -1,0 +1,18 @@
+@use "@styles/variables" as *;
+
+.glitchTitle {
+  color: $accent-gold;
+  font-size: 3rem;
+  letter-spacing: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  .qualitySymbol {
+    color: $text-gray;
+    font-size: 2.5rem;
+  }
+
+  animation: masterworkGlow 3s infinite alternate;
+}
