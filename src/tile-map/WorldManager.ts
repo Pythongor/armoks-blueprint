@@ -1,11 +1,17 @@
+import { getMoralDescriptor, identifyBiome } from "@/helpers/biomeResolver";
+
 import { LayerType } from "@store/brushSlice";
-import { identifyBiome, getMoralDescriptor } from "@/helpers/biomeResolver";
 
 export class WorldManager {
   public gridSize: number = 129;
   public worldData: Record<LayerType, Uint16Array>;
 
   constructor() {
+    this.worldData = this.setSize(this.gridSize);
+  }
+
+  setSize(size: number) {
+    this.gridSize = size;
     this.worldData = {
       elevation: new Uint16Array(this.gridSize * this.gridSize).fill(100),
       rainfall: new Uint16Array(this.gridSize * this.gridSize).fill(50),
@@ -15,6 +21,8 @@ export class WorldManager {
       savagery: new Uint16Array(this.gridSize * this.gridSize).fill(0),
       alignment: new Uint16Array(this.gridSize * this.gridSize).fill(50),
     };
+
+    return this.worldData;
   }
 
   getPointData(index: number) {
