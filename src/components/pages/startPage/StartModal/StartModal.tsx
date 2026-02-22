@@ -5,12 +5,39 @@ import {
   type DFWorldJson,
 } from "@utils/WorldGenParser";
 import styles from "./StartModal.module.scss";
+import { useDispatch } from "react-redux";
+import { worldManager } from "@tile-map/WorldManager";
+import type { LayerType } from "@store/brushSlice";
+import { initializeWorld } from "@store/worldSlice";
 
-interface Props {
-  onInitialize: (data: DFWorldJson | null, size?: number) => void;
-}
+export const StartModal = () => {
+  const dispatch = useDispatch();
 
-export const StartModal = ({ onInitialize }: Props) => {
+  const handleStart = (parsedJson: DFWorldJson | null, size: number = 129) => {
+    worldManager.setSize(size);
+
+    if (parsedJson?.mapData) {
+      Object.entries(parsedJson.mapData).forEach(([layerName, points]) => {
+        const layer = layerName as LayerType;
+        if (worldManager.worldData[layer]) {
+          points.forEach((p) => {
+            const index = p.y * size + p.x;
+            if (index < worldManager.worldData[layer].length) {
+              worldManager.updateTile(index, layer, p.v);
+            }
+          });
+        }
+      });
+    }
+
+    dispatch(
+      initializeWorld({
+        title: parsedJson?.title,
+        size: size,
+        settings: parsedJson?.settings,
+      }),
+    );
+  };
   const [dragActive, setDragActive] = useState(false);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +47,7 @@ export const StartModal = ({ onInitialize }: Props) => {
     const text = await file.text();
     const parsedData = WorldGenToUniversalJson.parse(text);
 
-    onInitialize(parsedData, parsedData.dimensions?.width || 129);
+    handleStart(parsedData, parsedData.dimensions?.width || 129);
   };
 
   return (
@@ -43,10 +70,10 @@ export const StartModal = ({ onInitialize }: Props) => {
             <h3>FORGE NEW WORLD</h3>
             <p>Initialize a blank slate with custom dimensions.</p>
             <div className={styles.buttonGroup}>
-              <button onClick={() => onInitialize(null, 129)}>
+              <button onClick={() => handleStart(null, 129)}>
                 Medium (129x129)
               </button>
-              <button onClick={() => onInitialize(null, 257)}>
+              <button onClick={() => handleStart(null, 257)}>
                 Large (257x257)
               </button>
             </div>

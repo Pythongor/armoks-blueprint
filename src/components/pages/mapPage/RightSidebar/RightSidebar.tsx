@@ -1,6 +1,6 @@
-import { CompositeToggle } from "./CompositeToggle/CompositeToggle";
+import { CompositeToggle } from "../CompositeToggle/CompositeToggle";
 import { ImageExporter } from "@utils/ImageExporter";
-import { StatusBar } from "./StatusBar/StatusBar";
+import { StatusBar } from "../StatusBar/StatusBar";
 import styles from "./RightSidebar.module.scss";
 
 export function RightSidebar() {

@@ -1,0 +1,66 @@
+@use "@styles/variables" as *;
+
+.nav {
+  background: #111;
+  border-bottom: 1px solid #252525;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(#000, 0.5);
+}
+
+.brand {
+  color: $accent-gold;
+  font-family: "Cinzel", serif;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba($accent-gold, 0.3);
+}
+
+.links {
+  display: flex;
+  gap: 4rem;
+  height: 100%;
+
+  a {
+    color: $ui-silver;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+
+    &:hover {
+      color: $ui-light;
+    }
+
+    &.active {
+      color: $ui-cyan;
+      text-shadow: 0 0 10px rgba(85, 255, 255, 0.4);
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: $ui-cyan;
+        box-shadow: 0 0 10px $ui-cyan;
+      }
+    }
+  }
+}
+
+.version {
+  color: $ui-light;
+  font-size: 1rem;
+  font-family: "Courier New", Courier, monospace;
+}
