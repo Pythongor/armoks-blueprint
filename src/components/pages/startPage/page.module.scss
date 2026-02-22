@@ -1,16 +1,22 @@
 @use "@styles/variables" as *;
 
 .overlay {
-  position: fixed;
-  inset: 0;
+  width: 100%;
   background: radial-gradient(circle, $bg-dark 0%, #0a0a0a 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
 }
 
 .modal {
   width: 800px;
   text-align: center;
+  margin: 0 auto;
+}
+
+.cards {
+  margin: 3rem 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }

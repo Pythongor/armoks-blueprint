@@ -1,4 +1,5 @@
-import { Cards } from "./Cards/Cards";
+import { ForgeNewWorldCard, ReclaimArchiveCard } from "./Cards";
+
 import { Description } from "./Description/Description";
 import { Footer } from "./Footer/Footer";
 import { Header } from "./Header/Header";
@@ -10,7 +11,10 @@ export function StartPage() {
       <div className={styles.modal}>
         <Header />
         <Description />
-        <Cards />
+        <div className={styles.cards}>
+          <ForgeNewWorldCard />
+          <ReclaimArchiveCard />
+        </div>
         <Footer />
       </div>
     </div>

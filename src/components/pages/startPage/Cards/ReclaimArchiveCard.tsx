@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 
 import { WorldGenToUniversalJson } from "@utils/WorldGenParser";
-import styles from "../Cards.module.scss";
-import { useWorldInitializer } from "../hooks";
+import styles from "./Cards.module.scss";
+import { useWorldInitializer } from "./hooks";
 
 export function ReclaimArchiveCard() {
   const handleStart = useWorldInitializer();
