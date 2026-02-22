@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
-import Phaser from "phaser";
+
 import { MainScene } from "@tile-map/MainScene";
-import styles from "./TileMap.module.scss";
-import { useSelector } from "react-redux";
+import Phaser from "phaser";
 import type { RootState } from "@/store";
 import { formatBiomeText } from "@helpers/biomeResolver";
+import styles from "./TileMap.module.scss";
+import { useSelector } from "react-redux";
 
 export function TileMap() {
   const { x, y, biome, biomeDescriptor } = useSelector(
@@ -21,8 +22,7 @@ export function TileMap() {
       parent: "game-container",
       scale: {
         mode: Phaser.Scale.RESIZE,
-        width: "100%",
-        height: "100%",
+        autoCenter: Phaser.Scale.CENTER_BOTH,
       },
       physics: { default: "arcade" },
       pixelArt: true,

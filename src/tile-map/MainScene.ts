@@ -25,6 +25,7 @@ export class MainScene extends Phaser.Scene {
     const worldHeight = worldManager.gridSize * this.tileSize;
 
     this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
+    this.cameras.main.setFollowOffset(0, 0);
 
     EventBus.on("brush-updated", (state: BrushSettings) => {
       this.currentLayer = state.activeLayer;
@@ -76,13 +77,39 @@ export class MainScene extends Phaser.Scene {
     this.input.on(
       "wheel",
       (
-        _: Phaser.Input.Pointer,
+        pointer: Phaser.Input.Pointer,
         __: Phaser.GameObjects.GameObject,
         ___: number,
         deltaY: number,
       ) => {
-        const newZoom = this.cameras.main.zoom - deltaY * 0.001;
-        this.cameras.main.setZoom(Phaser.Math.Clamp(newZoom, 0.2, 3));
+        const camera = this.cameras.main;
+        const oldZoom = camera.zoom;
+        const newZoom = Phaser.Math.Clamp(oldZoom - deltaY * 0.001, 0.15, 3);
+
+        if (newZoom !== oldZoom) {
+          const worldPointBeforeX =
+            (pointer.x - camera.width / 2) / oldZoom + camera.midPoint.x;
+          const worldPointBeforeY =
+            (pointer.y - camera.height / 2) / oldZoom + camera.midPoint.y;
+
+          camera.removeBounds();
+          camera.setZoom(newZoom);
+
+          const newScrollX =
+            worldPointBeforeX - (pointer.x - camera.width / 2) / newZoom;
+          const newScrollY =
+            worldPointBeforeY - (pointer.y - camera.height / 2) / newZoom;
+
+          camera.setScroll(
+            newScrollX - camera.width / 2,
+            newScrollY - camera.height / 2,
+          );
+
+          const worldWidth = worldManager.gridSize * this.tileSize;
+          const worldHeight = worldManager.gridSize * this.tileSize;
+
+          camera.setBounds(-500, -500, worldWidth + 1000, worldHeight + 1000);
+        }
       },
     );
   }
