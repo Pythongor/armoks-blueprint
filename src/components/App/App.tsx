@@ -1,9 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import { MainEditorLayout } from "../MainEditorLayout/MainEditorLayout";
-import { MapPage } from "../pages/mapPage/page";
+import { ExportPage } from "@components/pages/export/page";
+import { MainEditorLayout } from "@components/MainEditorLayout/MainEditorLayout";
+import { MapPage } from "@components/pages/map/page";
 import type { RootState } from "@store/index";
-import { StartPage } from "@/components/pages/startPage/page";
+import { StartPage } from "@components/pages/start/page";
 import { useSelector } from "react-redux";
 
 export function App() {
@@ -23,7 +24,7 @@ export function App() {
         >
           <Route path="/map" element={<MapPage />} />
           <Route path="/world-settings" element={<div>Settings Content</div>} />
-          <Route path="/export" element={<div>Export Content</div>} />
+          <Route path="/export" element={<ExportPage />} />
           <Route path="/new" element={<div>New Project Content</div>} />
           <Route path="/about" element={<div>About Content</div>} />
         </Route>

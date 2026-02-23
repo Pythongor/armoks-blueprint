@@ -30,30 +30,3 @@
   color: #888;
   margin-bottom: 0.5rem;
 }
-
-.buttonGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.exportButton {
-  background: transparent;
-  border: 1px solid $accent-gold;
-  color: $accent-gold;
-  padding: 0.8rem;
-  font-family: inherit;
-  font-weight: bold;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba($accent-gold, 0.1);
-    box-shadow: 0 0 10px rgba($accent-gold, 0.2);
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
-}

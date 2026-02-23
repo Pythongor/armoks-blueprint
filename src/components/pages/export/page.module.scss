@@ -1,0 +1,100 @@
+@use "@styles/variables" as *;
+
+.vaultContainer {
+  flex: 1;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba($ui-black, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 20;
+}
+
+.vaultHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+  color: $accent-gold;
+
+  h2 {
+    font-family: "Cinzel", serif;
+    letter-spacing: 4px;
+    margin: 0;
+  }
+
+  .qualitySymbol {
+    color: $text-gray;
+    font-size: 1.5rem;
+  }
+}
+
+.exportGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 450px));
+  gap: 2rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.exportCard {
+  background: $panel-bg;
+  border: 1px solid $ui-gray;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+  transition: border-color 0.3s ease;
+
+  &:hover:not(.disabled) {
+    border-color: $ui-cyan;
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+
+    button {
+      cursor: not-allowed;
+      &:hover {
+        border: 1px solid transparent;
+        transform: none;
+      }
+    }
+  }
+}
+
+.cardInfo {
+  h3 {
+    color: $ui-light;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+  }
+  p {
+    color: $ui-silver;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}
+
+.exportButton {
+  width: 100%;
+  padding: 1rem;
+  background: transparent;
+  border: 1px solid $ui-cyan;
+  color: $ui-cyan;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(85, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(85, 255, 255, 0.2);
+    border-color: $ui-cyan;
+  }
+}
