@@ -62,6 +62,7 @@ export class WorldGenToUniversalJson {
       // 3. Handle Title
       if (key === "TITLE") {
         preset.title = params[0];
+        continue;
       }
 
       // 4. Handle Everything Else Dynamically

@@ -63,6 +63,25 @@ export const worldSlice = createSlice({
       }
     },
 
+    renameActivePreset: (state, action: PayloadAction<string>) => {
+      const oldTitle = state.activePresetTitle;
+      const newTitle = action.payload.trim();
+
+      if (!oldTitle || !newTitle || oldTitle === newTitle) return;
+
+      if (state.presets[newTitle]) {
+        console.warn("A blueprint with this name already exists!");
+        return;
+      }
+
+      const presetData = state.presets[oldTitle];
+
+      presetData.title = newTitle;
+      state.presets[newTitle] = presetData;
+      delete state.presets[oldTitle];
+      state.activePresetTitle = newTitle;
+    },
+
     resetWorld: () => initialState,
   },
 });
@@ -72,6 +91,7 @@ export const {
   setActivePreset,
   updateActiveSetting,
   resetWorld,
+  renameActivePreset,
 } = worldSlice.actions;
 
 export default worldSlice.reducer;

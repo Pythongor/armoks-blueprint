@@ -33,6 +33,23 @@
   font-family: "Cinzel", serif;
   color: $ui-light;
   margin-bottom: 0.5rem;
+  border-bottom: 9px solid transparent;
+}
+
+.presetTitle,
+.titleInput {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin: 0 0 0.5rem 0;
+  font-family: "Cinzel", serif;
+}
+
+.titleInput {
+  padding: 0;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid $accent-gold;
+  background: transparent;
 }
 
 .titleGroup {
