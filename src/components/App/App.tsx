@@ -5,6 +5,7 @@ import { MainEditorLayout } from "@components/MainEditorLayout/MainEditorLayout"
 import { MapPage } from "@components/pages/map/page";
 import type { RootState } from "@store/index";
 import { StartPage } from "@components/pages/start/page";
+import { WorldSettingsPage } from "../pages/world-settings/page";
 import { useSelector } from "react-redux";
 
 export function App() {
@@ -23,9 +24,8 @@ export function App() {
           element={isInitialized ? <MainEditorLayout /> : <Navigate to="/" />}
         >
           <Route path="/map" element={<MapPage />} />
-          <Route path="/world-settings" element={<div>Settings Content</div>} />
+          <Route path="/world-settings" element={<WorldSettingsPage />} />
           <Route path="/export" element={<ExportPage />} />
-          <Route path="/new" element={<div>New Project Content</div>} />
           <Route path="/about" element={<div>About Content</div>} />
         </Route>
       </Routes>

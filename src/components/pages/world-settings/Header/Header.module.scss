@@ -1,0 +1,70 @@
+@use "@styles/variables" as *;
+
+.base {
+  padding: 1rem 2rem;
+  background: $panel-bg;
+  border-bottom: 1px solid $ui-dark;
+  box-shadow: 0 4px 20px rgba($ui-black, 0.6);
+
+  position: relative;
+
+  p {
+    font-size: 0.9rem;
+    color: $text-gray;
+  }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.presetTitle {
+  font-family: "Cinzel", serif;
+  color: $ui-light;
+  margin-bottom: 0.5rem;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  color: $accent-gold;
+
+  .title {
+    font-family: "Cinzel", serif;
+    letter-spacing: 4px;
+    margin: 0;
+    color: $accent-gold;
+  }
+
+  .qualitySymbol {
+    color: $text-gray;
+    font-size: 1.5rem;
+  }
+}
+
+.searchBox {
+  input {
+    background: $ui-black;
+    border: 1px solid $ui-gray;
+    padding: 0.8rem 1.2rem;
+    color: $accent-gold;
+    width: 300px;
+    font-family: inherit;
+    &:focus {
+      border-color: $accent-gold;
+      outline: none;
+    }
+  }
+}
