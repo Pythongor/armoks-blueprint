@@ -11,8 +11,9 @@ export function ReclaimArchiveCard() {
   const processFile = useCallback(
     async (file: File) => {
       const text = await file.text();
-      const parsedData = WorldGenToUniversalJson.parse(text);
-      handleStart(parsedData, parsedData.dimensions?.width || 129);
+      const allPresets = WorldGenToUniversalJson.parse(text);
+
+      handleStart(allPresets);
     },
     [handleStart],
   );
@@ -53,10 +54,12 @@ export function ReclaimArchiveCard() {
       onDragOver={onDrag}
       onDrop={onDrop}
     >
-      <h3>RECLAIM ARCHIVE</h3>
-      <p>Upload a world_gen.txt to resume your design.</p>
+      <div className={styles.cardHeader}>
+        <h3>RECLAIM ARCHIVE</h3>
+      </div>
+      <p>Unroll a world_gen.txt to restore all saved blueprints.</p>
       <label className={styles.fileLabel}>
-        BROWSE FILE
+        RESTORE FROM SCROLL
         <input type="file" accept=".txt" onChange={handleFileUpload} hidden />
       </label>
     </div>

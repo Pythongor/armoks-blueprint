@@ -6,6 +6,7 @@ import {
   setViewMode,
   setLockedToBiomes,
 } from "./brushSlice";
+import { setActivePreset } from "./worldSlice"; // NEW: Import the action
 import { setCoords, setBiome, setBiomeDescriptor } from "./coordsSlice";
 import { selectBrushSettings } from "./selectors";
 import type { Biome, BiomeDescriptor } from "@/types";
@@ -34,6 +35,10 @@ export const phaserMiddleware: Middleware = (store) => {
     ) {
       const settings = selectBrushSettings(store.getState());
       EventBus.emit("brush-updated", settings);
+    }
+
+    if (setActivePreset.match(action)) {
+      EventBus.emit("preset-switched", action.payload);
     }
 
     return result;

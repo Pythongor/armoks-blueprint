@@ -19,3 +19,11 @@ export const selectBrushSettings = (state: RootState): BrushSettings => {
     brushValue: selectActiveBrushValue(state),
   };
 };
+
+export const selectActivePreset = (state: RootState) =>
+  state.world.activePresetTitle
+    ? state.world.presets[state.world.activePresetTitle]
+    : null;
+
+export const selectActiveSettings = (state: RootState) =>
+  selectActivePreset(state)?.settings || {};

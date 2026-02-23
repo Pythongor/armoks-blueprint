@@ -2,38 +2,56 @@ import { getMoralDescriptor, identifyBiome } from "@/helpers/biomeResolver";
 
 import { LayerType } from "@store/brushSlice";
 
+export type WorldDataLayers = Record<LayerType, Uint16Array>;
+
 export class WorldManager {
   public gridSize: number = 129;
-  public worldData: Record<LayerType, Uint16Array>;
+  private presets: Map<string, WorldDataLayers> = new Map();
+  private activePresetTitle: string = "DEFAULT";
 
   constructor() {
-    this.worldData = this.setSize(this.gridSize);
+    this.createPreset("DEFAULT", 129);
   }
 
-  setSize(size: number) {
-    this.gridSize = size;
-    this.worldData = {
-      elevation: new Uint16Array(this.gridSize * this.gridSize).fill(100),
-      rainfall: new Uint16Array(this.gridSize * this.gridSize).fill(50),
-      drainage: new Uint16Array(this.gridSize * this.gridSize).fill(50),
-      temperature: new Uint16Array(this.gridSize * this.gridSize).fill(50),
-      volcanism: new Uint16Array(this.gridSize * this.gridSize).fill(0),
-      savagery: new Uint16Array(this.gridSize * this.gridSize).fill(0),
-      alignment: new Uint16Array(this.gridSize * this.gridSize).fill(50),
+  public createPreset(title: string, size: number) {
+    const data: WorldDataLayers = {
+      elevation: new Uint16Array(size * size).fill(100),
+      rainfall: new Uint16Array(size * size).fill(50),
+      drainage: new Uint16Array(size * size).fill(50),
+      temperature: new Uint16Array(size * size).fill(50),
+      volcanism: new Uint16Array(size * size).fill(0),
+      savagery: new Uint16Array(size * size).fill(0),
+      alignment: new Uint16Array(size * size).fill(50),
     };
 
-    return this.worldData;
+    this.presets.set(title, data);
+    this.activePresetTitle = title;
+    this.gridSize = size;
+    return data;
+  }
+
+  public switchToPreset(title: string) {
+    if (this.presets.has(title)) {
+      this.activePresetTitle = title;
+      const data = this.presets.get(title)!;
+      this.gridSize = Math.sqrt(data.elevation.length);
+    }
+  }
+
+  get worldData(): WorldDataLayers {
+    return this.presets.get(this.activePresetTitle)!;
   }
 
   getPointData(index: number) {
+    const data = this.worldData;
     return {
-      elevation: this.worldData.elevation[index],
-      rainfall: this.worldData.rainfall[index],
-      drainage: this.worldData.drainage[index],
-      temperature: this.worldData.temperature[index],
-      volcanism: this.worldData.volcanism[index],
-      savagery: this.worldData.savagery[index],
-      alignment: this.worldData.alignment[index],
+      elevation: data.elevation[index],
+      rainfall: data.rainfall[index],
+      drainage: data.drainage[index],
+      temperature: data.temperature[index],
+      volcanism: data.volcanism[index],
+      savagery: data.savagery[index],
+      alignment: data.alignment[index],
     };
   }
 
@@ -48,6 +66,11 @@ export class WorldManager {
   getBiomeDescriptor(index: number) {
     const data = this.getPointData(index);
     return getMoralDescriptor(data.savagery, data.alignment);
+  }
+
+  public reset() {
+    this.presets.clear();
+    this.createPreset("DEFAULT", 129);
   }
 }
 

@@ -1,35 +1,52 @@
-export interface DFWorldJson {
-  title?: string;
-  dimensions?: { width: number; height: number };
-  // Holds all standard tokens like [RAINFALL:0:100:101:101]
+export interface WorldPreset {
+  title: string;
+  size: number;
+  // Dynamic settings: key is token (e.g., "END_YEAR"),
+  // value is array of parameter arrays (e.g., [["250"]])
   settings: Record<string, string[][]>;
-  // Holds all coordinate data [PS_ELEVATION:x:y:v]
-  mapData: Record<string, { x: number; y: number; v: number }[]>;
+  // Map data is usually empty in standard world_gen.txt but handled for custom exports
+  mapData?: Record<string, { x: number; y: number; v: number }[]>;
 }
 
-// Regex to grab everything between [ and ]
 const tokenRegex = /\[([^\]]+)\]/g;
 
 export class WorldGenToUniversalJson {
-  static parse(input: string): DFWorldJson {
-    const world: DFWorldJson = {
+  /**
+   * Parses the entire world_gen.txt content into an array of presets.
+   */
+  static parse(input: string): WorldPreset[] {
+    // 1. Split the file into individual [WORLD_GEN] blocks
+    // We split by the tag, and filter out any empty strings resulting from the split
+    const blocks = input
+      .split(/\[WORLD_GEN\]/)
+      .filter((b) => b.trim().length > 0);
+
+    return blocks.map((block) => this.parseSingleBlock(block));
+  }
+
+  private static parseSingleBlock(blockContent: string): WorldPreset {
+    const preset: WorldPreset = {
+      title: "Untitled Blueprint",
+      size: 129,
       settings: {},
       mapData: {},
     };
 
     let match;
+    tokenRegex.lastIndex = 0;
 
-    while ((match = tokenRegex.exec(input)) !== null) {
+    while ((match = tokenRegex.exec(blockContent)) !== null) {
       const parts = match[1].split(":");
       const key = parts[0];
       const params = parts.slice(1);
 
-      // 1. Handle Map Data (PS_ tokens)
+      // 1. Handle Map Data (PS_ tokens from custom exports)
       if (key.startsWith("PS_")) {
         const layerName = key.replace("PS_", "").toLowerCase();
-        if (!world.mapData[layerName]) world.mapData[layerName] = [];
+        if (!preset.mapData) preset.mapData = {};
+        if (!preset.mapData[layerName]) preset.mapData[layerName] = [];
 
-        world.mapData[layerName].push({
+        preset.mapData[layerName].push({
           x: parseInt(params[0]),
           y: parseInt(params[1]),
           v: parseInt(params[2]),
@@ -37,28 +54,25 @@ export class WorldGenToUniversalJson {
         continue;
       }
 
-      // 2. Handle Dimension Shortcut
+      // 2. Handle Dimensions
       if (key === "DIM") {
-        world.dimensions = {
-          width: parseInt(params[0]),
-          height: parseInt(params[1]),
-        };
+        preset.size = parseInt(params[0]); // Using X as the source of truth for size
       }
 
-      // 3. Handle Title Shortcut
+      // 3. Handle Title
       if (key === "TITLE") {
-        world.title = params[0];
+        preset.title = params[0];
       }
 
       // 4. Handle Everything Else Dynamically
-      // We store as string[][] to handle tokens that repeat (like [ALLOWED_CREATURE:X])
-      if (!world.settings[key]) {
-        world.settings[key] = [params];
+      // Store as string[][] to handle repeating tokens (e.g. [REGION_COUNTS:...])
+      if (!preset.settings[key]) {
+        preset.settings[key] = [params];
       } else {
-        world.settings[key].push(params);
+        preset.settings[key].push(params);
       }
     }
 
-    return world;
+    return preset;
   }
 }

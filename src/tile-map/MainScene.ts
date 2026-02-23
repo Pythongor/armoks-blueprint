@@ -21,11 +21,8 @@ export class MainScene extends Phaser.Scene {
 
   create() {
     this.displayGraphics = this.add.graphics();
-    const worldWidth = worldManager.gridSize * this.tileSize;
-    const worldHeight = worldManager.gridSize * this.tileSize;
 
-    this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
-    this.cameras.main.setFollowOffset(0, 0);
+    this.updateCameraForCurrentPreset();
 
     EventBus.on("brush-updated", (state: BrushSettings) => {
       this.currentLayer = state.activeLayer;
@@ -37,9 +34,22 @@ export class MainScene extends Phaser.Scene {
       }
     });
 
+    EventBus.on("preset-switched", (presetTitle: string) => {
+      worldManager.switchToPreset(presetTitle);
+
+      if (this.cameras && this.cameras.main) {
+        this.updateCameraForCurrentPreset();
+
+        this.time.delayedCall(10, () => {
+          this.redrawMap();
+        });
+      } else {
+        console.warn("Camera not ready for preset switch yet.");
+      }
+    });
+
     this.setupInputs();
     this.redrawMap();
-    this.cameras.main.centerOn(worldWidth / 2, worldHeight / 2);
   }
 
   private setupInputs() {
@@ -114,6 +124,25 @@ export class MainScene extends Phaser.Scene {
     );
   }
 
+  private updateCameraForCurrentPreset() {
+    const worldWidth = worldManager.gridSize * this.tileSize;
+    const worldHeight = worldManager.gridSize * this.tileSize;
+
+    this.cameras.main.removeBounds();
+    this.cameras.main.setBounds(
+      -500,
+      -500,
+      worldWidth + 1000,
+      worldHeight + 1000,
+    );
+    this.cameras.main.centerOn(worldWidth / 2, worldHeight / 2);
+
+    const padding = 100;
+    const zoomX = this.cameras.main.width / (worldWidth + padding);
+    const zoomY = this.cameras.main.height / (worldHeight + padding);
+    this.cameras.main.setZoom(Math.min(zoomX, zoomY, 1));
+  }
+
   getTileColor(index: number): number {
     const data = worldManager.getPointData(index);
 
@@ -155,6 +184,7 @@ export class MainScene extends Phaser.Scene {
 
   redrawMap() {
     if (!this.displayGraphics) return;
+
     this.displayGraphics.clear();
     const size = worldManager.gridSize;
 
@@ -162,6 +192,7 @@ export class MainScene extends Phaser.Scene {
       const x = i % size;
       const y = Math.floor(i / size);
       const color = this.getTileColor(i);
+
       this.displayGraphics.fillStyle(color, 1);
       this.displayGraphics.fillRect(
         x * this.tileSize,

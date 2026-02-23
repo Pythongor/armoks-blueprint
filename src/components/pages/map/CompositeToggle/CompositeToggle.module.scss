@@ -6,7 +6,13 @@
   align-items: center;
   background: $ui-dark;
   padding: 8px 12px;
+  border: 1px solid #414141;
   border-radius: 4px;
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: $accent-gold;
+  }
 }
 
 .input {
