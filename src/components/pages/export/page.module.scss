@@ -82,6 +82,7 @@
 }
 
 .exportButton {
+  position: relative;
   width: 100%;
   padding: 1rem;
   background: transparent;
@@ -90,6 +91,7 @@
   font-family: inherit;
   font-weight: bold;
   cursor: pointer;
+  overflow: hidden;
   transition: all 0.2s ease;
 
   &:hover {
@@ -97,4 +99,26 @@
     box-shadow: 0 0 15px rgba(85, 255, 255, 0.2);
     border-color: $ui-cyan;
   }
+
+  .btnText {
+    position: relative;
+    z-index: 2;
+  }
+
+  &.loading {
+    border-color: #333;
+    color: #eee;
+    cursor: wait;
+  }
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(#55ffff, 0.2); // Light tint filling up
+  border-right: 2px solid #55ffff; // The leading edge
+  transition: width 0.1s linear;
+  z-index: 1;
 }

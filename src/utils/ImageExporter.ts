@@ -63,18 +63,23 @@ export class ImageExporter {
     return new Promise((resolve) => targetCanvas.toBlob(resolve, "image/png"));
   }
 
-  static async exportAllElevationForPerfectWorld(): Promise<void> {
+  static async exportAllElevationForPerfectWorld(
+    onProgress?: (percent: number) => void,
+  ): Promise<void> {
     const zip = new JSZip();
     const presetTitles = worldManager.getAllPresetTitles();
-
+    const total = presetTitles.length;
     const folder = zip.folder("perfect_world_heightmaps");
 
-    const exportPromises = presetTitles.map(async (title) => {
+    const exportPromises = presetTitles.map(async (title, index) => {
       const blob = await this.generatePresetBlob(title);
+
       if (blob && folder) {
         const fileName = `${title.toLowerCase().replace(/\s+/g, "_")}_elevation.png`;
         folder.file(fileName, blob);
       }
+
+      if (onProgress) onProgress(Math.round(((index + 1) / total) * 100));
     });
 
     await Promise.all(exportPromises);

@@ -1,7 +1,20 @@
 import { ImageExporter } from "@utils/ImageExporter";
+import cn from "classnames";
 import styles from "./page.module.scss";
+import { useState } from "react";
 
 export const ExportPage = () => {
+  const [progress, setProgress] = useState(0);
+  const isExporting = progress > 0 && progress < 100;
+
+  const handleExport = async () => {
+    setProgress(1);
+    await ImageExporter.exportAllElevationForPerfectWorld((p) =>
+      setProgress(p),
+    );
+    setTimeout(() => setProgress(0), 1000);
+  };
+
   return (
     <div className={styles.vaultContainer}>
       <header className={styles.vaultHeader}>
@@ -24,18 +37,26 @@ export const ExportPage = () => {
         <section className={styles.exportCard}>
           <div className={styles.cardInfo}>
             <h3>PerfectWorld Heightmap</h3>
-            <p>
-              Extract the elevation strata as a high-fidelity bitmap. Compatible
-              with the PerfectWorld utility for advanced biome simulation.
-            </p>
+            <p>Extract the elevation strata as a high-fidelity bitmap...</p>
           </div>
 
           <div className={styles.buttonGroup}>
             <button
-              className={styles.exportButton}
-              onClick={() => ImageExporter.exportAllElevationForPerfectWorld()}
+              className={cn(styles.exportButton, isExporting && styles.loading)}
+              onClick={handleExport}
+              disabled={isExporting}
             >
-              DOWNLOAD HEIGHTMAP
+              {isExporting && (
+                <div
+                  className={styles.progressBar}
+                  style={{ width: `${progress}%` }}
+                />
+              )}
+              <span className={styles.btnText}>
+                {isExporting
+                  ? `ENGRAVING... ${progress}%`
+                  : "DOWNLOAD HEIGHTMAP"}
+              </span>
             </button>
           </div>
         </section>
