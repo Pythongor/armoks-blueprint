@@ -33,7 +33,7 @@ export const ExportPage = () => {
           <div className={styles.buttonGroup}>
             <button
               className={styles.exportButton}
-              onClick={() => ImageExporter.exportElevationForPerfectWorld()}
+              onClick={() => ImageExporter.exportAllElevationForPerfectWorld()}
             >
               DOWNLOAD HEIGHTMAP
             </button>

@@ -68,6 +68,14 @@ export class WorldManager {
     return getMoralDescriptor(data.savagery, data.alignment);
   }
 
+  public getAllPresetTitles(): string[] {
+    return Array.from(this.presets.keys());
+  }
+
+  public getPresetData(title: string): WorldDataLayers {
+    return this.presets.get(title)!;
+  }
+
   public reset() {
     this.presets.clear();
     this.createPreset("DEFAULT", 129);
