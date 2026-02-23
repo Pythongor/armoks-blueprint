@@ -1,7 +1,7 @@
 @use "@styles/variables" as *;
 
 .nav {
-  background: #111;
+  background: $bg-dark;
   border-bottom: 1px solid #252525;
   display: flex;
   align-items: center;
@@ -23,16 +23,20 @@
   letter-spacing: 2px;
   font-weight: bold;
   text-shadow: 0 0 8px rgba($accent-gold, 0.3);
+  flex: 0 0 260px;
 }
 
 .links {
+  flex: 1;
   display: flex;
   gap: 4rem;
   height: 100%;
+  justify-content: center;
 
   a {
     color: $ui-silver;
     text-decoration: none;
+    text-align: center;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 1.5px;
@@ -94,14 +98,6 @@
     left: 0;
     width: 100%;
     height: 2px;
-    background: $accent-gold;
-    box-shadow: 0 0 10px $accent-gold;
     transition: all 0.2s ease;
   }
-}
-
-.version {
-  color: $ui-light;
-  font-size: 1rem;
-  font-family: "Courier New", Courier, monospace;
 }
