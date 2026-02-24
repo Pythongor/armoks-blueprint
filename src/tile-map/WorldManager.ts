@@ -13,7 +13,7 @@ export class WorldManager {
     this.createPreset("DEFAULT", 129);
   }
 
-  public createPreset(title: string, size: number) {
+  public createPreset(title: string, size: number, isActive: boolean = true) {
     const data: WorldDataLayers = {
       elevation: new Uint16Array(size * size).fill(100),
       rainfall: new Uint16Array(size * size).fill(50),
@@ -25,8 +25,10 @@ export class WorldManager {
     };
 
     this.presets.set(title, data);
-    this.activePresetTitle = title;
-    this.gridSize = size;
+    if (isActive) {
+      this.activePresetTitle = title;
+      this.gridSize = size;
+    }
     return data;
   }
 
@@ -79,6 +81,13 @@ export class WorldManager {
   public reset() {
     this.presets.clear();
     this.createPreset("DEFAULT", 129);
+  }
+
+  public resizePreset(title: string, newSize: number) {
+    if (this.presets.has(title)) {
+      const isActive = this.activePresetTitle === title;
+      this.createPreset(title, newSize, isActive);
+    }
   }
 }
 

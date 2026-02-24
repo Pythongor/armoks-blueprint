@@ -1,0 +1,77 @@
+@use "@styles/variables" as *;
+
+.tokenCard {
+  background: $panel-bg;
+  border: 1px solid $ui-dark;
+  padding: 1rem;
+  border-radius: 4px;
+
+  .tokenLabel {
+    color: $accent-gold;
+    font-size: 0.75rem;
+    font-family: "Fira Code", monospace;
+    margin-bottom: 0.75rem;
+    opacity: 0.8;
+  }
+}
+
+.parameterRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.paramInput {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+
+  background: $ui-dark-gray;
+  border: 1px solid $ui-gray;
+  color: $ui-light;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  text-align: center;
+  font-family: "Fira Code", monospace;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $accent-gold;
+  }
+
+  &:focus {
+    border-color: $accent-gold;
+    background: $ui-black;
+    outline: none;
+  }
+}
+
+.paramSelect {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  background: $ui-dark-gray;
+  border: 1px solid $ui-gray;
+  color: $accent-gold;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  font-family: "Fira Code", monospace;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $accent-gold;
+  }
+
+  &:focus {
+    border-color: $accent-gold;
+    background: $ui-black;
+  }
+
+  option {
+    background: $ui-dark-gray;
+    color: $ui-light;
+  }
+}

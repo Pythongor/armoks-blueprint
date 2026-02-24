@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { type RootState } from "@store/index";
-import { Token } from "./Token";
+import { Token } from "../Token/Token";
 import styles from "./TokensGrid.module.scss";
 
 export type TokensGridProps = {

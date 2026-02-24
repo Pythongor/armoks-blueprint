@@ -10,8 +10,6 @@ export const useWorldInitializer = () => {
     (presets: WorldPreset[]) => {
       worldManager.reset();
 
-      console.log(presets);
-
       presets.forEach((p) => {
         worldManager.createPreset(p.title, p.size);
       });

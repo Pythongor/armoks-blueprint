@@ -54,11 +54,19 @@ export const worldSlice = createSlice({
       const activeTitle = state.activePresetTitle;
 
       if (activeTitle && state.presets[activeTitle]) {
-        const settings = state.presets[activeTitle].settings;
-        if (settings[key]) {
-          settings[key][index] = params;
+        const preset = state.presets[activeTitle];
+
+        if (preset.settings[key]) {
+          preset.settings[key][index] = params;
         } else {
-          settings[key] = [params];
+          preset.settings[key] = [params];
+        }
+
+        if (key === "DIM") {
+          const newSize = parseInt(params[0]);
+          if (!isNaN(newSize)) {
+            preset.size = newSize;
+          }
         }
       }
     },
