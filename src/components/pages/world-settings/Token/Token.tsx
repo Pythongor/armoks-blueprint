@@ -10,7 +10,7 @@ export type TokenProps = {
 export function Token({ token, occurrences }: TokenProps) {
   return (
     <div className={styles.tokenCard}>
-      <div className={styles.tokenLabel}>{token}</div>
+      <div className={styles.tokenLabel}>{token.replace(/_+/g, " ")}</div>
       <div className={styles.occurrenceList}>
         {occurrences.map((params, index) => (
           <div key={index} className={styles.parameterRow}>

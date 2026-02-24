@@ -1,0 +1,39 @@
+@use "@styles/variables" as *;
+
+.base {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.categoryHeader {
+  font-family: "Fira Code", monospace;
+  font-size: 2rem;
+  color: $accent-gold;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  opacity: 0.6;
+
+  &::before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to left, rgba($accent-gold, 0.3), transparent);
+  }
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba($accent-gold, 0.3), transparent);
+  }
+}
+
+.categoryContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.25rem;
+}
