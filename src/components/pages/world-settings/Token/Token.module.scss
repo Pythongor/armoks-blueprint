@@ -41,7 +41,7 @@
   }
 
   &:focus {
-    border-color: $accent-gold;
+    border-color: $ui-cyan;
     background: $ui-black;
     outline: none;
   }
@@ -66,12 +66,79 @@
   }
 
   &:focus {
-    border-color: $accent-gold;
+    border-color: $ui-cyan;
     background: $ui-black;
   }
 
   option {
     background: $ui-dark-gray;
     color: $ui-light;
+  }
+}
+
+.booleanToggle {
+  flex: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  background: $ui-dark-gray;
+  border: 1px solid $ui-gray;
+  color: $text-gray;
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  font-family: "Fira Code", monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: $ui-gray;
+    box-shadow: inset 0 0 2px $ui-black;
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    border-color: $text-gray;
+    background: $bg-dark;
+  }
+
+  &:focus {
+    border-color: $ui-cyan;
+    background: $bg-dark;
+    outline: none;
+  }
+
+  &.active {
+    color: $accent-gold;
+    border-color: rgba($accent-gold, 0.5);
+
+    &::before {
+      background: $accent-gold;
+      box-shadow: 0 0 8px $accent-gold;
+    }
+
+    &:hover {
+      background: rgba($accent-gold, 0.05);
+    }
+
+    &:focus {
+      border-color: $ui-cyan;
+      background: rgba($ui-cyan, 0.05);
+      color: $ui-cyan;
+
+      &::before {
+        background: $ui-cyan;
+        box-shadow: 0 0 8px $ui-cyan;
+      }
+    }
   }
 }

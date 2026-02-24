@@ -1,5 +1,4 @@
-import { DimensionSelector } from "./DimensionSelector";
-import { MultipleNumberInput } from "./MultipleNumberInput";
+import { TokenOccurence } from "./TokenOccurence";
 import styles from "./Token.module.scss";
 
 export type TokenProps = {
@@ -14,15 +13,7 @@ export function Token({ token, occurrences }: TokenProps) {
       <div className={styles.occurrenceList}>
         {occurrences.map((params, index) => (
           <div key={index} className={styles.parameterRow}>
-            {token === "DIM" ? (
-              <DimensionSelector params={params} index={index} />
-            ) : (
-              <MultipleNumberInput
-                params={params}
-                token={token}
-                index={index}
-              />
-            )}
+            <TokenOccurence token={token} params={params} index={index} />
           </div>
         ))}
       </div>
