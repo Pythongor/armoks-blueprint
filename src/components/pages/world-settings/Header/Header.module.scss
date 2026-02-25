@@ -71,6 +71,33 @@
   }
 }
 
+.actionGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.anchorButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba($accent-gold, 0.05);
+  border: 1px solid rgba($accent-gold, 0.3);
+  color: $accent-gold;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 42px;
+  border-radius: 2px;
+
+  &:hover {
+    background: rgba($accent-gold, 0.15);
+    border-color: $accent-gold;
+    box-shadow: 0 0 12px rgba($accent-gold, 0.15);
+  }
+}
+
 .searchBox {
   input {
     background: $ui-black;
@@ -78,10 +105,24 @@
     padding: 0.8rem 1.2rem;
     color: $accent-gold;
     width: 300px;
+    height: 42px;
+    box-sizing: border-box;
     font-family: inherit;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      transition: all 0.2s ease;
+    }
+
     &:focus {
-      border-color: $accent-gold;
+      border-color: $ui-cyan;
       outline: none;
+      box-shadow: 0 0 10px rgba($ui-cyan, 0.1);
+      color: $ui-cyan;
+
+      &::placeholder {
+        color: rgba($ui-cyan, 0.4);
+      }
     }
   }
 }

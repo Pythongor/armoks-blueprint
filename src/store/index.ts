@@ -2,6 +2,7 @@ import { brushSlice } from "./brushSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { coordsSlice } from "./coordsSlice";
 import { phaserMiddleware } from "./phaserMiddleware";
+import { uiSlice } from "./uiSlice";
 import { worldSlice } from "./worldSlice";
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     brush: brushSlice.reducer,
     world: worldSlice.reducer,
     coords: coordsSlice.reducer,
+    ui: uiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(phaserMiddleware),

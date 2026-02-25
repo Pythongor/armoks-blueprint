@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { type RootState } from "@store/index";
-import { renameActivePreset } from "@store/worldSlice"; // Ensure you added this to your slice
+import { renameActivePreset } from "@store/worldSlice";
+import { setModal, Modal } from "@store/uiSlice"; // Import Modal controls
 import styles from "./Header.module.scss";
 
 export type HeaderProps = {
@@ -35,6 +36,10 @@ export function Header({ searchTerm, setSearchTerm }: HeaderProps) {
     setIsEditing(false);
   };
 
+  const openSafetyModal = () => {
+    dispatch(setModal(Modal.ResetDestructiveOptions));
+  };
+
   return (
     <header className={styles.base}>
       <section className={styles.row}>
@@ -64,13 +69,23 @@ export function Header({ searchTerm, setSearchTerm }: HeaderProps) {
           <p>Adjusting regional parameters for the active blueprint.</p>
         </div>
 
-        <div className={styles.searchBox}>
-          <input
-            type="text"
-            placeholder="Filter Tokens (e.g. EMBARK_POINTS)..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className={styles.actionGroup}>
+          <button
+            className={styles.anchorButton}
+            onClick={openSafetyModal}
+            title="Prepare physical laws to protect your painted map"
+          >
+            Reset Destructive Parameters
+          </button>
+
+          <div className={styles.searchBox}>
+            <input
+              type="text"
+              placeholder="Filter Tokens (e.g. EMBARK_POINTS)..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </section>
     </header>

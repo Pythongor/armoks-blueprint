@@ -5,7 +5,7 @@ import styles from "./Cards.module.scss";
 import { useWorldInitializer } from "./hooks";
 
 export function ReclaimArchiveCard() {
-  const handleStart = useWorldInitializer();
+  const handleStart = useWorldInitializer(true);
   const [dragActive, setDragActive] = useState(false);
 
   const processFile = useCallback(

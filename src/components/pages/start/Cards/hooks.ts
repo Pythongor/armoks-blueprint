@@ -1,9 +1,10 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { worldManager } from "@tile-map/WorldManager";
+import { setModal, Modal } from "@store/uiSlice";
 import { initializeWorld, type WorldPreset } from "@store/worldSlice";
 
-export const useWorldInitializer = () => {
+export const useWorldInitializer = (withModal = false) => {
   const dispatch = useDispatch();
 
   return useCallback(
@@ -17,9 +18,11 @@ export const useWorldInitializer = () => {
       if (presets.length > 0) {
         worldManager.switchToPreset(presets[0].title);
       }
+      const modal = withModal ? Modal.ResetDestructiveOptions : Modal.None;
 
       dispatch(initializeWorld(presets));
+      dispatch(setModal(modal));
     },
-    [dispatch],
+    [dispatch, withModal],
   );
 };
