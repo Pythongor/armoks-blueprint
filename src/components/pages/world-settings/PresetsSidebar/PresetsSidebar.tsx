@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "@store/index";
-import { setActivePreset } from "@store/worldSlice";
+import { setActivePreset, copyPreset, deletePreset } from "@store/worldSlice";
 import { EventBus } from "@tile-map/EventBus";
+import { createTitleForCopy } from "@helpers/common";
 import cn from "classnames";
 import styles from "./PresetsSidebar.module.scss";
 
@@ -19,12 +20,28 @@ export function PresetsSidebar() {
     EventBus.emit("preset-switched", title);
   };
 
+  const handleCopy = (e: React.MouseEvent, title: string) => {
+    e.stopPropagation();
+
+    const finalTitle = createTitleForCopy(title, Object.keys(presets));
+
+    dispatch(copyPreset({ sourceTitle: title, newTitle: finalTitle }));
+  };
+
+  const handleDelete = (e: React.MouseEvent, title: string) => {
+    e.stopPropagation();
+    if (presetNames.length <= 1) return;
+    if (window.confirm(`Delete blueprint "${title}"?`)) {
+      dispatch(deletePreset(title));
+    }
+  };
+
   return (
     <aside className={styles.base}>
       <header className={styles.sidebarHeader}>PRESETS</header>
       <div className={styles.container}>
         {presetNames.map((name) => (
-          <button
+          <div
             key={name}
             className={cn(
               styles.tab,
@@ -38,7 +55,24 @@ export function PresetsSidebar() {
                 {presets[name].size}×{presets[name].size}
               </span>
             </div>
-          </button>
+
+            <div className={styles.actions}>
+              <button
+                className={styles.miniBtn}
+                onClick={(e) => handleCopy(e, name)}
+                title="Duplicate Preset"
+              >
+                ⎘
+              </button>
+              <button
+                className={cn(styles.miniBtn, styles.delete)}
+                onClick={(e) => handleDelete(e, name)}
+                title="Remove Preset"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
         ))}
       </div>
     </aside>

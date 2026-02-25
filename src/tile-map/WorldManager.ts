@@ -32,6 +32,10 @@ export class WorldManager {
     return data;
   }
 
+  public removePreset(title: string) {
+    this.presets.delete(title);
+  }
+
   public switchToPreset(title: string) {
     if (this.presets.has(title)) {
       this.activePresetTitle = title;
@@ -76,6 +80,27 @@ export class WorldManager {
 
   public getPresetData(title: string): WorldDataLayers {
     return this.presets.get(title)!;
+  }
+
+  public copyBufferData(sourceTitle: string, targetTitle: string) {
+    const source = this.presets.get(sourceTitle);
+    const target = this.presets.get(targetTitle);
+
+    if (!source || !target) {
+      console.warn(
+        `Copy failed: Source (${sourceTitle}) or Target (${targetTitle}) missing.`,
+      );
+      return;
+    }
+
+    (Object.keys(source) as LayerType[]).forEach((layer) => {
+      target[layer].set(source[layer]);
+    });
+  }
+
+  public getPresetSize(title: string): number {
+    const data = this.presets.get(title);
+    return data ? Math.sqrt(data.elevation.length) : 129;
   }
 
   public reset() {

@@ -7,7 +7,13 @@ import {
   setLockedToBiomes,
 } from "./brushSlice";
 import { worldManager } from "@tile-map/WorldManager";
-import { setActivePreset, updateActiveSetting } from "./worldSlice";
+import {
+  setActivePreset,
+  updateActiveSetting,
+  addPreset,
+  copyPreset,
+  deletePreset,
+} from "./worldSlice";
 import { setCoords, setBiome, setBiomeDescriptor } from "./coordsSlice";
 import { selectBrushSettings } from "./selectors";
 import type { Biome, BiomeDescriptor } from "@/types";
@@ -48,6 +54,31 @@ export const phaserMiddleware: Middleware = (store) => {
 
     if (setActivePreset.match(action)) {
       EventBus.emit("preset-switched", action.payload);
+    }
+
+    if (addPreset.match(action)) {
+      const { title, size } = action.payload;
+      worldManager.createPreset(title, size);
+      EventBus.emit("preset-switched", title);
+    }
+
+    if (copyPreset.match(action)) {
+      const { sourceTitle, newTitle } = action.payload;
+      const sourceSize = store.getState().world.presets[newTitle].size;
+
+      worldManager.createPreset(newTitle, sourceSize);
+      worldManager.copyBufferData(sourceTitle, newTitle);
+      EventBus.emit("preset-switched", newTitle);
+    }
+
+    if (deletePreset.match(action)) {
+      const title = action.payload;
+      worldManager.removePreset(title);
+
+      const newActive = store.getState().world.activePresetTitle;
+      if (newActive) {
+        EventBus.emit("preset-switched", newActive);
+      }
     }
 
     if (updateActiveSetting.match(action) && action.payload.key === "DIM") {

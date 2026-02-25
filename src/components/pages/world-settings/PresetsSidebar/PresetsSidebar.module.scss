@@ -1,7 +1,7 @@
 @use "@styles/variables" as *;
 
 .base {
-  width: 200px;
+  width: 250px;
   background: $panel-bg;
   border-right: 1px solid $panel-border;
   display: flex;
@@ -10,8 +10,9 @@
 
 .sidebarHeader {
   padding: 1.5rem;
-  font-size: 0.7rem;
-  color: $ui-silver;
+  color: $text-silver;
+  font-size: 1rem;
+  font-weight: bold;
   letter-spacing: 2px;
   border-bottom: 1px solid $ui-dark;
   flex: 0;
@@ -23,12 +24,15 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+
   &::-webkit-scrollbar {
     width: 8px;
   }
+
   &::-webkit-scrollbar-track {
     background: $bg-dark;
   }
+
   &::-webkit-scrollbar-thumb {
     background: $ui-gray;
     border-radius: 4px;
@@ -39,45 +43,106 @@
 }
 
 .tab {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
   background: transparent;
-  border: none;
-  border-left: 3px solid transparent;
-  border-bottom: 1px solid $bg-dark;
+  border-bottom: 1px solid $ui-dark;
+  gap: 1rem;
   cursor: pointer;
-  text-align: left;
   transition: all 0.2s;
 
   &:hover {
-    background: $bg-dark;
-  }
-
-  &:focus {
-    outline: none;
-    background: $bg-dark;
+    background: rgba($bg-dark, 0.5);
+    .actions {
+      opacity: 1;
+    }
   }
 
   &.active {
     background: $bg-dark;
-    border-left-color: $accent-gold;
+
     .tabTitle {
-      color: $accent-gold;
+      color: $ui-cyan;
+      text-shadow: 0 0 10px rgba($ui-cyan, 0.4);
+    }
+
+    .tabSubtitle {
+      color: $ui-cyan;
+    }
+
+    .actions {
+      opacity: 1;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: $ui-cyan;
+      box-shadow: 0 0 10px $ui-cyan;
     }
   }
 }
 
+.tabInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
 .tabTitle {
-  display: block;
   color: $text-silver;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: bold;
   font-family: "Fira Code", monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.miniBtn {
+  background: transparent;
+  border: 1px solid $ui-light-gray;
+  color: $text-gray;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $accent-gold;
+    color: $accent-gold;
+    background: rgba($accent-gold, 0.1);
+  }
+
+  &.delete:hover {
+    border-color: $ui-warning;
+    color: $ui-warning;
+    background: rgba($ui-warning, 0.1);
+  }
 }
 
 .tabSubtitle {
   font-size: 0.7rem;
   color: $text-gray;
+  transition: all 0.2s;
 }
