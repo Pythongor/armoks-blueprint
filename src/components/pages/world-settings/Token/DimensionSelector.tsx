@@ -1,7 +1,7 @@
 import { updateActiveSetting } from "@store/worldSlice";
 import { type RootState } from "@store/index";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./Token.module.scss";
+import { Selector } from "@components/widgets/Selector/Selector";
 
 export type DimensionSelectorProps = {
   params: string[];
@@ -42,16 +42,10 @@ export function DimensionSelector({ params, index }: DimensionSelectorProps) {
   };
 
   return (
-    <select
-      className={styles.paramSelect}
+    <Selector
+      options={WORLD_SIZES}
       value={params[0]}
-      onChange={(e) => handleDimChange(e.target.value, index)}
-    >
-      {WORLD_SIZES.map((s) => (
-        <option key={s.value} value={s.value}>
-          {s.label}
-        </option>
-      ))}
-    </select>
+      onChange={(value) => handleDimChange(value, index)}
+    />
   );
 }

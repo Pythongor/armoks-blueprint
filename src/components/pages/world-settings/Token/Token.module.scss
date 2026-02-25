@@ -47,35 +47,6 @@
   }
 }
 
-.paramSelect {
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-  background: $ui-dark-gray;
-  border: 1px solid $ui-gray;
-  color: $accent-gold;
-  padding: 0.4rem;
-  font-size: 0.8rem;
-  font-family: "Fira Code", monospace;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.2s;
-
-  &:hover {
-    border-color: $accent-gold;
-  }
-
-  &:focus {
-    border-color: $ui-cyan;
-    background: $ui-black;
-  }
-
-  option {
-    background: $ui-dark-gray;
-    color: $ui-light;
-  }
-}
-
 .booleanToggle {
   flex: 1;
   cursor: pointer;
