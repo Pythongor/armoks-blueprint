@@ -35,7 +35,7 @@
   }
 
   &:hover {
-    border-color: $accent-gold;
+    border-color: $ui-accent;
   }
 }
 
@@ -83,12 +83,12 @@
   }
 
   &:hover {
-    background: rgba($accent-gold, 0.1);
-    border-color: $accent-gold;
-    color: $accent-gold;
+    background: rgba($ui-accent, 0.1);
+    border-color: $ui-accent;
+    color: $ui-accent;
 
     .btnValue {
-      color: lighten($accent-gold, 20%);
+      color: lighten($ui-accent, 20%);
     }
   }
 }

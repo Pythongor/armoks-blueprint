@@ -5,8 +5,8 @@
   width: 100%;
   padding: 1rem;
   background: transparent;
-  border: 1px solid $accent-gold;
-  color: $accent-gold;
+  border: 1px solid $ui-accent;
+  color: $ui-accent;
   font-family: inherit;
   font-weight: bold;
   cursor: pointer;
@@ -14,9 +14,9 @@
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: rgba($accent-gold, 0.1);
-    box-shadow: 0 0 15px rgba($accent-gold, 0.2);
-    border-color: $accent-gold;
+    background: rgba($ui-accent, 0.1);
+    box-shadow: 0 0 15px rgba($ui-accent, 0.2);
+    border-color: $ui-accent;
   }
 
   &.loading {
@@ -80,8 +80,8 @@
   top: 0;
   left: 0;
   height: 100%;
-  background: rgba($ui-cyan, 0.2);
-  border-right: 2px solid $ui-cyan;
+  background: rgba($ui-active, 0.2);
+  border-right: 2px solid $ui-active;
   transition: width 0.1s linear;
   z-index: 1;
 }

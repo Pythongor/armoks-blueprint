@@ -11,7 +11,7 @@
   transition: border-color 0.3s;
 
   &:hover {
-    border-color: $accent-gold;
+    border-color: $ui-accent;
   }
 }
 
@@ -26,7 +26,7 @@
   transition: background 0.3s;
 
   &:checked {
-    background: $accent-gold;
+    background: $ui-accent;
     &::before {
       transform: translateX(16px);
     }

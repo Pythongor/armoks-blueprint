@@ -37,7 +37,7 @@
     background: $ui-gray;
     border-radius: 4px;
     &:hover {
-      background: $accent-gold;
+      background: $ui-accent;
     }
   }
 }
@@ -65,12 +65,12 @@
     background: $bg-dark;
 
     .tabTitle {
-      color: $ui-cyan;
-      text-shadow: 0 0 10px rgba($ui-cyan, 0.4);
+      color: $ui-active;
+      text-shadow: 0 0 10px rgba($ui-active, 0.4);
     }
 
     .tabSubtitle {
-      color: $ui-cyan;
+      color: $ui-active;
     }
 
     .actions {
@@ -84,8 +84,8 @@
       left: 0;
       width: 2px;
       height: 100%;
-      background: $ui-cyan;
-      box-shadow: 0 0 10px $ui-cyan;
+      background: $ui-active;
+      box-shadow: 0 0 10px $ui-active;
     }
   }
 }
@@ -129,9 +129,9 @@
   transition: all 0.2s;
 
   &:hover {
-    border-color: $accent-gold;
-    color: $accent-gold;
-    background: rgba($accent-gold, 0.1);
+    border-color: $ui-accent;
+    color: $ui-accent;
+    background: rgba($ui-accent, 0.1);
   }
 
   &.delete:hover {

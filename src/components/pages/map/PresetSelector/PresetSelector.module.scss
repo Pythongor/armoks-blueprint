@@ -8,7 +8,7 @@
 }
 
 .label {
-  color: $accent-gold;
+  color: $ui-accent;
   font-size: 0.75rem;
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
@@ -24,7 +24,7 @@
   transition: border-color 0.3s;
 
   &:hover {
-    border-color: $accent-gold;
+    border-color: $ui-accent;
   }
 
   &::after {

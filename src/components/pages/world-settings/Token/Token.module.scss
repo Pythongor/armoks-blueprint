@@ -7,7 +7,7 @@
   border-radius: 4px;
 
   .tokenLabel {
-    color: $accent-gold;
+    color: $ui-accent;
     font-size: 0.75rem;
     font-family: "Fira Code", monospace;
     margin-bottom: 0.75rem;
@@ -37,11 +37,11 @@
   transition: all 0.2s;
 
   &:hover {
-    border-color: $accent-gold;
+    border-color: $ui-accent;
   }
 
   &:focus {
-    border-color: $ui-cyan;
+    border-color: $ui-active;
     background: $ui-black;
     outline: none;
   }
@@ -83,32 +83,32 @@
   }
 
   &:focus {
-    border-color: $ui-cyan;
+    border-color: $ui-active;
     background: $bg-dark;
     outline: none;
   }
 
   &.active {
-    color: $accent-gold;
-    border-color: rgba($accent-gold, 0.5);
+    color: $ui-accent;
+    border-color: rgba($ui-accent, 0.5);
 
     &::before {
-      background: $accent-gold;
-      box-shadow: 0 0 8px $accent-gold;
+      background: $ui-accent;
+      box-shadow: 0 0 8px $ui-accent;
     }
 
     &:hover {
-      background: rgba($accent-gold, 0.05);
+      background: rgba($ui-accent, 0.05);
     }
 
     &:focus {
-      border-color: $ui-cyan;
-      background: rgba($ui-cyan, 0.05);
-      color: $ui-cyan;
+      border-color: $ui-active;
+      background: rgba($ui-active, 0.05);
+      color: $ui-active;
 
       &::before {
-        background: $ui-cyan;
-        box-shadow: 0 0 8px $ui-cyan;
+        background: $ui-active;
+        box-shadow: 0 0 8px $ui-active;
       }
     }
   }

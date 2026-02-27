@@ -48,7 +48,7 @@
   padding: 0;
   border: none;
   outline: none;
-  border-bottom: 1px solid $accent-gold;
+  border-bottom: 1px solid $ui-accent;
   background: transparent;
 }
 
@@ -56,13 +56,13 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  color: $accent-gold;
+  color: $ui-accent;
 
   .title {
     font-family: "Cinzel", serif;
     letter-spacing: 4px;
     margin: 0;
-    color: $accent-gold;
+    color: $ui-accent;
   }
 
   .qualitySymbol {
@@ -81,9 +81,9 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba($accent-gold, 0.05);
-  border: 1px solid rgba($accent-gold, 0.3);
-  color: $accent-gold;
+  background: rgba($ui-accent, 0.05);
+  border: 1px solid rgba($ui-accent, 0.3);
+  color: $ui-accent;
   padding: 0.6rem 1.2rem;
   font-size: 0.75rem;
   cursor: pointer;
@@ -92,9 +92,9 @@
   border-radius: 2px;
 
   &:hover {
-    background: rgba($accent-gold, 0.15);
-    border-color: $accent-gold;
-    box-shadow: 0 0 12px rgba($accent-gold, 0.15);
+    background: rgba($ui-accent, 0.15);
+    border-color: $ui-accent;
+    box-shadow: 0 0 12px rgba($ui-accent, 0.15);
   }
 }
 
@@ -103,7 +103,7 @@
     background: $ui-black;
     border: 1px solid $ui-gray;
     padding: 0.8rem 1.2rem;
-    color: $accent-gold;
+    color: $ui-accent;
     width: 300px;
     height: 42px;
     box-sizing: border-box;
@@ -115,13 +115,13 @@
     }
 
     &:focus {
-      border-color: $ui-cyan;
+      border-color: $ui-active;
       outline: none;
-      box-shadow: 0 0 10px rgba($ui-cyan, 0.1);
-      color: $ui-cyan;
+      box-shadow: 0 0 10px rgba($ui-active, 0.1);
+      color: $ui-active;
 
       &::placeholder {
-        color: rgba($ui-cyan, 0.4);
+        color: rgba($ui-active, 0.4);
       }
     }
   }

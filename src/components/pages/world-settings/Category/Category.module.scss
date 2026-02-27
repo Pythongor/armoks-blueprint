@@ -9,7 +9,7 @@
 .categoryHeader {
   font-family: "Fira Code", monospace;
   font-size: 2rem;
-  color: $accent-gold;
+  color: $ui-accent;
   letter-spacing: 0.2rem;
   text-transform: uppercase;
   display: flex;
@@ -22,13 +22,13 @@
     content: "";
     flex: 1;
     height: 1px;
-    background: linear-gradient(to left, rgba($accent-gold, 0.3), transparent);
+    background: linear-gradient(to left, rgba($ui-accent, 0.3), transparent);
   }
   &::after {
     content: "";
     flex: 1;
     height: 1px;
-    background: linear-gradient(to right, rgba($accent-gold, 0.3), transparent);
+    background: linear-gradient(to right, rgba($ui-accent, 0.3), transparent);
   }
 }
 

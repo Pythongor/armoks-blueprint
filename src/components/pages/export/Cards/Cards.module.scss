@@ -25,7 +25,7 @@
   transition: border-color 0.3s ease;
 
   &:hover:not(.disabled) {
-    border-color: $accent-gold;
+    border-color: $ui-accent;
   }
 
   &.disabled {

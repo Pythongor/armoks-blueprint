@@ -18,9 +18,16 @@
   height: 0;
 
   &:checked + .radioContent {
-    background: $ui-selected;
-    border-color: $accent-gold;
-    color: $accent-gold;
+    // background: $ui-light-gray;
+    border-color: $ui-active;
+    color: $ui-active;
+    background: rgba($ui-active, 0.1);
+    box-shadow: 0 0 15px rgba($ui-active, 0.2);
+
+    .indicator {
+      background: $ui-active;
+      box-shadow: 5px 5px 20px rgba($ui-active, 0.2);
+    }
   }
 }
 
@@ -45,6 +52,7 @@
   height: 8px;
   border-radius: 50%;
   margin-right: 10px;
+  // border: 2px solid $ui-silver;
 
   @each $layer, $color in $layer-colors {
     &.#{$layer} {

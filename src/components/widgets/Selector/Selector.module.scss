@@ -6,7 +6,7 @@
   width: 100%;
   background: $ui-dark-gray;
   border: 1px solid $ui-gray;
-  color: $accent-gold;
+  color: $ui-accent;
   padding: 0.4rem;
   font-size: 0.8rem;
   font-family: "Fira Code", monospace;
@@ -15,11 +15,11 @@
   transition: all 0.2s;
 
   &:hover {
-    border-color: $accent-gold;
+    border-color: $ui-accent;
   }
 
   &:focus {
-    border-color: $ui-cyan;
+    border-color: $ui-active;
     background: $ui-black;
   }
 
