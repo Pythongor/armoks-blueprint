@@ -2,30 +2,28 @@ import { JsonToWorldGen } from "@utils/JsonToWorldGen";
 import { useSelector } from "react-redux";
 import { type RootState } from "@store/index";
 import { useState } from "react";
-import cn from "classnames";
+import { DownloadButton } from "@/components/widgets/DownloadButton/DownloadButton";
 import styles from "./Cards.module.scss";
 
 export function WorldGenCard() {
   const { presets } = useSelector((state: RootState) => state.world);
   const [progress, setProgress] = useState(0);
+  const [hasError, setHasError] = useState(false);
 
   const handleExport = async () => {
-    if (progress > 0) return;
-
+    setHasError(false);
     setProgress(1);
 
     try {
-      await JsonToWorldGen.export(presets, (p) => {
-        setProgress(p);
-      });
-    } catch (error) {
-      console.error("Export failed:", error);
-    } finally {
-      setTimeout(() => setProgress(0), 1000);
+      await JsonToWorldGen.export(presets, (p) => setProgress(p));
+      setTimeout(() => setProgress(0), 2000);
+    } catch (e) {
+      console.error(e);
+      setHasError(true);
+      setProgress(0);
+      setTimeout(() => setHasError(false), 3000);
     }
   };
-
-  const isExporting = progress > 0;
 
   return (
     <section className={styles.exportCard}>
@@ -34,23 +32,14 @@ export function WorldGenCard() {
         <p>Export your tokens and logic settings into a world_gen.txt file.</p>
       </div>
 
-      <button
-        className={cn(styles.exportButton, isExporting && styles.loading)}
+      <DownloadButton
+        progress={progress}
+        isError={hasError}
         onClick={handleExport}
-        disabled={isExporting}
-      >
-        {isExporting && (
-          <div
-            className={styles.progressBar}
-            style={{ width: `${progress}%` }}
-          />
-        )}
-        <span className={styles.btnText}>
-          {progress === 0 && "DOWNLOAD BLUEPRINT"}
-          {progress > 0 && progress < 100 && `ENGRAVING... ${progress}%`}
-          {progress === 100 && "SUCCESS!"}
-        </span>
-      </button>
+        labels={{
+          idle: "DOWNLOAD BLUEPRINT",
+        }}
+      />
     </section>
   );
 }

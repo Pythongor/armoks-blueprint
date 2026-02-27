@@ -1,43 +1,45 @@
+import { DownloadButton } from "@/components/widgets/DownloadButton/DownloadButton";
 import { ImageExporter } from "@utils/ImageExporter";
-import cn from "classnames";
 import styles from "./Cards.module.scss";
 import { useState } from "react";
 
 export function PerfectWorldCard() {
   const [progress, setProgress] = useState(0);
-  const isExporting = progress > 0 && progress < 100;
+  const [hasError, setHasError] = useState(false);
 
   const handleExport = async () => {
+    setHasError(false);
     setProgress(1);
-    await ImageExporter.exportAllElevationForPerfectWorld((p) =>
-      setProgress(p),
-    );
-    setTimeout(() => setProgress(0), 1000);
+
+    try {
+      await ImageExporter.exportAllElevationForPerfectWorld((p) =>
+        setProgress(p),
+      );
+      setTimeout(() => setProgress(0), 2000);
+    } catch (e) {
+      console.error(e);
+      setHasError(true);
+      setProgress(0);
+      setTimeout(() => setHasError(false), 3000);
+    }
   };
 
   return (
     <section className={styles.exportCard}>
       <div className={styles.cardInfo}>
         <h3>PerfectWorld Heightmap</h3>
-        <p>Extract the elevation strata as a high-fidelity bitmap...</p>
+        <p>Extract the elevation strata as a bitmap.</p>
       </div>
 
       <div className={styles.buttonGroup}>
-        <button
-          className={cn(styles.exportButton, isExporting && styles.loading)}
+        <DownloadButton
+          progress={progress}
+          isError={hasError}
           onClick={handleExport}
-          disabled={isExporting}
-        >
-          {isExporting && (
-            <div
-              className={styles.progressBar}
-              style={{ width: `${progress}%` }}
-            />
-          )}
-          <span className={styles.btnText}>
-            {isExporting ? `ENGRAVING... ${progress}%` : "DOWNLOAD HEIGHTMAP"}
-          </span>
-        </button>
+          labels={{
+            idle: "DOWNLOAD HEIGHTMAP",
+          }}
+        />
       </div>
     </section>
   );

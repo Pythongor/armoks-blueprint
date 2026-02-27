@@ -25,7 +25,7 @@
   transition: border-color 0.3s ease;
 
   &:hover:not(.disabled) {
-    border-color: $ui-cyan;
+    border-color: $accent-gold;
   }
 
   &.disabled {
@@ -41,46 +41,4 @@
       }
     }
   }
-}
-
-.exportButton {
-  position: relative;
-  width: 100%;
-  padding: 1rem;
-  background: transparent;
-  border: 1px solid $ui-cyan;
-  color: $ui-cyan;
-  font-family: inherit;
-  font-weight: bold;
-  cursor: pointer;
-  overflow: hidden;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(85, 255, 255, 0.1);
-    box-shadow: 0 0 15px rgba(85, 255, 255, 0.2);
-    border-color: $ui-cyan;
-  }
-
-  .btnText {
-    position: relative;
-    z-index: 2;
-  }
-
-  &.loading {
-    border-color: #333;
-    color: #eee;
-    cursor: wait;
-  }
-}
-
-.progressBar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background: rgba($ui-cyan, 0.2);
-  border-right: 2px solid $ui-cyan;
-  transition: width 0.1s linear;
-  z-index: 1;
 }

@@ -1,0 +1,87 @@
+@use "@styles/variables" as *;
+
+.base {
+  position: relative;
+  width: 100%;
+  padding: 1rem;
+  background: transparent;
+  border: 1px solid $accent-gold;
+  color: $accent-gold;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba($accent-gold, 0.1);
+    box-shadow: 0 0 15px rgba($accent-gold, 0.2);
+    border-color: $accent-gold;
+  }
+
+  &.loading {
+    border-color: $ui-gray;
+    color: $ui-light;
+    cursor: wait;
+  }
+
+  &.success {
+    border-color: $ui-success;
+    color: $ui-success;
+
+    &:hover {
+      background: rgba($ui-success, 0.1);
+      box-shadow: 0 0 15px rgba($ui-success, 0.2);
+      border-color: $ui-success;
+    }
+  }
+
+  &.error {
+    border-color: $ui-warning;
+    color: $ui-warning;
+    background: rgba($ui-warning, 0.05);
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+
+    &:hover {
+      background: rgba($ui-warning, 0.1);
+      box-shadow: 0 0 15px rgba($ui-warning, 0.2);
+      border-color: $ui-warning;
+    }
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateY(-1px);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px);
+  }
+}
+
+.btnText {
+  position: relative;
+  z-index: 2;
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba($ui-cyan, 0.2);
+  border-right: 2px solid $ui-cyan;
+  transition: width 0.1s linear;
+  z-index: 1;
+}
