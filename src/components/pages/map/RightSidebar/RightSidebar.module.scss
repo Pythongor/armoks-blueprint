@@ -1,7 +1,8 @@
 @use "@styles/variables" as *;
 
 .base {
-  width: 300px;
+  grid-area: right;
+  height: 100%;
   border-left: 2px solid $panel-border;
   padding: 1.5rem;
   display: flex;

@@ -9,29 +9,30 @@ export function StatusBar() {
     (state: RootState) => state.coords,
   );
 
+  const formattedX = x.toString().padStart(3, "0");
+  const formattedY = y.toString().padStart(3, "0");
+
   const descriptorClass = formatBiomeDescriptor(biomeDescriptor);
 
   return (
     <div className={styles.statusBar}>
-      <div className={styles.divider} />
-
       <div className={styles.section}>
-        <span className={styles.label}>Biome:</span>
-        <span className={cn(styles.descriptor, styles[descriptorClass])}>
-          {biomeDescriptor}
-        </span>
-        <span className={`${styles.biomeValue} ${styles[biome]}`}>
-          {formatBiomeText(biome)}
+        <span className={styles.label}>COORD:</span>
+        <span className={styles.value}>
+          {formattedX} : {formattedY}
         </span>
       </div>
 
       <div className={styles.divider} />
 
-      <div className={styles.statusBar}>
-        <div className={styles.section}>
-          <span className={styles.label}>Pos:</span>
-          <span className={styles.value}>
-            {x}:{y}
+      <div className={cn(styles.section, styles.biomeSection)}>
+        <span className={styles.label}>REGION:</span>
+        <div className={styles.contentGroup}>
+          <span className={cn(styles.descriptor, styles[descriptorClass])}>
+            {biomeDescriptor?.replace("_", " ")}
+          </span>{" "}
+          <span className={cn(styles.biomeValue, styles[biome])}>
+            {formatBiomeText(biome)}
           </span>
         </div>
       </div>

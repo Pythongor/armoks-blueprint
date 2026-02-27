@@ -18,15 +18,12 @@
   height: 0;
 
   &:checked + .radioContent {
-    // background: $ui-light-gray;
-    border-color: $ui-active;
-    color: $ui-active;
-    background: rgba($ui-active, 0.1);
-    box-shadow: 0 0 15px rgba($ui-active, 0.2);
-
-    .indicator {
-      background: $ui-active;
-      box-shadow: 5px 5px 20px rgba($ui-active, 0.2);
+    @each $layer, $color in $layer-colors {
+      .radioLabel__#{$layer} & {
+        border-color: $color;
+        color: $color;
+        background: rgba($ui-active, 0.05);
+      }
     }
   }
 }
@@ -40,6 +37,7 @@
   align-items: center;
   transition: all 0.2s;
   user-select: none;
+  border: 2px solid transparent;
 
   &:hover {
     background: $ui-light-gray;
@@ -52,10 +50,9 @@
   height: 8px;
   border-radius: 50%;
   margin-right: 10px;
-  // border: 2px solid $ui-silver;
 
   @each $layer, $color in $layer-colors {
-    &.#{$layer} {
+    .radioLabel__#{$layer} & {
       background: $color;
     }
   }

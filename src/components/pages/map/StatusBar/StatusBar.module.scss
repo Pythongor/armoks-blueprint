@@ -1,33 +1,43 @@
 @use "@styles/variables" as *;
 
-.base {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 32px;
-  background: #1a1a1a;
-  border-top: 1px solid #333;
+.statusBar {
+  grid-area: status;
+  height: 28px;
+  background: $panel-bg;
+  border-top: 1px solid $ui-gray;
   display: flex;
   align-items: center;
-  padding: 0 15px;
-  font-family: "monospace";
-  font-size: 12px;
-  color: #ccc;
-  gap: 20px;
-  z-index: 100;
+  padding: 0 12px;
+  font-family: "Fira Code", monospace;
+  font-size: 11px;
+  color: $ui-light;
+  gap: 15px;
+  user-select: none;
 }
 
 .section {
   display: flex;
   align-items: center;
   white-space: nowrap;
+  gap: 8px;
+
+  &.fill {
+    margin-left: auto;
+  }
+}
+
+.biomeSection {
+  width: 250px;
+}
+
+.divider {
+  width: 1px;
+  height: 14px;
+  background: $ui-gray;
 }
 
 .label {
-  color: #666;
-  margin-right: 6px;
-  text-transform: uppercase;
+  color: $text-gray;
   font-weight: bold;
 }
 
@@ -37,23 +47,18 @@
 
 .descriptor {
   font-weight: bold;
-  margin-right: 4px;
   text-transform: uppercase;
 
   &.Serene,
   &.Mirthful,
   &.Joyous_Wilds {
     color: $descriptor-good;
-    text-shadow: 0 0 5px rgba($descriptor-good, 0.4);
   }
-
   &.Sinister,
   &.Haunted,
   &.Terrifying {
     color: $descriptor-evil;
-    text-shadow: 0 0 5px rgba($descriptor-evil, 0.4);
   }
-
   &.Calm,
   &.Wilderness,
   &.Untamed_Wilds {
@@ -64,13 +69,10 @@
 .biomeValue {
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: color 0.2s ease;
 
   @each $name, $color in $biome-colors {
     &.#{$name} {
       color: $color;
-      text-shadow: 0 0 8px rgba($color, 0.5);
     }
   }
 }

@@ -23,7 +23,10 @@ export function LayersRadioGroup() {
       <label className={styles.label}>Layers</label>
       <div className={styles.radioGroup}>
         {layers.map((layer) => (
-          <label key={layer.id} className={styles.radioLabel}>
+          <label
+            key={layer.id}
+            className={cn(styles.radioLabel, styles[`radioLabel__${layer.id}`])}
+          >
             <input
               type="radio"
               name="activeLayer"
@@ -33,7 +36,7 @@ export function LayersRadioGroup() {
               className={styles.radioInput}
             />
             <div className={styles.radioContent}>
-              <span className={cn(styles.indicator, styles[layer.id])} />
+              <span className={styles.indicator} />
               {layer.label}
             </div>
           </label>
