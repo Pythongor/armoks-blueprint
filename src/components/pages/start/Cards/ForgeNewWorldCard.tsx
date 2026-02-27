@@ -36,15 +36,15 @@ export function ForgeNewWorldCard() {
     <div className={styles.card}>
       <div className={styles.cardHeader}>
         <h3>STRIKE THE EARTH</h3>
+        <p>
+          Initialize the <strong>Ten Great Templates</strong>. Forge your world
+          across every scale, from Pocket Outposts to Mighty Mountain-Homes.
+        </p>
       </div>
-      <p>
-        Initialize the <strong>Ten Great Templates</strong>. Forge your world
-        across every scale, from Pocket Outposts to Mighty Mountain-Homes.
-      </p>
 
       <div className={styles.buttonGroup}>
         <button
-          className={styles.forgeButton}
+          className={styles.button}
           onClick={() => handleStart(createStandardTemplates())}
         >
           PREPARE THE BLUEPRINTS
