@@ -98,6 +98,36 @@ export class WorldManager {
     });
   }
 
+  public getMapDataForExport(
+    title: string,
+  ): Record<string, { x: number; y: number; v: number }[]> {
+    const preset = this.presets.get(title);
+    if (!preset) return {};
+
+    const size = Math.sqrt(preset.elevation.length);
+    const exportData: Record<string, { x: number; y: number; v: number }[]> =
+      {};
+
+    (Object.keys(preset) as LayerType[]).forEach((layerName) => {
+      const buffer = preset[layerName];
+      const points: { x: number; y: number; v: number }[] = [];
+
+      for (let i = 0; i < buffer.length; i++) {
+        const value = buffer[i];
+
+        points.push({
+          x: i % size,
+          y: Math.floor(i / size),
+          v: value,
+        });
+      }
+
+      exportData[layerName] = points;
+    });
+
+    return exportData;
+  }
+
   public getPresetSize(title: string): number {
     const data = this.presets.get(title);
     return data ? Math.sqrt(data.elevation.length) : 129;

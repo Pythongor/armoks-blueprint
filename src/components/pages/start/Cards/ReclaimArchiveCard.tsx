@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { WorldGenToUniversalJson } from "@utils/WorldGenParser";
+import { WorldGenToJson } from "@/utils/WorldGenToJson";
 import styles from "./Cards.module.scss";
 import { useWorldInitializer } from "./hooks";
 
@@ -11,7 +11,7 @@ export function ReclaimArchiveCard() {
   const processFile = useCallback(
     async (file: File) => {
       const text = await file.text();
-      const allPresets = WorldGenToUniversalJson.parse(text);
+      const allPresets = WorldGenToJson.parse(text);
 
       handleStart(allPresets);
     },

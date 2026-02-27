@@ -53,3 +53,12 @@ export interface WorldPointData {
   savagery: number;
   alignment: number;
 }
+
+export interface WorldPreset {
+  title: string;
+  size: number;
+  // Dynamic settings: key is token (e.g., "END_YEAR"),
+  // value is array of parameter arrays (e.g., [["250"]])
+  settings: Record<string, string[][]>;
+  mapData?: Record<string, { x: number; y: number; v: number }[]>;
+}

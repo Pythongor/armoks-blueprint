@@ -1,16 +1,8 @@
-export interface WorldPreset {
-  title: string;
-  size: number;
-  // Dynamic settings: key is token (e.g., "END_YEAR"),
-  // value is array of parameter arrays (e.g., [["250"]])
-  settings: Record<string, string[][]>;
-  // Map data is usually empty in standard world_gen.txt but handled for custom exports
-  mapData?: Record<string, { x: number; y: number; v: number }[]>;
-}
+import type { WorldPreset } from "@/types";
 
 const tokenRegex = /\[([^\]]+)\]/g;
 
-export class WorldGenToUniversalJson {
+export class WorldGenToJson {
   /**
    * Parses the entire world_gen.txt content into an array of presets.
    */
@@ -40,16 +32,24 @@ export class WorldGenToUniversalJson {
       const key = parts[0];
       const params = parts.slice(1);
 
-      // 1. Handle Map Data (PS_ tokens from custom exports)
       if (key.startsWith("PS_")) {
-        const layerName = key.replace("PS_", "").toLowerCase();
-        if (!preset.mapData) preset.mapData = {};
-        if (!preset.mapData[layerName]) preset.mapData[layerName] = [];
+        const layerSuffix = key.replace("PS_", "").toUpperCase(); // e.g., "EL"
 
-        preset.mapData[layerName].push({
-          x: parseInt(params[0]),
-          y: parseInt(params[1]),
-          v: parseInt(params[2]),
+        if (!preset.mapData) preset.mapData = {};
+        if (!preset.mapData[layerSuffix]) preset.mapData[layerSuffix] = [];
+
+        // We track which row we are on by counting how many
+        // tokens of this type we've already seen
+        const currentY = preset.mapData[layerSuffix].length / preset.size;
+        const rowIndex = Math.floor(currentY);
+
+        // Loop through every value in this single bracket [PS_EL:v1:v2:v3...]
+        params.forEach((val, xIndex) => {
+          preset.mapData![layerSuffix].push({
+            x: xIndex,
+            y: rowIndex,
+            v: parseInt(val),
+          });
         });
         continue;
       }
