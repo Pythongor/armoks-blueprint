@@ -6,6 +6,10 @@ export function normalize(
   return Math.floor((value / numerator) * denominator);
 }
 
+export const randomChoice = <T>(list: Array<T>) => {
+  return list[Math.floor(Math.random() * list.length)];
+};
+
 export const createTitleForCopy = (title: string, titles: string[]) => {
   const copyRegex = /(.+) COPY(?: \((\d+)\))?$/;
   const match = title.match(copyRegex);
