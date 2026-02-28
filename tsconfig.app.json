@@ -14,6 +14,7 @@
       "@assets/*": ["./src/assets/*"],
       "@components/*": ["./src/components/*"],
       "@helpers*": ["src/helpers/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@store/*": ["./src/store/*"],
       "@styles/*": ["./src/styles/*"],
       "@tile-map/*": ["./src/tile-map/*"],

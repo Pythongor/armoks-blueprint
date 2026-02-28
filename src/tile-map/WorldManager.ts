@@ -9,6 +9,10 @@ export class WorldManager {
   private presets: Map<string, WorldDataLayers> = new Map();
   private activePresetTitle: string = "DEFAULT";
 
+  private undoStack: WorldDataLayers[] = [];
+  private redoStack: WorldDataLayers[] = [];
+  private readonly MAX_HISTORY = 30;
+
   constructor() {
     this.createPreset("DEFAULT", 129);
   }
@@ -41,7 +45,69 @@ export class WorldManager {
       this.activePresetTitle = title;
       const data = this.presets.get(title)!;
       this.gridSize = Math.sqrt(data.elevation.length);
+      this.clearHistory();
     }
+  }
+
+  public saveSnapshot() {
+    const current = this.worldData;
+    const snapshot: WorldDataLayers = {} as WorldDataLayers;
+
+    (Object.keys(current) as LayerType[]).forEach((layer) => {
+      snapshot[layer] = new Uint16Array(current[layer]);
+    });
+
+    this.undoStack.push(snapshot);
+
+    if (this.undoStack.length > this.MAX_HISTORY) {
+      this.undoStack.shift();
+    }
+
+    this.redoStack = [];
+  }
+
+  public undo(): boolean {
+    if (this.undoStack.length === 0) return false;
+
+    this.redoStack.push(this.cloneCurrentData());
+    const previousState = this.undoStack.pop()!;
+    this.applyState(previousState);
+
+    return true;
+  }
+
+  public redo(): boolean {
+    if (this.redoStack.length === 0) return false;
+
+    this.undoStack.push(this.cloneCurrentData());
+    const nextState = this.redoStack.pop()!;
+    this.applyState(nextState);
+
+    return true;
+  }
+
+  private clearHistory() {
+    this.undoStack = [];
+    this.redoStack = [];
+  }
+
+  private cloneCurrentData(): WorldDataLayers {
+    const current = this.worldData;
+    const clone: WorldDataLayers = {} as WorldDataLayers;
+
+    (Object.keys(current) as LayerType[]).forEach((layer) => {
+      clone[layer] = new Uint16Array(current[layer]);
+    });
+
+    return clone;
+  }
+
+  private applyState(state: WorldDataLayers) {
+    const current = this.worldData;
+
+    (Object.keys(state) as LayerType[]).forEach((layer) => {
+      current[layer].set(state[layer]);
+    });
   }
 
   get worldData(): WorldDataLayers {

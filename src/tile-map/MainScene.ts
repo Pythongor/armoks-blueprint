@@ -50,14 +50,22 @@ export class MainScene extends Phaser.Scene {
       }
     });
 
+    EventBus.on("request-redraw", () => {
+      this.redrawMap();
+    });
+
     this.setupInputs();
     this.redrawMap();
   }
 
   private setupInputs() {
     this.input.on("pointerdown", (p: Phaser.Input.Pointer) => {
-      if (p.middleButtonDown()) this.isPanning = true;
-      else this.handleInput(p);
+      if (p.middleButtonDown()) {
+        this.isPanning = true;
+      } else if (p.leftButtonDown()) {
+        worldManager.saveSnapshot();
+        this.handleInput(p);
+      }
     });
 
     this.input.on("pointerup", () => (this.isPanning = false));
