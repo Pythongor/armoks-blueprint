@@ -3,6 +3,7 @@ import { EventBus } from "@tile-map/EventBus";
 import {
   setActiveLayer,
   setBrushValue,
+  setBrushSize,
   setViewMode,
   setLockedToBiomes,
 } from "./brushSlice";
@@ -46,7 +47,8 @@ export const phaserMiddleware: Middleware = (store) => {
       setActiveLayer.match(action) ||
       setBrushValue.match(action) ||
       setViewMode.match(action) ||
-      setLockedToBiomes.match(action)
+      setLockedToBiomes.match(action) ||
+      setBrushSize.match(action)
     ) {
       const settings = selectBrushSettings(currentState);
       EventBus.emit("brush-updated", settings);

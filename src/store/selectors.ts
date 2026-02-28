@@ -9,14 +9,16 @@ export type BrushSettings = {
   activeLayer: RootState["brush"]["activeLayer"];
   viewMode: RootState["brush"]["viewMode"];
   brushValue: number;
+  brushSize: number;
 };
 
 export const selectBrushSettings = (state: RootState): BrushSettings => {
-  const { activeLayer, viewMode } = state.brush;
+  const { activeLayer, viewMode, brushSize } = state.brush;
   return {
     activeLayer,
     viewMode,
     brushValue: selectActiveBrushValue(state),
+    brushSize,
   };
 };
 

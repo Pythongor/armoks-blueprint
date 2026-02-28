@@ -14,10 +14,11 @@
 
 .slider {
   width: 100%;
-  margin-top: 8px;
-  background: $ui-gray;
-  height: 6px;
-  border-radius: 3px;
-  outline: none;
   cursor: pointer;
+  accent-color: $ui-accent;
+  transition: accent-color 0.2s ease;
+
+  &:hover {
+    accent-color: $ui-active;
+  }
 }

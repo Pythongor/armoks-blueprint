@@ -15,12 +15,14 @@ interface BrushState {
   viewMode: LayerType | "biomes";
   isLockedToBiomes: boolean;
   layerValues: Record<LayerType, number>;
+  brushSize: number;
 }
 
 const initialState: BrushState = {
   viewMode: "biomes",
   activeLayer: LayerType.Elevation,
   isLockedToBiomes: true,
+  brushSize: 1,
   layerValues: {
     elevation: 100,
     rainfall: 50,
@@ -57,8 +59,16 @@ export const brushSlice = createSlice({
     ) => {
       state.layerValues[layer] = value;
     },
+    setBrushSize: (state, action: PayloadAction<number>) => {
+      state.brushSize = action.payload;
+    },
   },
 });
 
-export const { setActiveLayer, setViewMode, setBrushValue, setLockedToBiomes } =
-  brushSlice.actions;
+export const {
+  setLockedToBiomes,
+  setActiveLayer,
+  setViewMode,
+  setBrushValue,
+  setBrushSize,
+} = brushSlice.actions;

@@ -29,6 +29,7 @@ export class MainScene extends Phaser.Scene {
     EventBus.on("brush-updated", (state: BrushSettings) => {
       this.currentLayer = state.activeLayer;
       this.brushValue = state.brushValue;
+      this.brushSize = state.brushSize;
 
       if (this.viewMode !== state.viewMode) {
         this.viewMode = state.viewMode;
@@ -159,18 +160,18 @@ export class MainScene extends Phaser.Scene {
     if (!this.cursorGraphics) return;
 
     this.cursorGraphics.clear();
-
     if (!this.isValidTile(tx, ty)) return;
 
+    const offset = Math.floor(this.brushSize / 2);
     const size = this.brushSize * this.tileSize;
-    const half = Math.floor(this.brushSize / 2) * this.tileSize;
-    const x = tx * this.tileSize - half;
-    const y = ty * this.tileSize - half;
 
-    this.cursorGraphics.lineStyle(1, 0x000000, 1);
-    this.cursorGraphics.strokeRect(x - 1, y - 1, size + 2, size + 2);
+    const x = (tx - offset) * this.tileSize;
+    const y = (ty - offset) * this.tileSize;
 
     this.cursorGraphics.lineStyle(1, 0xffffff, 1);
+    this.cursorGraphics.strokeRect(x - 1, y - 1, size + 2, size + 2);
+
+    this.cursorGraphics.lineStyle(1, 0x000000, 1);
     this.cursorGraphics.strokeRect(x, y, size, size);
   }
 
@@ -188,6 +189,7 @@ export class MainScene extends Phaser.Scene {
 
   paintTile(tileX: number, tileY: number) {
     if (!this.displayGraphics) return;
+
     const half = Math.floor(this.brushSize / 2);
 
     for (let dy = -half; dy <= half; dy++) {
