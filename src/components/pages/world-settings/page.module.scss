@@ -1,9 +1,9 @@
 @use "@styles/variables" as *;
+@use "@styles/mixins" as *;
 
 .base {
+  @include page;
   display: flex;
-  height: 100%;
-  width: 100%;
   background: $ui-black;
   overflow: hidden;
 }
