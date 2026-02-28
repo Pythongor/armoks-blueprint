@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { NON_DESTRUCTIVE_CONFIG } from "./configs";
+import { isArrayOfArrays } from "@helpers/typeGuards";
 
 export interface WorldPreset {
   title: string;
@@ -80,10 +81,10 @@ export const worldSlice = createSlice({
 
       Object.entries(NON_DESTRUCTIVE_CONFIG).forEach(([key, value]) => {
         if (settings[key]) {
-          if (Array.isArray(value[0])) {
-            settings[key] = value as string[][];
+          if (isArrayOfArrays(value)) {
+            settings[key] = value;
           } else {
-            settings[key][0] = value as string[];
+            settings[key][0] = value;
           }
         }
       });

@@ -1,3 +1,5 @@
+import { DEFAULT_CONFIG } from "@store/configs";
+import { isArrayOfArrays } from "@helpers/typeGuards";
 import styles from "./Cards.module.scss";
 import { useWorldInitializer } from "./hooks";
 
@@ -16,16 +18,22 @@ export function ForgeNewWorldCard() {
     const templates = [];
 
     for (const s of sizes) {
-      templates.push({
-        title: `${s.name} ISLAND`,
-        size: s.dim,
-        settings: { COMPLETE_OCEAN_EDGE_MIN: [["4"]] },
+      const settings: Record<string, string[][]> = {
+        DIM: [[String(s.dim), String(s.dim)]],
+      };
+
+      Object.entries(DEFAULT_CONFIG).forEach(([key, value]) => {
+        if (isArrayOfArrays<string>(value)) {
+          settings[key] = value;
+        } else {
+          settings[key] = [value];
+        }
       });
 
       templates.push({
         title: `${s.name} REGION`,
         size: s.dim,
-        settings: { COMPLETE_OCEAN_EDGE_MIN: [["0"]] },
+        settings,
       });
     }
 
@@ -37,7 +45,7 @@ export function ForgeNewWorldCard() {
       <div className={styles.cardHeader}>
         <h3>STRIKE THE EARTH</h3>
         <p>
-          Initialize the <strong>Ten Great Templates</strong>. Forge your world
+          Initialize the <strong>Five Great Templates</strong>. Forge your world
           across every scale, from Pocket Outposts to Mighty Mountain-Homes.
         </p>
       </div>
