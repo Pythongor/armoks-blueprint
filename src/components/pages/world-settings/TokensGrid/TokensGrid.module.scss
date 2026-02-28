@@ -1,6 +1,7 @@
 @use "@styles/variables" as *;
 
 .base {
+  @include scroll;
   flex: 1;
   overflow-y: auto;
   padding: 2rem;
@@ -8,20 +9,4 @@
   flex-direction: column;
   gap: 3rem;
   align-content: flex-start;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: $bg-dark;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: $ui-gray;
-    border-radius: 4px;
-    &:hover {
-      background: $ui-accent;
-    }
-  }
 }

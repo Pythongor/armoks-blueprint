@@ -6,10 +6,10 @@ import styles from "./Navbar.module.scss";
 import { useDispatch } from "react-redux";
 
 const linksMap = [
-  { name: "THE WORLD MAP", path: "/map" },
   { name: "WORLD SETTINGS", path: "/world-settings" },
+  { name: "THE WORLD MAP", path: "/map" },
   { name: "THE EXPORT VAULT", path: "/export" },
-  { name: "THE CHRONICLES", path: "/about" },
+  { name: "ABOUT", path: "/about" },
 ];
 
 export const Navbar = () => {

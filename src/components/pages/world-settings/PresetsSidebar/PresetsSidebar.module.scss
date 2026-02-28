@@ -20,26 +20,11 @@
 }
 
 .container {
+  @include scroll;
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: $bg-dark;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: $ui-gray;
-    border-radius: 4px;
-    &:hover {
-      background: $ui-accent;
-    }
-  }
 }
 
 .tab {

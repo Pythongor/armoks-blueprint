@@ -14,7 +14,7 @@ export const ResetDestructiveModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <header className={styles.header}>
-        <h2>PREPARE FOR PAINTING</h2>
+        <h2>PREPARE FOR PAINTING ?</h2>
         <button className={styles.closeButton} onClick={onClose}>
           &times;
         </button>

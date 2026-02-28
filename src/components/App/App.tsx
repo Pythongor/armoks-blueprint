@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { AboutPage } from "../pages/about/page";
 import { ExportPage } from "@components/pages/export/page";
 import { MainEditorLayout } from "@components/MainEditorLayout/MainEditorLayout";
 import { MapPage } from "@components/pages/map/page";
@@ -21,15 +22,17 @@ export function App() {
         <Routes>
           <Route
             path="/"
-            element={!isInitialized ? <StartPage /> : <Navigate to="/map" />}
+            element={
+              !isInitialized ? <StartPage /> : <Navigate to="/world-settings" />
+            }
           />
           <Route
             element={isInitialized ? <MainEditorLayout /> : <Navigate to="/" />}
           >
-            <Route path="/map" element={<MapPage />} />
             <Route path="/world-settings" element={<WorldSettingsPage />} />
+            <Route path="/map" element={<MapPage />} />
             <Route path="/export" element={<ExportPage />} />
-            <Route path="/about" element={<div>About Content</div>} />
+            <Route path="/about" element={<AboutPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
