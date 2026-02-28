@@ -10,12 +10,18 @@ export enum LayerType {
   Alignment = "alignment",
 }
 
+export enum BrushShape {
+  Square = "square",
+  Circle = "circle",
+}
+
 interface BrushState {
   activeLayer: LayerType;
   viewMode: LayerType | "biomes";
   isLockedToBiomes: boolean;
   layerValues: Record<LayerType, number>;
   brushSize: number;
+  brushShape: BrushShape;
 }
 
 const initialState: BrushState = {
@@ -23,6 +29,7 @@ const initialState: BrushState = {
   activeLayer: LayerType.Elevation,
   isLockedToBiomes: true,
   brushSize: 1,
+  brushShape: BrushShape.Square,
   layerValues: {
     elevation: 100,
     rainfall: 50,
@@ -62,6 +69,9 @@ export const brushSlice = createSlice({
     setBrushSize: (state, action: PayloadAction<number>) => {
       state.brushSize = action.payload;
     },
+    setBrushShape: (state, action: PayloadAction<BrushShape>) => {
+      state.brushShape = action.payload;
+    },
   },
 });
 
@@ -71,4 +81,5 @@ export const {
   setViewMode,
   setBrushValue,
   setBrushSize,
+  setBrushShape,
 } = brushSlice.actions;

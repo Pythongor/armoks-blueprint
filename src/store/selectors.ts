@@ -1,3 +1,4 @@
+import type { BrushShape } from "./brushSlice";
 import { type RootState } from "./index";
 
 export const selectActiveBrushValue = (state: RootState) => {
@@ -10,15 +11,17 @@ export type BrushSettings = {
   viewMode: RootState["brush"]["viewMode"];
   brushValue: number;
   brushSize: number;
+  brushShape: BrushShape;
 };
 
 export const selectBrushSettings = (state: RootState): BrushSettings => {
-  const { activeLayer, viewMode, brushSize } = state.brush;
+  const { activeLayer, viewMode, brushSize, brushShape } = state.brush;
   return {
     activeLayer,
     viewMode,
     brushValue: selectActiveBrushValue(state),
     brushSize,
+    brushShape,
   };
 };
 

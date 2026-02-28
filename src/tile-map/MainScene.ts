@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { EventBus } from "./EventBus";
-import { LayerType } from "@store/brushSlice";
+import { LayerType, BrushShape } from "@store/brushSlice";
 import { type BrushSettings } from "@store/selectors";
 import { worldManager } from "@tile-map/WorldManager";
 import { getBiomeColor } from "@helpers/biomeResolver";
@@ -12,6 +12,7 @@ export class MainScene extends Phaser.Scene {
   private viewMode: LayerType | "biomes" = "biomes";
   private brushValue: number = 100;
   private brushSize: number = 1;
+  private brushShape: BrushShape = BrushShape.Square;
   private displayGraphics?: Phaser.GameObjects.Graphics;
   private cursorGraphics?: Phaser.GameObjects.Graphics;
   private isPanning: boolean = false;
@@ -30,6 +31,7 @@ export class MainScene extends Phaser.Scene {
       this.currentLayer = state.activeLayer;
       this.brushValue = state.brushValue;
       this.brushSize = state.brushSize;
+      this.brushShape = state.brushShape;
 
       if (this.viewMode !== state.viewMode) {
         this.viewMode = state.viewMode;
@@ -163,16 +165,31 @@ export class MainScene extends Phaser.Scene {
     if (!this.isValidTile(tx, ty)) return;
 
     const offset = Math.floor(this.brushSize / 2);
-    const size = this.brushSize * this.tileSize;
+    const radius = this.brushSize / 2;
 
-    const x = (tx - offset) * this.tileSize;
-    const y = (ty - offset) * this.tileSize;
+    if (this.brushShape === BrushShape.Square) {
+      const x = (tx - offset) * this.tileSize;
+      const y = (ty - offset) * this.tileSize;
+      const size = this.brushSize * this.tileSize;
 
-    this.cursorGraphics.lineStyle(1, 0xffffff, 1);
-    this.cursorGraphics.strokeRect(x - 1, y - 1, size + 2, size + 2);
+      this.cursorGraphics
+        .lineStyle(1, 0xffffff, 1)
+        .strokeRect(x - 1, y - 1, size + 2, size + 2);
+      this.cursorGraphics
+        .lineStyle(1, 0x000000, 1)
+        .strokeRect(x, y, size, size);
+    } else {
+      const centerX = tx * this.tileSize + this.tileSize / 2;
+      const centerY = ty * this.tileSize + this.tileSize / 2;
+      const pixelRadius = radius * this.tileSize;
 
-    this.cursorGraphics.lineStyle(1, 0x000000, 1);
-    this.cursorGraphics.strokeRect(x, y, size, size);
+      this.cursorGraphics
+        .lineStyle(1, 0xffffff, 1)
+        .strokeCircle(centerX, centerY, pixelRadius + 1);
+      this.cursorGraphics
+        .lineStyle(1, 0x000000, 1)
+        .strokeCircle(centerX, centerY, pixelRadius);
+    }
   }
 
   getTileColor(index: number): number {
@@ -191,6 +208,7 @@ export class MainScene extends Phaser.Scene {
     if (!this.displayGraphics) return;
 
     const half = Math.floor(this.brushSize / 2);
+    const radiusSq = Math.pow(this.brushSize / 2, 2);
 
     for (let dy = -half; dy <= half; dy++) {
       for (let dx = -half; dx <= half; dx++) {
@@ -198,8 +216,12 @@ export class MainScene extends Phaser.Scene {
         const ty = tileY + dy;
 
         if (this.isValidTile(tx, ty)) {
-          const index = ty * worldManager.gridSize + tx;
+          if (this.brushShape === BrushShape.Circle) {
+            const distSq = dx * dx + dy * dy;
+            if (distSq > radiusSq) continue;
+          }
 
+          const index = ty * worldManager.gridSize + tx;
           worldManager.updateTile(index, this.currentLayer, this.brushValue);
 
           const color = this.getTileColor(index);

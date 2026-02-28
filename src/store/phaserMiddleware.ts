@@ -4,6 +4,7 @@ import {
   setActiveLayer,
   setBrushValue,
   setBrushSize,
+  setBrushShape,
   setViewMode,
   setLockedToBiomes,
 } from "./brushSlice";
@@ -48,7 +49,8 @@ export const phaserMiddleware: Middleware = (store) => {
       setBrushValue.match(action) ||
       setViewMode.match(action) ||
       setLockedToBiomes.match(action) ||
-      setBrushSize.match(action)
+      setBrushSize.match(action) ||
+      setBrushShape.match(action)
     ) {
       const settings = selectBrushSettings(currentState);
       EventBus.emit("brush-updated", settings);
