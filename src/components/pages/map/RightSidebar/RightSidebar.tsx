@@ -1,3 +1,4 @@
+import { BrushOpacitySlider } from "../Sliders/BrushOpacitySlider";
 import { BrushShapeSelector } from "../BrushShapeSelector/BrushShapeSelector";
 import { BrushSizeSlider } from "../Sliders/BrushSizeSlider";
 import { BrushValueSlider } from "../Sliders/BrushValueSlider";
@@ -9,6 +10,7 @@ export function RightSidebar() {
       <section className={styles.section}>
         <BrushValueSlider />
         <BrushSizeSlider />
+        <BrushOpacitySlider />
         <BrushShapeSelector />
       </section>
     </div>

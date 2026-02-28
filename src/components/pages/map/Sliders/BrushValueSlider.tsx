@@ -24,7 +24,7 @@ export function BrushValueSlider() {
           }),
         )
       }
-      label="Brush Value"
+      label="Value"
     />
   );
 }

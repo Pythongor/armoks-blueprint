@@ -14,7 +14,7 @@ export function BrushSizeSlider() {
       step={2}
       currentValue={brushSize}
       onChange={(value) => dispatch(setBrushSize(value))}
-      label="Brush Size"
+      label="Size"
     />
   );
 }

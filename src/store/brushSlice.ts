@@ -22,6 +22,7 @@ interface BrushState {
   layerValues: Record<LayerType, number>;
   brushSize: number;
   brushShape: BrushShape;
+  brushOpacity: number;
 }
 
 const initialState: BrushState = {
@@ -30,6 +31,7 @@ const initialState: BrushState = {
   isLockedToBiomes: true,
   brushSize: 1,
   brushShape: BrushShape.Square,
+  brushOpacity: 1,
   layerValues: {
     elevation: 100,
     rainfall: 50,
@@ -72,6 +74,9 @@ export const brushSlice = createSlice({
     setBrushShape: (state, action: PayloadAction<BrushShape>) => {
       state.brushShape = action.payload;
     },
+    setBrushOpacity: (state, action: PayloadAction<number>) => {
+      state.brushOpacity = action.payload;
+    },
   },
 });
 
@@ -82,4 +87,5 @@ export const {
   setBrushValue,
   setBrushSize,
   setBrushShape,
+  setBrushOpacity,
 } = brushSlice.actions;

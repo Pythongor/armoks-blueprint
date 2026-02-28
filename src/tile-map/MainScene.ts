@@ -13,8 +13,12 @@ export class MainScene extends Phaser.Scene {
   private brushValue: number = 100;
   private brushSize: number = 1;
   private brushShape: BrushShape = BrushShape.Square;
+  private brushOpacity: number = 0.5;
+  private touchedTiles: Set<number> = new Set();
+
   private displayGraphics?: Phaser.GameObjects.Graphics;
   private cursorGraphics?: Phaser.GameObjects.Graphics;
+
   private isPanning: boolean = false;
 
   constructor() {
@@ -32,6 +36,7 @@ export class MainScene extends Phaser.Scene {
       this.brushValue = state.brushValue;
       this.brushSize = state.brushSize;
       this.brushShape = state.brushShape;
+      this.brushOpacity = state.brushOpacity;
 
       if (this.viewMode !== state.viewMode) {
         this.viewMode = state.viewMode;
@@ -66,12 +71,16 @@ export class MainScene extends Phaser.Scene {
       if (p.middleButtonDown()) {
         this.isPanning = true;
       } else if (p.leftButtonDown()) {
+        this.touchedTiles.clear();
         worldManager.saveSnapshot();
         this.handleInput(p);
       }
     });
 
-    this.input.on("pointerup", () => (this.isPanning = false));
+    this.input.on("pointerup", () => {
+      this.isPanning = false;
+      this.touchedTiles.clear();
+    });
 
     this.input.on("pointermove", (p: Phaser.Input.Pointer) => {
       if (this.isPanning) {
@@ -216,13 +225,25 @@ export class MainScene extends Phaser.Scene {
         const ty = tileY + dy;
 
         if (this.isValidTile(tx, ty)) {
-          if (this.brushShape === BrushShape.Circle) {
+          const index = ty * worldManager.gridSize + tx;
+
+          if (this.touchedTiles.has(index)) continue;
+
+          if (this.brushShape === "circle") {
             const distSq = dx * dx + dy * dy;
             if (distSq > radiusSq) continue;
           }
 
-          const index = ty * worldManager.gridSize + tx;
-          worldManager.updateTile(index, this.currentLayer, this.brushValue);
+          this.touchedTiles.add(index);
+
+          const oldData = worldManager.getPointData(index);
+          const oldValue = oldData[this.currentLayer as keyof typeof oldData];
+
+          const newValue = Math.round(
+            oldValue + (this.brushValue - oldValue) * this.brushOpacity,
+          );
+
+          worldManager.updateTile(index, this.currentLayer, newValue);
 
           const color = this.getTileColor(index);
           this.displayGraphics.fillStyle(color, 1);
