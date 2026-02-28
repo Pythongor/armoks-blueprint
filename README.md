@@ -1,73 +1,75 @@
-# React + TypeScript + Vite
+# ⚒️ Armok's Blueprint: The Great Scriptorium
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> *"It is a masterwork blueprint. It is menacing with spikes of code. It relates to the founding of a world."*
 
-Currently, two official plugins are available:
+**Armok's Blueprint** is a web-utility designed for the manual engraving of world-generation parameters for Dwarf Fortress. While the gods provide random chance, the Blueprint provides **intent**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Age: Age of Forging](https://img.shields.io/badge/Age-0.0.1-gold)](#)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📜 What is this Artifact?
 
-## Expanding the ESLint configuration
+In the early ages, Overseers were forced to rely on the whims of the World Engine, hitting "Generate" and praying for a favorable embark. **Armok's Blueprint** changes the law of the land. 
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+It is a **pixel-perfect map editor** that allows you to hand-paint Elevation, Rainfall, Savagery, and Volcanism directly onto a digital slab. It translates your art into the "Secret Language" of `world_gen.txt` tokens (the `PS_EL` signatures), allowing you to force the game to build exactly what you envisioned.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🏔️ Why Strike This Earth? (Comparison)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Why use the Armok's Blueprint instead of the old-world tools?
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Feature | In-Game Advanced Gen | PerfectWorld | **Armok's Blueprint** |
+| :--- | :--- | :--- | :--- |
+| **Control** | Random / Seeded | Algorithmic Sliders | **Manual Pixel Painting** |
+| **Feedback** | Wait for Generation | Trial & Error | **Instant Visual Preview** |
+| **Precision** | Low (Global) | Medium (Regional) | **High (Tile-by-Tile)** |
+| **Portability** | In-Game Only | Local Executable | **Web-Based / No Install** |
+| **Legacy Support** | New Seeds Only | Heightmaps Only | **Import/Export Existing Files** |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🛠️ The Loom & The Anvil (Stack & Architecture)
+
+The runes beneath the surface are organized for performance and reliability:
+
+* **The Skeleton (React & TypeScript):** Strictly typed logic to ensure no "Fractures" in the masonry.
+* **The Heart (Redux Toolkit):** Centralized state management for presets, coordinate tracking, and world parameters.
+* **The Canvas (Phaser 3 / HTML5 Canvas):** A high-performance rendering engine capable of handling up to 257x257 grids with real-time composite biome calculation.
+* **The Transmuter (Custom Parser):** A bi-directional logic engine that converts raw `world_gen.txt` strings into memory-efficient `Uint16Array` buffers and back again.
+
+---
+
+## 📥 Installation & Setting the Forge
+
+To set up the Scriptorium in your own mountain hall:
+
+1.  **Clone the Source Scrolls:**
+    ```bash
+    git clone https://github.com/Pythongor/armoks-blueprint.git
+    ```
+2.  **Ignite the Spark (Install dependencies):**
+    ```bash
+    npm install
+    ```
+3.  **Strike the Earth (Run development server):**
+    ```bash
+    npm run dev
+
+---
+
+## 🤝 The Fellowship of Architects (Contribution)
+
+No masterwork is ever truly finished. If you are a scribe of the code-mines or a veteran Overseer, your help is welcomed:
+
+* **Report a Fracture:** Open an **Issue** if you find a bug in the coordinate mapping or a crash in the parser.
+* **Refine the Runes:** **Pull Requests** are welcome for new brush types, better biome resolvers, UI enhancements or anything else you can think of.
+* **The Scribe’s Mark:** If you find this tool useful, leave a ⭐ on the repository to let the other dwarves know where the fine crafts are kept.
+
+---
+
+## ⚖️ License
+
+Distributed under the **MIT License**. See the `LICENSE` file for more information.
