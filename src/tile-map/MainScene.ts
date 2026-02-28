@@ -13,6 +13,7 @@ export class MainScene extends Phaser.Scene {
   private brushValue: number = 100;
   private brushSize: number = 1;
   private displayGraphics?: Phaser.GameObjects.Graphics;
+  private cursorGraphics?: Phaser.GameObjects.Graphics;
   private isPanning: boolean = false;
 
   constructor() {
@@ -21,6 +22,7 @@ export class MainScene extends Phaser.Scene {
 
   create() {
     this.displayGraphics = this.add.graphics();
+    this.cursorGraphics = this.add.graphics();
 
     this.updateCameraForCurrentPreset();
 
@@ -72,6 +74,8 @@ export class MainScene extends Phaser.Scene {
 
       const tx = Math.floor(p.worldX / this.tileSize);
       const ty = Math.floor(p.worldY / this.tileSize);
+
+      this.drawCursor(tx, ty);
 
       if (this.isValidTile(tx, ty)) {
         const index = ty * worldManager.gridSize + tx;
@@ -141,6 +145,25 @@ export class MainScene extends Phaser.Scene {
     const zoomX = this.cameras.main.width / (worldWidth + padding);
     const zoomY = this.cameras.main.height / (worldHeight + padding);
     this.cameras.main.setZoom(Math.min(zoomX, zoomY, 1));
+  }
+
+  private drawCursor(tx: number, ty: number) {
+    if (!this.cursorGraphics) return;
+
+    this.cursorGraphics.clear();
+
+    if (!this.isValidTile(tx, ty)) return;
+
+    const size = this.brushSize * this.tileSize;
+    const half = Math.floor(this.brushSize / 2) * this.tileSize;
+    const x = tx * this.tileSize - half;
+    const y = ty * this.tileSize - half;
+
+    this.cursorGraphics.lineStyle(1, 0x000000, 1);
+    this.cursorGraphics.strokeRect(x - 1, y - 1, size + 2, size + 2);
+
+    this.cursorGraphics.lineStyle(1, 0xffffff, 1);
+    this.cursorGraphics.strokeRect(x, y, size, size);
   }
 
   getTileColor(index: number): number {
