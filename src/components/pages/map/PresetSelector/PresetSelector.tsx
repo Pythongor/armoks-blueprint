@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import { EventBus } from "@tile-map/EventBus";
+import { BusEvent, EventBus } from "@tile-map/EventBus";
 import React from "react";
 import { type RootState } from "@store/index";
 import { setActivePreset } from "@store/worldSlice";
@@ -18,7 +18,7 @@ export const PresetSelector = () => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newTitle = e.target.value;
     dispatch(setActivePreset(newTitle));
-    EventBus.emit("preset-switched", newTitle);
+    EventBus.emit(BusEvent.PresetSwitched, newTitle);
   };
 
   if (!activeTitle) return null;

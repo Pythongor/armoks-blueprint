@@ -17,7 +17,7 @@ export function PresetsSidebar() {
 
   const handleSwitchPreset = (title: string) => {
     dispatch(setActivePreset(title));
-    EventBus.emit("preset-switched", title);
+    EventBus.emit(BusEvent.PresetSwitched, title);
   };
 
   const handleCopy = (e: React.MouseEvent, title: string) => {

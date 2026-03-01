@@ -1,4 +1,5 @@
-import { EventBus } from "./EventBus";
+import { BusEvent, EventBus } from "./EventBus";
+
 import type { GridScene } from "./GridScene";
 import { PaintMode } from "@store/paintSlice";
 import type { PaintSettings } from "@store/selectors";
@@ -20,7 +21,7 @@ export class LineScene extends Phaser.Scene {
   create() {
     this.previewGraphics = this.add.graphics();
 
-    EventBus.on("brush-updated", (state: PaintSettings) => {
+    EventBus.on(BusEvent.BrushUpdated, (state: PaintSettings) => {
       this.brushWidth = state.brushWidth;
       this.isActive = state.paintMode === PaintMode.Line;
       if (!this.isActive) {
@@ -29,11 +30,11 @@ export class LineScene extends Phaser.Scene {
       }
     });
 
-    EventBus.on("line-start", (coords: { x: number; y: number }) => {
+    EventBus.on(BusEvent.LineStart, (coords: { x: number; y: number }) => {
       this.startTile = coords;
     });
 
-    EventBus.on("line-end", (coords: { x: number; y: number }) => {
+    EventBus.on(BusEvent.LineEnd, (coords: { x: number; y: number }) => {
       if (this.startTile) {
         this.commitLine(this.startTile, coords);
         this.startTile = null;
@@ -42,7 +43,7 @@ export class LineScene extends Phaser.Scene {
     });
 
     EventBus.on(
-      "cursor-moved",
+      BusEvent.CursorMoved,
       (data: { tx: number; ty: number; isValid: boolean }) => {
         this.currentTile = { x: data.tx, y: data.ty };
         if (this.startTile) {

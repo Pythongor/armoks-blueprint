@@ -1,5 +1,5 @@
 import { type Middleware } from "@reduxjs/toolkit";
-import { EventBus } from "@tile-map/EventBus";
+import { BusEvent, EventBus } from "@tile-map/EventBus";
 import {
   setActiveLayer,
   setPaintMode,
@@ -23,15 +23,15 @@ import { selectPaintSettings } from "./selectors";
 import type { Biome, BiomeDescriptor } from "@/types";
 
 export const phaserMiddleware: Middleware = (store) => {
-  EventBus.on("update-coords", (coords: { x: number; y: number }) => {
+  EventBus.on(BusEvent.UpdateCoords, (coords: { x: number; y: number }) => {
     store.dispatch(setCoords(coords));
   });
 
-  EventBus.on("update-biome", (biome: Biome) => {
+  EventBus.on(BusEvent.UpdateBiome, (biome: Biome) => {
     store.dispatch(setBiome(biome));
   });
 
-  EventBus.on("update-biome-descriptor", (descriptor: BiomeDescriptor) => {
+  EventBus.on(BusEvent.UpdateBiomeDescriptor, (descriptor: BiomeDescriptor) => {
     store.dispatch(setBiomeDescriptor(descriptor));
   });
 
@@ -57,17 +57,17 @@ export const phaserMiddleware: Middleware = (store) => {
       setBrushOpacity.match(action)
     ) {
       const settings = selectPaintSettings(currentState);
-      EventBus.emit("brush-updated", settings);
+      EventBus.emit(BusEvent.BrushUpdated, settings);
     }
 
     if (setActivePreset.match(action)) {
-      EventBus.emit("preset-switched", action.payload);
+      EventBus.emit(BusEvent.PresetSwitched, action.payload);
     }
 
     if (addPreset.match(action)) {
       const { title, size } = action.payload;
       worldManager.createPreset(title, size);
-      EventBus.emit("preset-switched", title);
+      EventBus.emit(BusEvent.PresetSwitched, title);
     }
 
     if (copyPreset.match(action)) {
@@ -76,7 +76,7 @@ export const phaserMiddleware: Middleware = (store) => {
 
       worldManager.createPreset(newTitle, sourceSize);
       worldManager.copyBufferData(sourceTitle, newTitle);
-      EventBus.emit("preset-switched", newTitle);
+      EventBus.emit(BusEvent.PresetSwitched, newTitle);
     }
 
     if (deletePreset.match(action)) {
@@ -85,7 +85,7 @@ export const phaserMiddleware: Middleware = (store) => {
 
       const newActive = store.getState().world.activePresetTitle;
       if (newActive) {
-        EventBus.emit("preset-switched", newActive);
+        EventBus.emit(BusEvent.PresetSwitched, newActive);
       }
     }
 
@@ -97,7 +97,7 @@ export const phaserMiddleware: Middleware = (store) => {
 
       if (activeTitle && dimAfter !== dimBefore && dimAfter !== null) {
         worldManager.resizePreset(activeTitle, dimAfter);
-        EventBus.emit("preset-switched", activeTitle);
+        EventBus.emit(BusEvent.PresetSwitched, activeTitle);
       }
     }
 

@@ -1,5 +1,6 @@
+import { BusEvent, EventBus } from "./EventBus";
+
 import type { BrushScene } from "./BrushScene";
-import { EventBus } from "./EventBus";
 import type { GridScene } from "./GridScene";
 import { PaintMode } from "@store/paintSlice";
 import type { PaintSettings } from "@store/selectors";
@@ -19,7 +20,7 @@ export class MainScene extends Phaser.Scene {
     this.scene.launch("BrushScene");
     this.scene.launch("LineScene");
 
-    EventBus.on("brush-updated", (state: PaintSettings) => {
+    EventBus.on(BusEvent.BrushUpdated, (state: PaintSettings) => {
       this.paintMode = state.paintMode;
     });
 
@@ -37,7 +38,7 @@ export class MainScene extends Phaser.Scene {
       if (!coords.isValid) return;
 
       if (this.paintMode === PaintMode.Line) {
-        EventBus.emit("line-start", { x: coords.tx, y: coords.ty });
+        EventBus.emit(BusEvent.LineStart, { x: coords.tx, y: coords.ty });
       } else {
         worldManager.saveSnapshot();
         this.processPaintInput(p);
@@ -47,7 +48,7 @@ export class MainScene extends Phaser.Scene {
     this.input.on("pointermove", (p: Phaser.Input.Pointer) => {
       const coords = this.getTileCoords(p);
 
-      EventBus.emit("cursor-moved", {
+      EventBus.emit(BusEvent.CursorMoved, {
         tx: coords.tx,
         ty: coords.ty,
         isValid: coords.isValid,
@@ -63,8 +64,8 @@ export class MainScene extends Phaser.Scene {
 
       if (coords.isValid) {
         const index = coords.ty * worldManager.gridSize + coords.tx;
-        EventBus.emit("update-coords", { x: coords.tx, y: coords.ty });
-        EventBus.emit("update-biome", worldManager.getBiome(index));
+        EventBus.emit(BusEvent.UpdateCoords, { x: coords.tx, y: coords.ty });
+        EventBus.emit(BusEvent.UpdateBiome, worldManager.getBiome(index));
       }
     });
 
@@ -74,12 +75,12 @@ export class MainScene extends Phaser.Scene {
 
         if (coords.isValid) {
           worldManager.saveSnapshot();
-          EventBus.emit("line-end", { x: coords.tx, y: coords.ty });
+          EventBus.emit(BusEvent.LineEnd, { x: coords.tx, y: coords.ty });
         }
       }
 
       this.isPanning = false;
-      EventBus.emit("stroke-finished");
+      EventBus.emit(BusEvent.StrokeFinished);
     });
 
     this.input.on(

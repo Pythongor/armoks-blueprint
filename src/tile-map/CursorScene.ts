@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { EventBus } from "./EventBus";
+import { BusEvent, EventBus } from "./EventBus";
 import { BrushShape, PaintMode } from "@store/paintSlice";
 import { type PaintSettings } from "@store/selectors";
 import type { GridScene } from "./GridScene";
@@ -18,14 +18,14 @@ export class CursorScene extends Phaser.Scene {
   create() {
     this.cursorGraphics = this.add.graphics();
 
-    EventBus.on("brush-updated", (state: PaintSettings) => {
+    EventBus.on(BusEvent.BrushUpdated, (state: PaintSettings) => {
       this.brushWidth = state.brushWidth;
       this.brushShape = state.brushShape;
       this.paintMode = state.paintMode;
     });
 
     EventBus.on(
-      "cursor-moved",
+      BusEvent.CursorMoved,
       ({ tx, ty, isValid }: { tx: number; ty: number; isValid: boolean }) => {
         this.handleCursorUpdate(tx, ty, isValid);
       },

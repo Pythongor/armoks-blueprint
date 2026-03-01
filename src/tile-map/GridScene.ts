@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { EventBus } from "./EventBus";
+import { BusEvent, EventBus } from "./EventBus";
 import { LayerType, BrushShape } from "@store/paintSlice";
 import { type PaintSettings } from "@store/selectors";
 import { worldManager } from "@tile-map/WorldManager";
@@ -26,7 +26,7 @@ export class GridScene extends Phaser.Scene {
     this.displayGraphics = this.add.graphics();
     this.updateCameraForCurrentPreset();
 
-    EventBus.on("brush-updated", (state: PaintSettings) => {
+    EventBus.on(BusEvent.BrushUpdated, (state: PaintSettings) => {
       this.currentLayer = state.activeLayer;
       this.brushValue = state.brushValue;
       this.brushWidth = state.brushWidth;
@@ -39,8 +39,8 @@ export class GridScene extends Phaser.Scene {
       }
     });
 
-    EventBus.on("stroke-finished", () => this.touchedTiles.clear());
-    EventBus.on("request-redraw", () => this.redrawMap());
+    EventBus.on(BusEvent.StrokeFinished, () => this.touchedTiles.clear());
+    EventBus.on(BusEvent.RequestRedraw, () => this.redrawMap());
 
     this.redrawMap();
   }

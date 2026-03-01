@@ -6,13 +6,13 @@ import { worldManager } from "@tile-map/WorldManager";
 export function useMapHistory() {
   const handleUndo = useCallback(() => {
     if (worldManager.undo()) {
-      EventBus.emit("request-redraw");
+      EventBus.emit(BusEvent.RequestRedraw);
     }
   }, []);
 
   const handleRedo = useCallback(() => {
     if (worldManager.redo()) {
-      EventBus.emit("request-redraw");
+      EventBus.emit(BusEvent.RequestRedraw);
     }
   }, []);
 
