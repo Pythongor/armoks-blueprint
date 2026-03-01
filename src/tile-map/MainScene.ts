@@ -1,3 +1,4 @@
+import type { BrushScene } from "./BrushScene";
 import { EventBus } from "./EventBus";
 import type { GridScene } from "./GridScene";
 import Phaser from "phaser";
@@ -12,6 +13,7 @@ export class MainScene extends Phaser.Scene {
 
   create() {
     this.scene.launch("GridScene");
+    this.scene.launch("BrushScene");
     this.scene.launch("CursorScene");
 
     this.setupGlobalInputs();
@@ -72,22 +74,25 @@ export class MainScene extends Phaser.Scene {
         deltaY: number,
       ) => {
         const gridScene = this.scene.get("GridScene") as GridScene;
-        if (gridScene) gridScene.handleZoom(pointer, deltaY);
+        if (gridScene) {
+          gridScene.handleZoom(pointer, deltaY);
+        }
       },
     );
   }
 
-  private processPaintInput(pointer: Phaser.Input.Pointer) {
+  private processPaintInput(p: Phaser.Input.Pointer) {
     const gridScene = this.scene.get("GridScene") as GridScene;
-    const worldPoint = gridScene.cameras.main.getWorldPoint(
-      pointer.x,
-      pointer.y,
-    );
+    const brushScene = this.scene.get("BrushScene") as BrushScene;
+
+    if (!gridScene || !brushScene) return;
+
+    const worldPoint = gridScene.cameras.main.getWorldPoint(p.x, p.y);
     const tx = Math.floor(worldPoint.x / gridScene.tileSize);
     const ty = Math.floor(worldPoint.y / gridScene.tileSize);
 
     if (gridScene.isValidTile(tx, ty)) {
-      gridScene.paintTile(tx, ty);
+      brushScene.handlePaintAction(tx, ty);
     }
   }
 }

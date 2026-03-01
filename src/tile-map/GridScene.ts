@@ -39,16 +39,15 @@ export class GridScene extends Phaser.Scene {
       }
     });
 
-    EventBus.on("stroke-finished", () => {
-      this.touchedTiles.clear();
+    EventBus.on("preset-switched", () => {
+      this.updateCameraForCurrentPreset();
+      this.redrawMap();
     });
 
     EventBus.on("request-redraw", () => this.redrawMap());
 
-    EventBus.on("preset-switched", (title: string) => {
-      worldManager.switchToPreset(title);
-      this.updateCameraForCurrentPreset();
-      this.redrawMap();
+    EventBus.on("stroke-finished", () => {
+      this.touchedTiles.clear();
     });
 
     this.redrawMap();
@@ -82,6 +81,7 @@ export class GridScene extends Phaser.Scene {
 
         if (this.isValidTile(tx, ty)) {
           const index = ty * worldManager.gridSize + tx;
+
           if (this.touchedTiles.has(index)) continue;
 
           if (this.brushShape === BrushShape.Circle) {
