@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { EventBus } from "./EventBus";
-import { LayerType, BrushShape } from "@store/brushSlice";
+import { LayerType, BrushShape } from "@/store/paintSlice";
 import { type BrushSettings } from "@store/selectors";
 import { worldManager } from "@tile-map/WorldManager";
 import { getBiomeColor } from "@helpers/biomeResolver";
@@ -11,7 +11,7 @@ export class MainScene extends Phaser.Scene {
   private currentLayer: LayerType = LayerType.Elevation;
   private viewMode: LayerType | "biomes" = "biomes";
   private brushValue: number = 100;
-  private brushSize: number = 1;
+  private brushWidth: number = 1;
   private brushShape: BrushShape = BrushShape.Square;
   private brushOpacity: number = 0.5;
   private touchedTiles: Set<number> = new Set();
@@ -34,9 +34,9 @@ export class MainScene extends Phaser.Scene {
     EventBus.on("brush-updated", (state: BrushSettings) => {
       this.currentLayer = state.activeLayer;
       this.brushValue = state.brushValue;
-      this.brushSize = state.brushSize;
+      this.brushWidth = state.brushWidth;
       this.brushShape = state.brushShape;
-      this.brushOpacity = state.brushOpacity;
+      this.brushOpacity = state.opacity;
 
       if (this.viewMode !== state.viewMode) {
         this.viewMode = state.viewMode;
@@ -173,13 +173,13 @@ export class MainScene extends Phaser.Scene {
     this.cursorGraphics.clear();
     if (!this.isValidTile(tx, ty)) return;
 
-    const offset = Math.floor(this.brushSize / 2);
-    const radius = this.brushSize / 2;
+    const offset = Math.floor(this.brushWidth / 2);
+    const radius = this.brushWidth / 2;
 
     if (this.brushShape === BrushShape.Square) {
       const x = (tx - offset) * this.tileSize;
       const y = (ty - offset) * this.tileSize;
-      const size = this.brushSize * this.tileSize;
+      const size = this.brushWidth * this.tileSize;
 
       this.cursorGraphics
         .lineStyle(1, 0xffffff, 1)
@@ -216,8 +216,8 @@ export class MainScene extends Phaser.Scene {
   paintTile(tileX: number, tileY: number) {
     if (!this.displayGraphics) return;
 
-    const half = Math.floor(this.brushSize / 2);
-    const radiusSq = Math.pow(this.brushSize / 2, 2);
+    const half = Math.floor(this.brushWidth / 2);
+    const radiusSq = Math.pow(this.brushWidth / 2, 2);
 
     for (let dy = -half; dy <= half; dy++) {
       for (let dx = -half; dx <= half; dx++) {

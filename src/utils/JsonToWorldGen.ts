@@ -1,4 +1,4 @@
-import { LayerType } from "@store/brushSlice";
+import { LayerType } from "@/store/paintSlice";
 import type { WorldPreset } from "@/types";
 import { worldManager } from "@tile-map/WorldManager";
 

@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "@store/index";
-import { setBrushValue, LayerType } from "@store/brushSlice";
+import { setBrushValue, LayerType } from "@/store/paintSlice";
 import { Slider } from "@components/widgets/Slider/Slider";
 
 export function BrushValueSlider() {
   const dispatch = useDispatch();
   const { activeLayer, layerValues } = useSelector(
-    (state: RootState) => state.brush,
+    (state: RootState) => state.paint,
   );
 
   const maxRange = activeLayer === LayerType.Elevation ? 400 : 100;

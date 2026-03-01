@@ -1,6 +1,6 @@
 import { getMoralDescriptor, identifyBiome } from "@/helpers/biomeResolver";
 
-import { LayerType } from "@store/brushSlice";
+import { LayerType } from "@/store/paintSlice";
 
 export type WorldDataLayers = Record<LayerType, Uint16Array>;
 

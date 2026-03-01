@@ -1,4 +1,4 @@
-import { BrushShape, setBrushShape } from "@store/brushSlice";
+import { BrushShape, setBrushShape } from "@/store/paintSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import type { RootState } from "@store/index";
@@ -7,7 +7,7 @@ import styles from "./BrushShapeSelector.module.scss";
 
 export function BrushShapeSelector() {
   const dispatch = useDispatch();
-  const { brushShape } = useSelector((state: RootState) => state.brush);
+  const { brushShape } = useSelector((state: RootState) => state.paint);
 
   return (
     <div className={styles.base}>

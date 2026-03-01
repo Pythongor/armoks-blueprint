@@ -1,13 +1,13 @@
-import { brushSlice } from "./brushSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { coordsSlice } from "./coordsSlice";
+import { paintSlice } from "./paintSlice";
 import { phaserMiddleware } from "./phaserMiddleware";
 import { uiSlice } from "./uiSlice";
 import { worldSlice } from "./worldSlice";
 
 export const store = configureStore({
   reducer: {
-    brush: brushSlice.reducer,
+    paint: paintSlice.reducer,
     world: worldSlice.reducer,
     coords: coordsSlice.reducer,
     ui: uiSlice.reducer,

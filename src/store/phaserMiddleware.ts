@@ -3,12 +3,12 @@ import { EventBus } from "@tile-map/EventBus";
 import {
   setActiveLayer,
   setBrushValue,
-  setBrushSize,
+  setBrushWidth,
   setBrushShape,
   setBrushOpacity,
   setViewMode,
   setLockedToBiomes,
-} from "./brushSlice";
+} from "./paintSlice";
 import { worldManager } from "@tile-map/WorldManager";
 import {
   setActivePreset,
@@ -50,7 +50,7 @@ export const phaserMiddleware: Middleware = (store) => {
       setBrushValue.match(action) ||
       setViewMode.match(action) ||
       setLockedToBiomes.match(action) ||
-      setBrushSize.match(action) ||
+      setBrushWidth.match(action) ||
       setBrushShape.match(action) ||
       setBrushOpacity.match(action)
     ) {

@@ -1,30 +1,30 @@
-import type { BrushShape } from "./brushSlice";
+import type { BrushShape } from "./paintSlice";
 import { type RootState } from "./index";
 
 export const selectActiveBrushValue = (state: RootState) => {
-  const { activeLayer, layerValues } = state.brush;
+  const { activeLayer, layerValues } = state.paint;
   return layerValues[activeLayer];
 };
 
 export type BrushSettings = {
-  activeLayer: RootState["brush"]["activeLayer"];
-  viewMode: RootState["brush"]["viewMode"];
+  activeLayer: RootState["paint"]["activeLayer"];
+  viewMode: RootState["paint"]["viewMode"];
   brushValue: number;
-  brushSize: number;
+  brushWidth: number;
   brushShape: BrushShape;
-  brushOpacity: number;
+  opacity: number;
 };
 
 export const selectBrushSettings = (state: RootState): BrushSettings => {
-  const { activeLayer, viewMode, brushSize, brushShape, brushOpacity } =
-    state.brush;
+  const { activeLayer, viewMode, brushWidth, brushShape, opacity } =
+    state.paint;
   return {
     activeLayer,
     viewMode,
     brushValue: selectActiveBrushValue(state),
-    brushSize,
+    brushWidth,
     brushShape,
-    brushOpacity,
+    opacity,
   };
 };
 

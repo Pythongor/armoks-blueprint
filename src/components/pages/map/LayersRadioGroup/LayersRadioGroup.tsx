@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import cn from "classnames";
 import { type RootState } from "@store/index";
-import { setActiveLayer, LayerType } from "@store/brushSlice";
+import { setActiveLayer, LayerType } from "@/store/paintSlice";
 import styles from "./LayersRadioGroup.module.scss";
 
 const layers: Array<{ id: LayerType; label: string }> = [
@@ -16,7 +16,7 @@ const layers: Array<{ id: LayerType; label: string }> = [
 
 export function LayersRadioGroup() {
   const dispatch = useDispatch();
-  const { activeLayer } = useSelector((state: RootState) => state.brush);
+  const { activeLayer } = useSelector((state: RootState) => state.paint);
 
   return (
     <div className={styles.base}>
