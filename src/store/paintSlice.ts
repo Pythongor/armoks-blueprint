@@ -10,6 +10,11 @@ export enum LayerType {
   Alignment = "alignment",
 }
 
+export enum PaintMode {
+  Brush = "brush",
+  Line = "line",
+}
+
 export enum BrushShape {
   Square = "square",
   Circle = "circle",
@@ -20,15 +25,17 @@ interface PaintState {
   viewMode: LayerType | "biomes";
   isLockedToBiomes: boolean;
   layerValues: Record<LayerType, number>;
+  paintMode: PaintMode;
+  opacity: number;
   brushWidth: number;
   brushShape: BrushShape;
-  opacity: number;
 }
 
 const initialState: PaintState = {
   viewMode: "biomes",
   activeLayer: LayerType.Elevation,
   isLockedToBiomes: true,
+  paintMode: PaintMode.Brush,
   brushWidth: 1,
   brushShape: BrushShape.Square,
   opacity: 1,
@@ -68,6 +75,9 @@ export const paintSlice = createSlice({
     ) => {
       state.layerValues[layer] = value;
     },
+    setPaintMode: (state, action: PayloadAction<PaintMode>) => {
+      state.paintMode = action.payload;
+    },
     setBrushWidth: (state, action: PayloadAction<number>) => {
       state.brushWidth = action.payload;
     },
@@ -85,6 +95,7 @@ export const {
   setActiveLayer,
   setViewMode,
   setBrushValue,
+  setPaintMode,
   setBrushWidth,
   setBrushShape,
   setBrushOpacity,

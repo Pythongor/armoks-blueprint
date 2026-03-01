@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { EventBus } from "./EventBus";
 import { LayerType, BrushShape } from "@store/paintSlice";
-import { type BrushSettings } from "@store/selectors";
+import { type PaintSettings } from "@store/selectors";
 import { worldManager } from "@tile-map/WorldManager";
 import { getBiomeColor } from "@helpers/biomeResolver";
 import { getLayerColor } from "@helpers/paletteResolver";
@@ -26,7 +26,7 @@ export class GridScene extends Phaser.Scene {
     this.displayGraphics = this.add.graphics();
     this.updateCameraForCurrentPreset();
 
-    EventBus.on("brush-updated", (state: BrushSettings) => {
+    EventBus.on("brush-updated", (state: PaintSettings) => {
       this.currentLayer = state.activeLayer;
       this.brushValue = state.brushValue;
       this.brushWidth = state.brushWidth;
@@ -39,16 +39,8 @@ export class GridScene extends Phaser.Scene {
       }
     });
 
-    EventBus.on("preset-switched", () => {
-      this.updateCameraForCurrentPreset();
-      this.redrawMap();
-    });
-
+    EventBus.on("stroke-finished", () => this.touchedTiles.clear());
     EventBus.on("request-redraw", () => this.redrawMap());
-
-    EventBus.on("stroke-finished", () => {
-      this.touchedTiles.clear();
-    });
 
     this.redrawMap();
   }
@@ -112,8 +104,10 @@ export class GridScene extends Phaser.Scene {
 
   public redrawMap() {
     if (!this.displayGraphics) return;
+
     this.displayGraphics.clear();
     const size = worldManager.gridSize;
+
     for (let i = 0; i < size * size; i++) {
       const x = i % size;
       const y = Math.floor(i / size);
@@ -129,9 +123,11 @@ export class GridScene extends Phaser.Scene {
 
   private getTileColor(index: number): number {
     const data = worldManager.getPointData(index);
+
     if (this.viewMode === "biomes") {
       return getBiomeColor(worldManager.getBiome(index), data.volcanism > 90);
     }
+
     return getLayerColor(
       this.viewMode,
       worldManager.worldData[this.viewMode][index],

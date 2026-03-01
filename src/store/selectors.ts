@@ -1,4 +1,4 @@
-import type { BrushShape } from "./paintSlice";
+import type { BrushShape, LayerType, PaintMode } from "./paintSlice";
 import { type RootState } from "./index";
 
 export const selectActiveBrushValue = (state: RootState) => {
@@ -6,21 +6,23 @@ export const selectActiveBrushValue = (state: RootState) => {
   return layerValues[activeLayer];
 };
 
-export type BrushSettings = {
-  activeLayer: RootState["paint"]["activeLayer"];
-  viewMode: RootState["paint"]["viewMode"];
+export type PaintSettings = {
+  activeLayer: LayerType;
+  viewMode: LayerType | "biomes";
+  paintMode: PaintMode;
   brushValue: number;
   brushWidth: number;
   brushShape: BrushShape;
   opacity: number;
 };
 
-export const selectBrushSettings = (state: RootState): BrushSettings => {
-  const { activeLayer, viewMode, brushWidth, brushShape, opacity } =
+export const selectPaintSettings = (state: RootState): PaintSettings => {
+  const { activeLayer, viewMode, paintMode, brushWidth, brushShape, opacity } =
     state.paint;
   return {
     activeLayer,
     viewMode,
+    paintMode,
     brushValue: selectActiveBrushValue(state),
     brushWidth,
     brushShape,

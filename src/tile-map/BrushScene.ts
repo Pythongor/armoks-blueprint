@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { EventBus } from "./EventBus";
-import { BrushShape } from "@store/paintSlice";
-import { type BrushSettings } from "@store/selectors";
+import { BrushShape, PaintMode } from "@store/paintSlice";
+import { type PaintSettings } from "@store/selectors";
 import type { GridScene } from "./GridScene";
 
 export class BrushScene extends Phaser.Scene {
@@ -9,6 +9,7 @@ export class BrushScene extends Phaser.Scene {
   private brushWidth: number = 1;
   private brushShape: BrushShape = BrushShape.Square;
   private brushGraphics?: Phaser.GameObjects.Graphics;
+  private isActive: boolean = true;
 
   constructor() {
     super("BrushScene");
@@ -17,9 +18,10 @@ export class BrushScene extends Phaser.Scene {
   create() {
     this.brushGraphics = this.add.graphics();
 
-    EventBus.on("brush-updated", (state: BrushSettings) => {
+    EventBus.on("brush-updated", (state: PaintSettings) => {
       this.brushWidth = state.brushWidth;
       this.brushShape = state.brushShape;
+      this.isActive = state.paintMode === PaintMode.Brush;
     });
 
     EventBus.on(
@@ -35,7 +37,7 @@ export class BrushScene extends Phaser.Scene {
 
     this.brushGraphics.clear();
 
-    if (!isValid) return;
+    if (!isValid || !this.isActive) return;
 
     const gridScene = this.scene.get("GridScene") as GridScene;
     if (gridScene && gridScene.cameras.main) {

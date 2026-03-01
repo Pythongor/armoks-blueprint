@@ -1,12 +1,14 @@
 import Phaser from "phaser";
 import { EventBus } from "./EventBus";
-import { BrushShape } from "@store/paintSlice";
-import { type BrushSettings } from "@store/selectors";
+import { BrushShape, PaintMode } from "@store/paintSlice";
+import { type PaintSettings } from "@store/selectors";
+import type { GridScene } from "./GridScene";
 
 export class CursorScene extends Phaser.Scene {
   private tileSize: number = 16;
   private brushWidth: number = 1;
   private brushShape: BrushShape = BrushShape.Square;
+  private paintMode: PaintMode = PaintMode.Brush;
   private cursorGraphics?: Phaser.GameObjects.Graphics;
 
   constructor() {
@@ -16,9 +18,10 @@ export class CursorScene extends Phaser.Scene {
   create() {
     this.cursorGraphics = this.add.graphics();
 
-    EventBus.on("brush-updated", (state: BrushSettings) => {
+    EventBus.on("brush-updated", (state: PaintSettings) => {
       this.brushWidth = state.brushWidth;
       this.brushShape = state.brushShape;
+      this.paintMode = state.paintMode;
     });
 
     EventBus.on(
@@ -34,12 +37,15 @@ export class CursorScene extends Phaser.Scene {
 
     this.cursorGraphics.clear();
 
-    if (!isValid) return;
+    if (!isValid || this.paintMode === PaintMode.Line) return;
 
-    const mainCamera = this.scene.get("GridScene").cameras.main;
-    this.cameras.main.scrollX = mainCamera.scrollX;
-    this.cameras.main.scrollY = mainCamera.scrollY;
-    this.cameras.main.zoom = mainCamera.zoom;
+    const gridScene = this.scene.get("GridScene") as GridScene;
+    if (gridScene && gridScene.cameras.main) {
+      const mainCamera = gridScene.cameras.main;
+      this.cameras.main.scrollX = mainCamera.scrollX;
+      this.cameras.main.scrollY = mainCamera.scrollY;
+      this.cameras.main.zoom = mainCamera.zoom;
+    }
 
     this.drawCursor(tx, ty);
   }
@@ -53,25 +59,35 @@ export class CursorScene extends Phaser.Scene {
       const y = (ty - offset) * this.tileSize;
       const size = this.brushWidth * this.tileSize;
 
-      this.cursorGraphics
-        ?.lineStyle(1, 0xffffff, 1)
-        .strokeRect(x - 1, y - 1, size + 2, size + 2);
+      this.cursorGraphics!.lineStyle(1, 0xffffff, 1).strokeRect(
+        x - 1,
+        y - 1,
+        size + 2,
+        size + 2,
+      );
 
-      this.cursorGraphics
-        ?.lineStyle(1, 0x000000, 1)
-        .strokeRect(x, y, size, size);
+      this.cursorGraphics!.lineStyle(1, 0x000000, 1).strokeRect(
+        x,
+        y,
+        size,
+        size,
+      );
     } else {
       const centerX = tx * this.tileSize + this.tileSize / 2;
       const centerY = ty * this.tileSize + this.tileSize / 2;
       const pixelRadius = radius * this.tileSize;
 
-      this.cursorGraphics
-        ?.lineStyle(1, 0xffffff, 1)
-        .strokeCircle(centerX, centerY, pixelRadius + 1);
+      this.cursorGraphics!.lineStyle(1, 0xffffff, 1).strokeCircle(
+        centerX,
+        centerY,
+        pixelRadius + 1,
+      );
 
-      this.cursorGraphics
-        ?.lineStyle(1, 0x000000, 1)
-        .strokeCircle(centerX, centerY, pixelRadius);
+      this.cursorGraphics!.lineStyle(1, 0x000000, 1).strokeCircle(
+        centerX,
+        centerY,
+        pixelRadius,
+      );
     }
   }
 }

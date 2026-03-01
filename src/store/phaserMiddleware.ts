@@ -2,6 +2,7 @@ import { type Middleware } from "@reduxjs/toolkit";
 import { EventBus } from "@tile-map/EventBus";
 import {
   setActiveLayer,
+  setPaintMode,
   setBrushValue,
   setBrushWidth,
   setBrushShape,
@@ -18,7 +19,7 @@ import {
   deletePreset,
 } from "./worldSlice";
 import { setCoords, setBiome, setBiomeDescriptor } from "./coordsSlice";
-import { selectBrushSettings } from "./selectors";
+import { selectPaintSettings } from "./selectors";
 import type { Biome, BiomeDescriptor } from "@/types";
 
 export const phaserMiddleware: Middleware = (store) => {
@@ -49,12 +50,13 @@ export const phaserMiddleware: Middleware = (store) => {
       setActiveLayer.match(action) ||
       setBrushValue.match(action) ||
       setViewMode.match(action) ||
+      setPaintMode.match(action) ||
       setLockedToBiomes.match(action) ||
       setBrushWidth.match(action) ||
       setBrushShape.match(action) ||
       setBrushOpacity.match(action)
     ) {
-      const settings = selectBrushSettings(currentState);
+      const settings = selectPaintSettings(currentState);
       EventBus.emit("brush-updated", settings);
     }
 

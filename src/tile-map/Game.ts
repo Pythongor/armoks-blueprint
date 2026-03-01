@@ -1,6 +1,7 @@
 import { BrushScene } from "./BrushScene";
 import { CursorScene } from "./CursorScene";
 import { GridScene } from "./GridScene";
+import { LineScene } from "./LineScene";
 import { MainScene } from "./MainScene";
 
 export function createGame() {
@@ -13,6 +14,6 @@ export function createGame() {
     },
     physics: { default: "arcade" },
     pixelArt: true,
-    scene: [MainScene, GridScene, CursorScene, BrushScene],
+    scene: [MainScene, GridScene, CursorScene, BrushScene, LineScene],
   });
 }
