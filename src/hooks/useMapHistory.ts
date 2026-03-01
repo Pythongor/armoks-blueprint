@@ -1,6 +1,6 @@
+import { BusEvent, EventBus } from "@tile-map/EventBus";
 import { useCallback, useEffect } from "react";
 
-import { EventBus } from "@/tile-map/EventBus";
 import { worldManager } from "@tile-map/WorldManager";
 
 export function useMapHistory() {
@@ -39,4 +39,6 @@ export function useMapHistory() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleUndo, handleRedo]);
+
+  return { undo: handleUndo, redo: handleRedo };
 }
