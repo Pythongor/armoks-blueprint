@@ -20,6 +20,23 @@ export class MainScene extends Phaser.Scene {
     this.scene.launch("BrushScene");
     this.scene.launch("LineScene");
 
+    EventBus.on(BusEvent.PresetSwitched, (presetTitle: string) => {
+      worldManager.switchToPreset(presetTitle);
+      this.isPanning = false;
+      EventBus.emit("stroke-finished");
+
+      if (!this.input || !this.input.manager) return;
+
+      const pointers = this.input.manager.pointers;
+      const p = pointers && pointers.length > 0 ? pointers[0] : null;
+
+      if (p && p.active) {
+        this.input.emit("pointermove", p);
+      } else {
+        EventBus.emit(BusEvent.CursorMoved, { tx: 0, ty: 0, isValid: false });
+      }
+    });
+
     EventBus.on(BusEvent.BrushUpdated, (state: PaintSettings) => {
       this.paintMode = state.paintMode;
     });

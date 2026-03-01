@@ -26,6 +26,14 @@ export class GridScene extends Phaser.Scene {
     this.displayGraphics = this.add.graphics();
     this.updateCameraForCurrentPreset();
 
+    EventBus.on(BusEvent.PresetSwitched, () => {
+      this.updateCameraForCurrentPreset();
+
+      this.touchedTiles.clear();
+
+      this.redrawMap();
+    });
+
     EventBus.on(BusEvent.BrushUpdated, (state: PaintSettings) => {
       this.currentLayer = state.activeLayer;
       this.brushValue = state.brushValue;
@@ -108,10 +116,15 @@ export class GridScene extends Phaser.Scene {
     this.displayGraphics.clear();
     const size = worldManager.gridSize;
 
+    if (size <= 0) return;
+
     for (let i = 0; i < size * size; i++) {
       const x = i % size;
       const y = Math.floor(i / size);
-      this.displayGraphics.fillStyle(this.getTileColor(i), 1);
+
+      const color = this.getTileColor(i);
+
+      this.displayGraphics.fillStyle(color, 1);
       this.displayGraphics.fillRect(
         x * this.tileSize,
         y * this.tileSize,
