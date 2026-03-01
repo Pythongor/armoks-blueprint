@@ -102,3 +102,37 @@
     opacity: 0.7;
   }
 }
+
+.card__error {
+  border: 2px solid $ui-warning;
+  background: rgba(60, 0, 0, 0.8);
+  box-shadow: 0 0 15px rgba($ui-warning, 0.4);
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  cursor: pointer;
+}
+
+.errorContent {
+  text-align: center;
+}
+
+.errorTitle {
+  color: $ui-warning;
+}
+
+.errorMessage {
+  font-size: 0.85rem;
+  color: rgba($ui-warning, 0.7);
+  margin-top: 1rem;
+  font-style: italic;
+  background: rgba($ui-black, 0.3);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.retryHint {
+  display: block;
+  margin-top: 5rem;
+  font-size: 0.7rem;
+  color: $ui-silver;
+  text-transform: uppercase;
+}

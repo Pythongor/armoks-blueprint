@@ -5,21 +5,39 @@ const tokenRegex = /\[([^\]]+)\]/g;
 export class WorldGenToJson {
   /**
    * Parses the entire world_gen.txt content into an array of presets.
+   * Throws Error if structure is invalid.
    */
   static parse(input: string): WorldPreset[] {
-    // 1. Split the file into individual [WORLD_GEN] blocks
-    // We split by the tag, and filter out any empty strings resulting from the split
+    if (!input || !input.includes("[WORLD_GEN]")) {
+      throw new Error("Invalid File: No [WORLD_GEN] blocks found.");
+    }
+
     const blocks = input
       .split(/\[WORLD_GEN\]/)
       .filter((b) => b.trim().length > 0);
 
-    return blocks.map((block) => this.parseSingleBlock(block));
+    if (blocks.length === 0) {
+      throw new Error(
+        "Invalid File: [WORLD_GEN] tag found but content is empty.",
+      );
+    }
+
+    return blocks.map((block, index) => {
+      try {
+        return this.parseSingleBlock(block.trim());
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          throw new Error(`Error in Block #${index + 1}: ${err.message}`);
+        }
+        throw new Error(`Error in Block #${index + 1}: ${String(err)}`);
+      }
+    });
   }
 
   private static parseSingleBlock(blockContent: string): WorldPreset {
     const preset: WorldPreset = {
       title: "Untitled Blueprint",
-      size: 129,
+      size: 0,
       settings: {},
       mapData: {},
     };
@@ -32,45 +50,71 @@ export class WorldGenToJson {
       const key = parts[0];
       const params = parts.slice(1);
 
+      if (key === "DIM") {
+        const size = parseInt(params[0]);
+        if (isNaN(size) || size <= 0) {
+          throw new Error(`Invalid DIM value: ${params[0]}`);
+        }
+        preset.size = size;
+        continue;
+      }
+
       if (key.startsWith("PS_")) {
-        const layerSuffix = key.replace("PS_", "").toUpperCase(); // e.g., "EL"
+        if (preset.size === 0) {
+          throw new Error(
+            "Map data [PS_...] found before dimension [DIM] was defined.",
+          );
+        }
 
-        if (!preset.mapData) preset.mapData = {};
-        if (!preset.mapData[layerSuffix]) preset.mapData[layerSuffix] = [];
+        const layerSuffix = key.replace("PS_", "").toUpperCase();
 
-        // We track which row we are on by counting how many
-        // tokens of this type we've already seen
-        const currentY = preset.mapData[layerSuffix].length / preset.size;
-        const rowIndex = Math.floor(currentY);
+        if (!preset.mapData![layerSuffix]) preset.mapData![layerSuffix] = [];
 
-        // Loop through every value in this single bracket [PS_EL:v1:v2:v3...]
+        if (params.length !== preset.size) {
+          throw new Error(
+            `Data mismatch in ${layerSuffix}. Expected ${preset.size} values, but found ${params.length}.`,
+          );
+        }
+
+        const currentTotal = preset.mapData![layerSuffix].length;
+        const rowIndex = Math.floor(currentTotal / preset.size);
+
         params.forEach((val, xIndex) => {
+          const num = parseInt(val);
+          if (isNaN(num)) {
+            throw new Error(
+              `Non-numeric value "${val}" found in ${layerSuffix} at row ${rowIndex}`,
+            );
+          }
+
           preset.mapData![layerSuffix].push({
             x: xIndex,
             y: rowIndex,
-            v: parseInt(val),
+            v: num,
           });
         });
         continue;
       }
 
-      // 2. Handle Dimensions
-      if (key === "DIM") {
-        preset.size = parseInt(params[0]); // Using X as the source of truth for size
-      }
-
-      // 3. Handle Title
       if (key === "TITLE") {
-        preset.title = params[0];
+        preset.title = params[0] || "Untitled";
         continue;
       }
 
-      // 4. Handle Everything Else Dynamically
-      // Store as string[][] to handle repeating tokens (e.g. [REGION_COUNTS:...])
       if (!preset.settings[key]) {
         preset.settings[key] = [params];
       } else {
         preset.settings[key].push(params);
+      }
+    }
+
+    for (const layer in preset.mapData) {
+      const expectedCount = preset.size * preset.size;
+      const actualCount = preset.mapData[layer].length;
+      if (actualCount !== expectedCount) {
+        throw new Error(
+          `Layer ${layer} is incomplete. Expected ${expectedCount} total points, but found ${actualCount}.`,
+        );
       }
     }
 

@@ -6,26 +6,6 @@
   width: 100%;
 }
 
-@keyframes shake {
-  10%,
-  90% {
-    transform: translateY(-1px);
-  }
-  20%,
-  80% {
-    transform: translate3d(2px);
-  }
-  30%,
-  50%,
-  70% {
-    transform: translate3d(-4px);
-  }
-  40%,
-  60% {
-    transform: translate3d(4px);
-  }
-}
-
 .btnText {
   position: relative;
   z-index: 2;
