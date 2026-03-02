@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { WorldGenToJson } from "@/utils/WorldGenToJson";
 import cn from "classnames";
 import styles from "./Cards.module.scss";
-import { useWorldInitializer } from "./hooks";
+import { useWorldInitializer } from "@hooks/useWorldInitializer";
 
 export function ReclaimArchiveCard() {
   const handleStart = useWorldInitializer(true);

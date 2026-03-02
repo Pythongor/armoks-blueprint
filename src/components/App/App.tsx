@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AboutPage } from "../pages/about/page";
 import { ExportPage } from "@components/pages/export/page";
+import { GalleryPage } from "../pages/gallery/page";
 import { MainEditorLayout } from "@components/MainEditorLayout/MainEditorLayout";
 import { MapPage } from "@components/pages/map/page";
 import { ModalManager } from "../Modal/Modal";
@@ -26,6 +27,7 @@ export function App() {
               !isInitialized ? <StartPage /> : <Navigate to="/world-settings" />
             }
           />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route
             element={isInitialized ? <MainEditorLayout /> : <Navigate to="/" />}
           >

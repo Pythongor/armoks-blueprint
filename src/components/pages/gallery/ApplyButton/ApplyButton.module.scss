@@ -1,0 +1,25 @@
+@use "@styles/variables" as *;
+@use "@styles/mixins" as *;
+
+.base {
+  @include button;
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $ui-accent;
+  color: $ui-black;
+  border: none;
+  font-weight: bold;
+
+  &:hover:not(:disabled) {
+    background: lighten($ui-accent, 10%);
+    box-shadow: 0 15px 40px rgba($ui-black, 0.6);
+  }
+
+  &:active,
+  &:hover:not(:disabled):active {
+    background: $ui-active;
+    color: $ui-white;
+  }
+}
