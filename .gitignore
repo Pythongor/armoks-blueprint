@@ -15,6 +15,7 @@ package-lock.json
 
 data/
 output/
+**/__pycache__/
 
 # Editor directories and files
 .vscode/*
