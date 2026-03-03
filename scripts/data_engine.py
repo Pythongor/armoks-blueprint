@@ -1,3 +1,4 @@
+import json
 import os
 import rasterio
 from rasterio.merge import merge
@@ -5,6 +6,7 @@ from rasterio.mask import mask
 from shapely.geometry import box
 from scipy.ndimage import zoom
 from rasterio.windows import from_bounds
+import numpy as np
 
 
 def extract_layer_matrix(bounds, target_size, tif_path):
@@ -69,3 +71,36 @@ def extract_layer_from_single_tif(bounds, target_size, tif_path):
                      order=1, mode='grid-constant', grid_mode=True)
 
     return resampled[:target_size, :target_size]
+
+
+def extract_volcano_coords(bounds, target_size, file_path, km_range=10):
+    """
+    Now returns (x, y, radius) where radius is scaled to the map zoom.
+    """
+    min_lon, min_lat, max_lon, max_lat = bounds
+
+    # Calculate how many pixels are in 1 KM
+    # Total range in KM is km_range * 2 (since it's a radius from center)
+    pixels_per_km = target_size / (km_range * 2)
+
+    # Define a standard volcano 'footprint' in KM (e.g., 4km radius)
+    # On a world map (km_range=20000), this will be 0.05 pixels.
+    # On a local map (km_range=10), this will be 51 pixels.
+    dynamic_radius = max(1, int(4 * pixels_per_km))
+
+    with open(file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    points = []
+    for feature in data['features']:
+        coords = feature['geometry']['coordinates']
+        lon, lat = coords[0], coords[1]
+
+        if (min_lat <= lat <= max_lat) and (min_lon <= lon <= max_lon):
+            x = int(np.interp(lon, [min_lon, max_lon], [0, target_size - 1]))
+            y = int(np.interp(lat, [min_lat, max_lat], [target_size - 1, 0]))
+
+            # Store radius with the coordinate
+            points.append((x, y, dynamic_radius))
+
+    return points
