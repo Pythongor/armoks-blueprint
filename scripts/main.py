@@ -71,7 +71,7 @@ def main():
     #  Processing and translation
     print("🧪  Processing layers...")
     df_el = normalize_to_df_elevation(raw_el)
-    df_tm = normalize_to_df_temperature(raw_tm)
+    df_tm = normalize_to_df_temperature(raw_tm, raw_el)
     df_rn = normalize_to_df_rainfall(raw_rn)
     df_dr = calculate_drainage_advanced(raw_el, raw_tm, raw_rn)
 
