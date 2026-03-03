@@ -30,7 +30,7 @@ def normalize_to_df_temperature(tm_matrix, el_matrix):
     if np.any(land_mask):
         land_raw = tm_clean[land_mask]
         l_min, l_max = land_raw.min(), land_raw.max()
-        print(f"🌡️  Land: {l_min/10:.1f}°C to {l_max/10:.1f}°C")
+        print(f"🌡️  Land: {l_min:.1f}°C to {l_max:.1f}°C")
 
         norm = (land_raw - l_min) / (l_max - l_min)
         eased = np.power(norm, 2.2)
@@ -93,7 +93,31 @@ def normalize_to_df_elevation(matrix):
     return final
 
 
-def format_as_world_gen(el, tm, rn, dr, title, size):
+def generate_volcano_layer(volcano_info, size):
+    matrix = np.zeros((size, size), dtype=int)
+
+    for x, y, radius in volcano_info:
+        # If radius is small (world map), just plot the point
+        if radius <= 1:
+            if 0 <= x < size and 0 <= y < size:
+                matrix[y, x] = 100
+            continue
+
+        # If radius is large (local map), create the gradient
+        for i in range(-radius, radius + 1):
+            for j in range(-radius, radius + 1):
+                nx, ny = x + i, y + j
+                if 0 <= nx < size and 0 <= ny < size:
+                    dist = np.sqrt(i**2 + j**2)
+                    if dist <= radius:
+                        # Smooth falloff from 100 to 80
+                        val = int(100 - (dist / radius) * 20)
+                        if val > matrix[ny, nx]:
+                            matrix[ny, nx] = val
+    return matrix
+
+
+def format_as_world_gen(el, tm, rn, dr, vo, title, size):
     lines = ["[WORLD_GEN]", f"[TITLE:{title}]", f"[DIM:{size}]"]
 
     def add_layer(tag, matrix):
@@ -103,4 +127,6 @@ def format_as_world_gen(el, tm, rn, dr, title, size):
     add_layer("PS_TM", tm)
     add_layer("PS_RF", rn)
     add_layer("PS_DR", dr)
+    add_layer("PS_VL", vo)
+
     return "\n".join(lines)
