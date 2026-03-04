@@ -3,7 +3,7 @@ import os
 import sys
 from geo_utils import calculate_square_bounds
 from data_engine import extract_layer_from_single_tif, extract_elevation_matrix, extract_volcano_coords
-from df_translator import calculate_drainage_advanced, generate_volcano_layer, normalize_to_df_rainfall, normalize_to_df_temperature, normalize_to_df_elevation, format_as_world_gen, normalize_to_df_temperature
+from df_translator import calculate_drainage_advanced, generate_volcano_layer, normalize_to_df_rainfall, normalize_to_df_savagery, normalize_to_df_temperature, normalize_to_df_elevation, format_as_world_gen, normalize_to_df_temperature
 from library import get_region_data
 
 
@@ -49,11 +49,6 @@ def main():
     elif args.name:
         bounds = calculate_square_bounds(lat, lon, km_range)
 
-    # Volcanoes (HDX GVM GeoJSON)
-    print("🌋 Extracting volcano data...")
-    volcano_json = os.path.join("data", "GVM", "volcano.json")
-    v_coords = extract_volcano_coords(bounds, args.size, volcano_json)
-
     # Elevation (GEBCO)
     print("⛰️ Extracting elevation data...")
     raw_el = extract_elevation_matrix(bounds, args.size)
@@ -68,6 +63,17 @@ def main():
     rain_tif = os.path.join("data", "worldclim", "wc2.1_30s_bio_12.tif")
     raw_rn = extract_layer_from_single_tif(bounds, args.size, rain_tif)
 
+    # Volcanoes (HDX GVM GeoJSON)
+    print("🌋 Extracting volcano data...")
+    volcano_json = os.path.join("data", "gvm", "volcano.json")
+    v_coords = extract_volcano_coords(bounds, args.size, volcano_json)
+
+    # Population Density (SEDAC GPWv4)
+    print("👥 Extracting population density data...")
+    pop_tif = os.path.join(
+        "data", "sedac", "gpw_v4_population_density_rev11_2020_30_sec_2020.tif")
+    raw_pop = extract_layer_from_single_tif(bounds, args.size, pop_tif)
+
     #  Processing and translation
     print("🧪  Processing layers...")
     df_el = normalize_to_df_elevation(raw_el)
@@ -75,10 +81,11 @@ def main():
     df_rn = normalize_to_df_rainfall(raw_rn)
     df_dr = calculate_drainage_advanced(raw_el, raw_tm, raw_rn)
     df_vo = generate_volcano_layer(v_coords, args.size)
+    df_sv = normalize_to_df_savagery(raw_pop, raw_el)
 
     # Export
     output_text = format_as_world_gen(
-        df_el, df_tm, df_rn, df_dr, df_vo, title, args.size)
+        df_el, df_tm, df_rn, df_dr, df_vo, df_sv, title, args.size)
 
     # Save
     filename = f"{title.lower().replace(' ', '_')}.txt"

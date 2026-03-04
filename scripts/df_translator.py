@@ -19,6 +19,17 @@ def clean_coastal_noise(matrix, invalid_val=-1000):
     return generic_filter(matrix, fill_void, size=3)
 
 
+def normalize_to_df_elevation(matrix):
+    final = np.zeros_like(matrix, dtype=int)
+    ocean = matrix < 0
+    final[ocean] = np.interp(matrix[ocean], [-11000, 0], [0, 99])
+    low_land = (matrix >= 0) & (matrix < 2000)
+    final[low_land] = np.interp(matrix[low_land], [0, 2000], [100, 300])
+    high_land = matrix >= 2000
+    final[high_land] = np.interp(matrix[high_land], [2000, 8848], [301, 400])
+    return final
+
+
 def normalize_to_df_temperature(tm_matrix, el_matrix):
     # 1. Clean the 'NoData' spikes before they hit the math
     tm_clean = clean_coastal_noise(tm_matrix, invalid_val=-1000)
@@ -82,15 +93,33 @@ def calculate_drainage_advanced(raw_el, raw_tm, raw_rn):
     return final.astype(int)
 
 
-def normalize_to_df_elevation(matrix):
-    final = np.zeros_like(matrix, dtype=int)
-    ocean = matrix < 0
-    final[ocean] = np.interp(matrix[ocean], [-11000, 0], [0, 99])
-    low_land = (matrix >= 0) & (matrix < 2000)
-    final[low_land] = np.interp(matrix[low_land], [0, 2000], [100, 300])
-    high_land = matrix >= 2000
-    final[high_land] = np.interp(matrix[high_land], [2000, 8848], [301, 400])
-    return final
+def normalize_to_df_savagery(pop_matrix, el_matrix):
+    # 1. Clean Data
+    pop_clean = np.where(pop_matrix < 0, 0, pop_matrix)
+
+    # 2. Logarithmic Scaling
+    pop_log = np.log1p(pop_clean)
+
+    # 3. ADJUSTED THRESHOLD (The 'Taming' Factor)
+    # Areas with even 50 people/km2 are considered mostly civilized.
+    # This reduces the 'Max Savagery' bloat in rural/low-density areas.
+    max_log_val = np.log1p(50)
+
+    # 4. Interpolate Inversely
+    # 0 pop -> 100 Savagery
+    # 50+ pop -> 0 Savagery
+    savagery = np.interp(pop_log, [0, max_log_val], [100, 0])
+
+    # 5. Apply "Softening" (Power Curve)
+    # Applying a power of 0.7 pushes values DOWN towards the 'Civilized' end.
+    # This makes 'Savagery 100' much harder to reach (only for total void).
+    savagery = np.power(savagery / 100.0, 1.2) * 100
+
+    # 6. OCEAN LOGIC (The Neutral 50)
+    ocean_mask = el_matrix < 0
+    savagery[ocean_mask] = 50
+
+    return np.clip(savagery, 0, 100).astype(int)
 
 
 def generate_volcano_layer(volcano_info, size):
@@ -117,7 +146,7 @@ def generate_volcano_layer(volcano_info, size):
     return matrix
 
 
-def format_as_world_gen(el, tm, rn, dr, vo, title, size):
+def format_as_world_gen(el, tm, rn, dr, vo, sv, title, size):
     lines = ["[WORLD_GEN]", f"[TITLE:{title}]", f"[DIM:{size}]"]
 
     def add_layer(tag, matrix):
@@ -128,5 +157,6 @@ def format_as_world_gen(el, tm, rn, dr, vo, title, size):
     add_layer("PS_RF", rn)
     add_layer("PS_DR", dr)
     add_layer("PS_VL", vo)
+    add_layer("PS_SV", sv)
 
     return "\n".join(lines)
