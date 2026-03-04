@@ -1,8 +1,8 @@
-import Phaser from "phaser";
 import { BusEvent, EventBus } from "./EventBus";
-import { BrushShape, PaintMode } from "@store/paintSlice";
-import { type PaintSettings } from "@store/selectors";
+
+import { BrushShape } from "@store/paintSlice";
 import type { GridScene } from "./GridScene";
+import Phaser from "phaser";
 
 export class BrushScene extends Phaser.Scene {
   private tileSize: number = 16;
@@ -18,33 +18,47 @@ export class BrushScene extends Phaser.Scene {
   create() {
     this.brushGraphics = this.add.graphics();
 
-    EventBus.on(BusEvent.BrushUpdated, (state: PaintSettings) => {
-      this.brushWidth = state.brushWidth;
-      this.brushShape = state.brushShape;
-      this.isActive = state.paintMode === PaintMode.Brush;
+    const onCursorMove = (data: {
+      tx: number;
+      ty: number;
+      isValid: boolean;
+    }) => {
+      this.updateBrushVisuals(data.tx, data.ty, data.isValid);
+    };
+
+    EventBus.on(BusEvent.CursorMoved, onCursorMove);
+
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      EventBus.off(BusEvent.CursorMoved, onCursorMove);
     });
 
-    EventBus.on(
-      BusEvent.CursorMoved,
-      ({ tx, ty, isValid }: { tx: number; ty: number; isValid: boolean }) => {
-        this.updateBrushVisuals(tx, ty, isValid);
-      },
-    );
+    this.events.once(Phaser.Scenes.Events.DESTROY, () => {
+      EventBus.off(BusEvent.CursorMoved, onCursorMove);
+    });
   }
 
   private updateBrushVisuals(tx: number, ty: number, isValid: boolean) {
+    if (!this.scene || !this.game || !this.sys.isActive()) {
+      return;
+    }
+
     if (!this.brushGraphics) return;
 
     this.brushGraphics.clear();
 
     if (!isValid || !this.isActive) return;
 
-    const gridScene = this.scene.get("GridScene") as GridScene;
-    if (gridScene && gridScene.cameras.main) {
+    const gridScene = this.game.scene.getScene("GridScene") as GridScene;
+
+    if (gridScene && gridScene.sys && gridScene.sys.cameras) {
       const mainCam = gridScene.cameras.main;
-      this.cameras.main.scrollX = mainCam.scrollX;
-      this.cameras.main.scrollY = mainCam.scrollY;
-      this.cameras.main.zoom = mainCam.zoom;
+      const thisCam = this.cameras.main;
+
+      if (mainCam && thisCam) {
+        thisCam.scrollX = mainCam.scrollX;
+        thisCam.scrollY = mainCam.scrollY;
+        thisCam.zoom = mainCam.zoom;
+      }
     }
 
     this.drawCursor(tx, ty);

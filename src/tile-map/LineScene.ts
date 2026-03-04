@@ -21,39 +21,54 @@ export class LineScene extends Phaser.Scene {
   create() {
     this.previewGraphics = this.add.graphics();
 
-    EventBus.on(BusEvent.BrushUpdated, (state: PaintSettings) => {
+    const onBrushUpdated = (state: PaintSettings) => {
       this.brushWidth = state.brushWidth;
       this.isActive = state.paintMode === PaintMode.Line;
       if (!this.isActive) {
         this.previewGraphics?.clear();
         this.startTile = null;
       }
-    });
+    };
 
-    EventBus.on(BusEvent.LineStart, (coords: { x: number; y: number }) => {
+    const onLineStart = (coords: { x: number; y: number }) => {
       this.startTile = coords;
-    });
+    };
 
-    EventBus.on(BusEvent.LineEnd, (coords: { x: number; y: number }) => {
+    const onLineEnd = (coords: { x: number; y: number }) => {
       if (this.startTile) {
         this.commitLine(this.startTile, coords);
         this.startTile = null;
         this.previewGraphics?.clear();
       }
-    });
+    };
 
-    EventBus.on(
-      BusEvent.CursorMoved,
-      (data: { tx: number; ty: number; isValid: boolean }) => {
-        this.currentTile = { x: data.tx, y: data.ty };
-        if (this.startTile) {
-          this.drawTiledPreview();
-        }
-      },
-    );
+    const onCursorMoved = (data: {
+      tx: number;
+      ty: number;
+      isValid: boolean;
+    }) => {
+      this.currentTile = { x: data.tx, y: data.ty };
+      if (this.startTile) {
+        this.drawTiledPreview();
+      }
+    };
+
+    EventBus.on(BusEvent.BrushUpdated, onBrushUpdated);
+    EventBus.on(BusEvent.LineStart, onLineStart);
+    EventBus.on(BusEvent.LineEnd, onLineEnd);
+    EventBus.on(BusEvent.CursorMoved, onCursorMoved);
+
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      EventBus.off(BusEvent.BrushUpdated, onBrushUpdated);
+      EventBus.off(BusEvent.LineStart, onLineStart);
+      EventBus.off(BusEvent.LineEnd, onLineEnd);
+      EventBus.off(BusEvent.CursorMoved, onCursorMoved);
+    });
   }
 
   private drawTiledPreview() {
+    if (!this.scene || !this.sys.isActive() || !this.game) return;
+
     if (
       !this.isActive ||
       !this.previewGraphics ||
@@ -63,11 +78,15 @@ export class LineScene extends Phaser.Scene {
       return;
 
     this.previewGraphics.clear();
-    const gridScene = this.scene.get("GridScene") as GridScene;
+
+    const gridScene = this.game.scene.getScene("GridScene") as GridScene;
+    if (!gridScene || !gridScene.sys.isActive()) return;
 
     const cam = gridScene.cameras.main;
-    this.cameras.main.setScroll(cam.scrollX, cam.scrollY);
-    this.cameras.main.setZoom(cam.zoom);
+    if (cam && this.cameras.main) {
+      this.cameras.main.setScroll(cam.scrollX, cam.scrollY);
+      this.cameras.main.setZoom(cam.zoom);
+    }
 
     this.previewGraphics.lineStyle(1, 0x00ffff, 0.8);
 
@@ -85,7 +104,10 @@ export class LineScene extends Phaser.Scene {
     start: { x: number; y: number },
     end: { x: number; y: number },
   ) {
-    const gridScene = this.scene.get("GridScene") as GridScene;
+    if (!this.game) return;
+
+    const gridScene = this.game.scene.getScene("GridScene") as GridScene;
+    if (!gridScene) return;
 
     this.bresenham(start, end, (x, y) => {
       gridScene.paintTile(x, y);
