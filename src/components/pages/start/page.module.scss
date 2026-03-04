@@ -1,15 +1,16 @@
 @use "@styles/variables" as *;
 @use "@styles/mixins" as *;
 
-.overlay {
+.base {
   @include page;
+  @include scroll;
+  overflow-y: auto;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
 .header {
-  margin-bottom: 4rem;
+  margin: 4rem 0 4rem;
 }
 
 .modal {

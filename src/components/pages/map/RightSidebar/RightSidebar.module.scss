@@ -1,6 +1,9 @@
 @use "@styles/variables" as *;
+@use "@styles/mixins" as *;
 
 .base {
+  @include scroll;
+  overflow-y: auto;
   grid-area: right;
   height: 100%;
   border-left: 2px solid $panel-border;

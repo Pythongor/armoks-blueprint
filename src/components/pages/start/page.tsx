@@ -7,7 +7,7 @@ import styles from "./page.module.scss";
 
 export function StartPage() {
   return (
-    <div className={styles.overlay}>
+    <div className={styles.base}>
       <div className={styles.modal}>
         <header className={styles.header}>
           <LogoHeader />

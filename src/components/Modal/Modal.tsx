@@ -13,7 +13,7 @@ export const ModalManager = () => {
   const closeModal = () => dispatch(setModal(Modal.None));
 
   return (
-    <div className={styles.overlay} onClick={closeModal}>
+    <div className={styles.base} onClick={closeModal}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {activeModal === Modal.ResetDestructiveOptions && (
           <ResetDestructiveModal onClose={closeModal} />

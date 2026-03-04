@@ -3,6 +3,8 @@
 
 .base {
   @include page;
+  @include scroll;
+  overflow-y: auto;
   flex: 1;
   padding: 4rem;
   display: flex;
