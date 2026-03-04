@@ -14,12 +14,12 @@ export function CardsGrid() {
   return (
     <div className={styles.base}>
       <div className={styles.container}>
-        {availableBlueprints.map(({ title, size, mapData }) => (
+        {availableBlueprints.map(({ title, size, withLoading }) => (
           <Card
             key={title}
             title={title}
             size={size}
-            mapData={mapData}
+            withLoading={withLoading ?? false}
             onClick={() => dispatch(toggleSelection(title))}
           />
         ))}

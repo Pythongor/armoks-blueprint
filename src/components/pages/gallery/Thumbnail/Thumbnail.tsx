@@ -17,15 +17,15 @@ const drawThumbnail = (
 
   const imageData = ctx.createImageData(size, size);
 
-  for (let i = 0; i < mapData.elevation.length; i++) {
+  for (let i = 0; i < mapData.EL.length; i++) {
     const point = {
-      elevation: mapData.elevation[i]?.v ?? 0,
-      drainage: mapData.drainage[i]?.v ?? 50,
-      temperature: mapData.temperature[i]?.v ?? 50,
-      rainfall: mapData.rainfall[i]?.v ?? 50,
-      volcanism: mapData.volcanism[i]?.v ?? 0,
-      savagery: mapData.savagery[i]?.v ?? 0,
-      alignment: mapData.alignment[i]?.v ?? 50,
+      elevation: mapData.EL?.[i]?.v ?? 0,
+      drainage: mapData.DR?.[i]?.v ?? 50,
+      temperature: mapData.TM?.[i]?.v ?? 50,
+      rainfall: mapData.RF?.[i]?.v ?? 50,
+      volcanism: mapData.VL?.[i]?.v ?? 0,
+      savagery: mapData.SV?.[i]?.v ?? 0,
+      alignment: mapData.AL?.[i]?.v ?? 50,
     };
 
     const biome = identifyBiome(point);

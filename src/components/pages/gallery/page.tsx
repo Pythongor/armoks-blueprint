@@ -8,6 +8,7 @@ import { setAvailableBlueprints } from "@store/gallerySlice";
 import styles from "./page.module.scss";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useFetchCustomPresets } from "@hooks/useFetchCustomPresets";
 
 const sizes = [
   { name: "POCKET", dim: 17 },
@@ -46,6 +47,7 @@ const createStandardTemplates = () => {
 
 export function GalleryPage() {
   const dispatch = useDispatch();
+  useFetchCustomPresets();
 
   useEffect(() => {
     dispatch(setAvailableBlueprints(createStandardTemplates()));

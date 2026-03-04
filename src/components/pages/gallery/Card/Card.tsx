@@ -1,19 +1,30 @@
-import type { MapData } from "@/types";
+import { useEffect, useMemo } from "react";
+
 import type { RootState } from "@store/index";
 import { Thumbnail } from "../Thumbnail/Thumbnail";
 import cn from "classnames";
 import styles from "./Card.module.scss";
+import { useFetchMapData } from "@hooks/useFetchMapData";
 import { useSelector } from "react-redux";
 
 export type CardProps = {
   title: string;
   size: number;
   onClick: () => void;
-  mapData: MapData;
+  withLoading: boolean;
 };
 
-export function Card({ title, size, onClick, mapData }: CardProps) {
+export function Card({ title, size, withLoading, onClick }: CardProps) {
   const { selectedTitles } = useSelector((state: RootState) => state.gallery);
+  const filename = useMemo(() => `${title.toLowerCase()}.txt`, [title]);
+
+  const { data, loading, fetchMap } = useFetchMapData(filename);
+
+  useEffect(() => {
+    if (withLoading && !loading && !data) {
+      fetchMap();
+    }
+  }, [withLoading, loading, data, fetchMap]);
 
   return (
     <div
@@ -24,8 +35,8 @@ export function Card({ title, size, onClick, mapData }: CardProps) {
       )}
       onClick={onClick}
     >
-      <Thumbnail data={mapData} size={size} />
-      <h4 className={styles.title}>{title}</h4>
+      <Thumbnail data={data} size={size} />
+      <h4 className={styles.title}>{title.replaceAll(/_/g, " ")}</h4>
       <span className={styles.size}>
         {size} x {size}
       </span>
