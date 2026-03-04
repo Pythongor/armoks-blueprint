@@ -1,3 +1,6 @@
+import json
+import os
+
 from scipy.ndimage import laplace, generic_filter
 import numpy as np
 
@@ -161,17 +164,48 @@ def generate_volcano_layer(volcano_info, size):
     return matrix
 
 
-def format_as_world_gen(el, tm, rn, dr, vo, sv, title, size):
+def format_as_world_gen(el, tm, rn, dr, vo, sv, title, size, config_path="scripts/config.json"):
+    # 1. Load the flattened config from the JSON file
+    if os.path.exists(config_path):
+        with open(config_path, 'r') as f:
+            full_config = json.load(f)
+            # Accessing the DEFAULT_CONFIG or the flattened dict directly
+            config_dict = full_config.get("DEFAULT_CONFIG", full_config)
+    else:
+        print(f"⚠️ Config not found at {config_path}, using empty defaults.")
+        config_dict = {}
+
     lines = ["[WORLD_GEN]", f"[TITLE:{title}]", f"[DIM:{size}]"]
 
+    # 2. Iterate through the flattened dictionary
+    for key, val in config_dict.items():
+        # Skip DIM as we set it dynamically above
+        if key == "DIM":
+            continue
+
+        # Handle REGION_COUNTS (List of Lists)
+        if key == "REGION_COUNTS" and isinstance(val, list):
+            for region_data in val:
+                lines.append(
+                    f"[REGION_COUNTS:{':'.join(map(str, region_data))}]")
+
+        # Handle Standard flattened parameters
+        elif isinstance(val, list):
+            lines.append(f"[{key}:{':'.join(map(str, val))}]")
+        else:
+            lines.append(f"[{key}:{val}]")
+
+    # 3. Add the Raw Data Layers (PS Tags)
+    # Note: PS_RF (Rainfall) and PS_VL (Volcanism) used based on your recent tags
     def add_layer(tag, matrix):
         for row in matrix:
             lines.append(f"[{tag}:{':'.join(map(str, row))}]")
-    add_layer("PS_EL", el)
-    add_layer("PS_TM", tm)
-    add_layer("PS_RF", rn)
-    add_layer("PS_DR", dr)
-    add_layer("PS_VL", vo)
-    add_layer("PS_SV", sv)
+
+    add_layer("PS_EL", el)  # Elevation
+    add_layer("PS_TM", tm)  # Temperature
+    add_layer("PS_RF", rn)  # Rainfall
+    add_layer("PS_DR", dr)  # Drainage
+    add_layer("PS_VL", vo)  # Volcanism
+    add_layer("PS_SV", sv)  # Savagery
 
     return "\n".join(lines)
