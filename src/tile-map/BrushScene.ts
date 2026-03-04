@@ -1,13 +1,9 @@
 import { BusEvent, EventBus } from "./EventBus";
 
-import { BrushShape } from "@store/paintSlice";
 import type { GridScene } from "./GridScene";
 import Phaser from "phaser";
 
 export class BrushScene extends Phaser.Scene {
-  private tileSize: number = 16;
-  private brushWidth: number = 1;
-  private brushShape: BrushShape = BrushShape.Square;
   private brushGraphics?: Phaser.GameObjects.Graphics;
   private isActive: boolean = true;
 
@@ -23,7 +19,7 @@ export class BrushScene extends Phaser.Scene {
       ty: number;
       isValid: boolean;
     }) => {
-      this.updateBrushVisuals(data.tx, data.ty, data.isValid);
+      this.updateBrushVisuals(data.isValid);
     };
 
     EventBus.on(BusEvent.CursorMoved, onCursorMove);
@@ -37,7 +33,7 @@ export class BrushScene extends Phaser.Scene {
     });
   }
 
-  private updateBrushVisuals(tx: number, ty: number, isValid: boolean) {
+  private updateBrushVisuals(isValid: boolean) {
     if (!this.scene || !this.game || !this.sys.isActive()) {
       return;
     }
@@ -59,49 +55,6 @@ export class BrushScene extends Phaser.Scene {
         thisCam.scrollY = mainCam.scrollY;
         thisCam.zoom = mainCam.zoom;
       }
-    }
-
-    this.drawCursor(tx, ty);
-  }
-
-  private drawCursor(tx: number, ty: number) {
-    const offset = Math.floor(this.brushWidth / 2);
-    const radius = this.brushWidth / 2;
-
-    if (this.brushShape === BrushShape.Square) {
-      const x = (tx - offset) * this.tileSize;
-      const y = (ty - offset) * this.tileSize;
-      const size = this.brushWidth * this.tileSize;
-
-      this.brushGraphics!.lineStyle(1, 0xffffff, 1).strokeRect(
-        x - 1,
-        y - 1,
-        size + 2,
-        size + 2,
-      );
-
-      this.brushGraphics!.lineStyle(1, 0x000000, 1).strokeRect(
-        x,
-        y,
-        size,
-        size,
-      );
-    } else {
-      const centerX = tx * this.tileSize + this.tileSize / 2;
-      const centerY = ty * this.tileSize + this.tileSize / 2;
-      const pixelRadius = radius * this.tileSize;
-
-      this.brushGraphics!.lineStyle(1, 0xffffff, 1).strokeCircle(
-        centerX,
-        centerY,
-        pixelRadius + 1,
-      );
-
-      this.brushGraphics!.lineStyle(1, 0x000000, 1).strokeCircle(
-        centerX,
-        centerY,
-        pixelRadius,
-      );
     }
   }
 

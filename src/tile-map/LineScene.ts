@@ -68,7 +68,6 @@ export class LineScene extends Phaser.Scene {
 
   private drawTiledPreview() {
     if (!this.scene || !this.sys.isActive() || !this.game) return;
-
     if (
       !this.isActive ||
       !this.previewGraphics ||
@@ -80,23 +79,20 @@ export class LineScene extends Phaser.Scene {
     this.previewGraphics.clear();
 
     const gridScene = this.game.scene.getScene("GridScene") as GridScene;
-    if (!gridScene || !gridScene.sys.isActive()) return;
-
     const cam = gridScene.cameras.main;
-    if (cam && this.cameras.main) {
-      this.cameras.main.setScroll(cam.scrollX, cam.scrollY);
-      this.cameras.main.setZoom(cam.zoom);
-    }
+    this.cameras.main.setScroll(cam.scrollX, cam.scrollY).setZoom(cam.zoom);
 
-    this.previewGraphics.lineStyle(1, 0x00ffff, 0.8);
+    this.previewGraphics.fillStyle(0x00ffff, 0.3);
+    this.previewGraphics.lineStyle(1, 0x00ffff, 1);
+
+    const offset = Math.floor(this.brushWidth / 2);
+    const size = this.brushWidth * this.tileSize;
 
     this.bresenham(this.startTile, this.currentTile, (x, y) => {
-      const offset = Math.floor(this.brushWidth / 2);
-      const size = this.brushWidth * this.tileSize;
       const px = (x - offset) * this.tileSize;
       const py = (y - offset) * this.tileSize;
 
-      this.previewGraphics?.strokeRect(px, py, size, size);
+      this.previewGraphics?.fillRect(px, py, size, size);
     });
   }
 

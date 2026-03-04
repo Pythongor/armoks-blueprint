@@ -19,6 +19,7 @@ export class MainScene extends Phaser.Scene {
     this.scene.launch("GridScene");
     this.scene.launch("BrushScene");
     this.scene.launch("LineScene");
+    this.scene.launch("CursorScene");
 
     EventBus.on(BusEvent.PresetSwitched, (presetTitle: string) => {
       worldManager.switchToPreset(presetTitle);
