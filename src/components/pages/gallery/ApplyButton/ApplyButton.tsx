@@ -1,3 +1,4 @@
+import { ProgressButton } from "@components/widgets/DownloadButton/ProgressButton";
 import type { RootState } from "@store/index";
 import styles from "./ApplyButton.module.scss";
 import { useNavigate } from "react-router-dom";
@@ -9,18 +10,33 @@ export function ApplyButton() {
     (state: RootState) => state.gallery,
   );
   const navigate = useNavigate();
-  const handleStart = useWorldInitializer();
+  const { init, progress, isError } = useWorldInitializer();
 
-  const handleApply = () => {
+  const handleApply = async () => {
     const finalSelection = availableBlueprints.filter((b) =>
       selectedTitles.includes(b.title),
     );
-    handleStart(finalSelection);
-    navigate("/world-settings");
+
+    const success = await init(finalSelection);
+
+    if (success) {
+      setTimeout(() => navigate("/world-settings"), 600);
+    }
   };
+
   return (
-    <button className={styles.base} onClick={handleApply}>
-      RESTORE SELECTED ARCHIVES ({selectedTitles.length})
-    </button>
+    <ProgressButton
+      classNames={{ base: styles.base, success: styles.base__success }}
+      progress={progress}
+      isError={isError}
+      onClick={handleApply}
+      disabled={selectedTitles.length === 0}
+      labels={{
+        idle: `RESTORE ARCHIVES (${selectedTitles.length})`,
+        loading: "DECRYPTING MAPS...",
+        success: "ANCIENT KNOWLEDGE RESTORED!",
+        error: "FORGE FAILED - CHECK NETWORK",
+      }}
+    />
   );
 }

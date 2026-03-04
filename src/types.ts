@@ -67,5 +67,5 @@ export interface WorldPreset {
   // Dynamic settings: key is token (e.g., "END_YEAR"),
   // value is array of parameter arrays (e.g., [["250"]])
   settings: WorldSettings;
-  mapData: MapData;
+  mapData?: MapData;
 }

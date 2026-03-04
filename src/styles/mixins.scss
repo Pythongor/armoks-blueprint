@@ -30,13 +30,26 @@
     color: $ui-active;
   }
 
-  &.loading {
+  &:disabled {
+    border-color: $ui-gray;
+    color: $ui-gray;
+    cursor: not-allowed;
+    background: rgba($ui-gray, 0.05);
+
+    &:hover {
+      background: rgba($ui-gray, 0.05);
+      box-shadow: none;
+      border-color: $ui-gray;
+    }
+  }
+
+  &__loading {
     border-color: $ui-gray;
     color: $ui-light;
     cursor: wait;
   }
 
-  &.success {
+  &__success {
     border-color: $ui-success;
     color: $ui-success;
 
@@ -47,7 +60,7 @@
     }
   }
 
-  &.error {
+  &__error {
     border-color: $ui-warning;
     color: $ui-warning;
     background: rgba($ui-warning, 0.05);

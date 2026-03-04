@@ -2,7 +2,7 @@ import { JsonToWorldGen } from "@utils/JsonToWorldGen";
 import { useSelector } from "react-redux";
 import { type RootState } from "@store/index";
 import { useState } from "react";
-import { DownloadButton } from "@/components/widgets/DownloadButton/DownloadButton";
+import { ProgressButton } from "@components/widgets/DownloadButton/ProgressButton";
 import styles from "./Cards.module.scss";
 
 export function WorldGenCard() {
@@ -32,7 +32,7 @@ export function WorldGenCard() {
         <p>Export your tokens and logic settings into a world_gen.txt file.</p>
       </div>
 
-      <DownloadButton
+      <ProgressButton
         progress={progress}
         isError={hasError}
         onClick={handleExport}

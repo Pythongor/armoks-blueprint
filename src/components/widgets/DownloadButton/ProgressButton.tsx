@@ -1,5 +1,5 @@
 import cn from "classnames";
-import styles from "./DownloadButton.module.scss";
+import styles from "./ProgressButton.module.scss";
 
 type ProgressButtonProps = {
   progress: number;
@@ -12,10 +12,16 @@ type ProgressButtonProps = {
     error?: string;
   };
   disabled?: boolean;
-  className?: string;
+  classNames?: {
+    base?: string;
+    loading?: string;
+    success?: string;
+    error?: string;
+    disabled?: string;
+  };
 };
 
-export function DownloadButton({
+export function ProgressButton({
   progress,
   isError,
   onClick,
@@ -26,7 +32,7 @@ export function DownloadButton({
     error: errorLabel = "FORGE FAILED - TRY AGAIN",
   },
   disabled,
-  className,
+  classNames,
 }: ProgressButtonProps) {
   const isLoading = progress > 0 && progress < 100;
   const isComplete = progress === 100 && !isError;
@@ -35,10 +41,14 @@ export function DownloadButton({
     <button
       className={cn(
         styles.base,
-        isLoading && styles.loading,
-        isComplete && styles.success,
-        isError && styles.error,
-        className,
+        classNames?.base,
+        isLoading && styles.base__loading,
+        isLoading && classNames?.loading,
+        isComplete && styles.base__success,
+        isComplete && classNames?.success,
+        isError && styles.base__error,
+        isError && classNames?.error,
+        disabled && classNames?.disabled,
       )}
       onClick={onClick}
       disabled={disabled || (isLoading && !isError)}

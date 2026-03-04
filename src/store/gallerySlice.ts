@@ -55,11 +55,7 @@ export const gallerySlice = createSlice({
     },
     toggleSelection: (state, { payload: title }: PayloadAction<string>) => {
       if (state.selectedTitles.includes(title)) {
-        if (state.selectedTitles.length > 1) {
-          state.selectedTitles = state.selectedTitles.filter(
-            (t) => t !== title,
-          );
-        }
+        state.selectedTitles = state.selectedTitles.filter((t) => t !== title);
       } else {
         state.selectedTitles.push(title);
       }

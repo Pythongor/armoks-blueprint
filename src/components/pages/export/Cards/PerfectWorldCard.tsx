@@ -1,5 +1,5 @@
-import { DownloadButton } from "@/components/widgets/DownloadButton/DownloadButton";
 import { ImageExporter } from "@utils/ImageExporter";
+import { ProgressButton } from "@/components/widgets/DownloadButton/ProgressButton";
 import styles from "./Cards.module.scss";
 import { useState } from "react";
 
@@ -32,7 +32,7 @@ export function PerfectWorldCard() {
       </div>
 
       <div className={styles.buttonGroup}>
-        <DownloadButton
+        <ProgressButton
           progress={progress}
           isError={hasError}
           onClick={handleExport}

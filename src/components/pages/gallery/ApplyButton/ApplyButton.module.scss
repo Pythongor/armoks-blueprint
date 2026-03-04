@@ -4,7 +4,8 @@
 .base {
   @include button;
   position: fixed;
-  bottom: 40px;
+  width: 20rem;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background: $ui-accent;
@@ -21,5 +22,18 @@
   &:hover:not(:disabled):active {
     background: $ui-active;
     color: $ui-white;
+  }
+
+  &__success {
+    background: $ui-black;
+    color: $ui-success;
+    border: 1px solid $ui-success;
+
+    &.base:hover {
+      background: $ui-black;
+      color: $ui-success;
+      box-shadow: 0 0 15px rgba($ui-success, 0.2);
+      border-color: $ui-success;
+    }
   }
 }
