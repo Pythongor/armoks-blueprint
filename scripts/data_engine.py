@@ -73,7 +73,7 @@ def extract_layer_from_single_tif(bounds, target_size, tif_path):
     return resampled[:target_size, :target_size]
 
 
-def extract_volcano_coords(bounds, target_size, file_path, km_range=10):
+def extract_volcano_coords(bounds, target_size, file_path, km_range=1000):
     """
     Now returns (x, y, radius) where radius is scaled to the map zoom.
     """
