@@ -3,29 +3,39 @@ import { useCallback, useState } from "react";
 import { WorldGenToJson } from "@/utils/WorldGenToJson";
 import cn from "classnames";
 import styles from "./Cards.module.scss";
+import { useNavigate } from "react-router-dom";
 import { useWorldInitializer } from "@hooks/useWorldInitializer";
 
 export function ReclaimArchiveCard() {
-  const handleStart = useWorldInitializer(true);
+  const navigate = useNavigate();
+  const { init, progress, isError: fetchError } = useWorldInitializer(true);
+
   const [dragActive, setDragActive] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const processFile = useCallback(
     async (file: File) => {
-      setError(null);
+      setLocalError(null);
       try {
         const text = await file.text();
         const allPresets = WorldGenToJson.parse(text);
 
-        handleStart(allPresets);
+        const success = await init(allPresets);
+
+        if (success) {
+          navigate("/world-settings");
+        }
       } catch (err: unknown) {
         if (err instanceof Error) {
-          setError(err.message || "The scroll is unreadable.");
+          setLocalError(err.message || "The scroll is unreadable.");
         }
       }
     },
-    [handleStart],
+    [init, navigate],
   );
+
+  const displayError =
+    localError || (fetchError ? "Failed to initialize world manager." : null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -61,23 +71,31 @@ export function ReclaimArchiveCard() {
         styles.card,
         styles.reclaimCard,
         dragActive && styles.card__dragActive,
-        error && styles.card__error,
+        displayError && styles.card__error,
       )}
       onDragEnter={onDrag}
       onDragLeave={onDrag}
       onDragOver={onDrag}
       onDrop={onDrop}
-      onClick={() => error && setError(null)}
+      onClick={() => displayError && setLocalError(null)}
     >
-      {dragActive ? (
+      {progress > 0 && progress < 100 ? (
+        <div className={styles.loadingContent}>
+          <h3>RESTORING {progress}%</h3>
+          <div
+            className={styles.progressBar}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      ) : dragActive ? (
         <div className={styles.dropZoneIndicator}>
           <h3>DROP WORLD_GEN.TXT HERE</h3>
           <p>The archives are ready to be unrolled...</p>
         </div>
-      ) : error ? (
+      ) : displayError ? (
         <div className={styles.errorContent}>
           <h3 className={styles.errorTitle}>ARCHIVE CORRUPTED</h3>
-          <p className={styles.errorMessage}>{error}</p>
+          <p className={styles.errorMessage}>{displayError}</p>
           <span className={styles.retryHint}>Click to try another scroll</span>
         </div>
       ) : (
