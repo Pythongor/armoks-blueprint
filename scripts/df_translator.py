@@ -1,6 +1,9 @@
 from scipy.ndimage import laplace, generic_filter
 import numpy as np
 
+GLOBAL_TEMPERATURE_MIN = -54.5
+GLOBAL_TEMPERATURE_MAX = 29.7
+
 
 def clean_coastal_noise(matrix, invalid_val=-1000):
     """
@@ -38,19 +41,31 @@ def normalize_to_df_temperature(tm_matrix, el_matrix):
     land_mask = el_matrix >= 100
     ocean_mask = el_matrix < 100
 
+    # --- LAND PROCESSING ---
     if np.any(land_mask):
         land_raw = tm_clean[land_mask]
-        l_min, l_max = land_raw.min(), land_raw.max()
-        print(f"🌡️  Land: {l_min:.1f}°C to {l_max:.1f}°C")
 
-        norm = (land_raw - l_min) / (l_max - l_min)
+        # Linear map to 0.0 - 1.0 based on GLOBAL constants
+        # Anything colder than -54.5 becomes 0, hotter than 29.7 becomes 1.0
+        norm = (land_raw - GLOBAL_TEMPERATURE_MIN) / \
+            (GLOBAL_TEMPERATURE_MAX - GLOBAL_TEMPERATURE_MIN)
+        norm = np.clip(norm, 0, 1)
+
+        # Apply Easing
+        # We want the 'Temperate' zone (0°C to 20°C) to be the most detailed.
+        # A power of 2.2 works well for global absolute scales.
         eased = np.power(norm, 2.2)
+
         final[land_mask] = (eased * 100).astype(int)
 
+    # --- OCEAN PROCESSING ---
     if np.any(ocean_mask):
         ocean_raw = tm_clean[ocean_mask]
-        norm_o = (ocean_raw - ocean_raw.min()) / \
-            (ocean_raw.max() - ocean_raw.min() + 1)
+        norm_o = (ocean_raw - GLOBAL_TEMPERATURE_MIN) / \
+            (GLOBAL_TEMPERATURE_MAX - GLOBAL_TEMPERATURE_MIN)
+        norm_o = np.clip(norm_o, 0, 1)
+
+        # Oceans move in a tighter, more moderate range (20 to 70)
         final[ocean_mask] = (norm_o * 50 + 20).astype(int)
 
     return np.clip(final, 0, 100).astype(int)
