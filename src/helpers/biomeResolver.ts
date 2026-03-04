@@ -1,5 +1,5 @@
-import { Biome } from "@/types";
 import {
+  Biome,
   AlignmentTier,
   SavageryTier,
   BiomeDescriptor,
@@ -57,46 +57,49 @@ export function identifyBiome(data: WorldPointData): Biome {
   if (elevation < 100) return Biome.Ocean;
   if (elevation > 300) return Biome.Mountain;
 
-  if (temperature < 10) return Biome.Glacier;
-  if (temperature < 25) {
-    if (rainfall > 30 && drainage > 33) return Biome.Taiga;
+  if (temperature < -20) {
+    if (rainfall > 40) return Biome.Glacier;
+    return Biome.Tundra;
+  }
+
+  if (temperature < 0) {
+    if (rainfall > 35 && drainage > 33) return Biome.Taiga;
     return Biome.Tundra;
   }
 
   if (drainage > 95 && elevation > 150) return Biome.RockyWasteland;
 
   if (rainfall < 20) {
-    return temperature > 60 ? Biome.HotDesert : Biome.Badlands;
+    return temperature > 85 ? Biome.HotDesert : Biome.Badlands;
   }
 
-  if (temperature > 65) {
+  if (temperature > 80) {
     if (rainfall > 66 && drainage < 33) return Biome.Swamp;
-
-    if (rainfall > 75) {
-      return Biome.TropicalMoistBroadleafForest;
-    } else if (rainfall > 45) {
+    if (rainfall > 80) return Biome.TropicalMoistBroadleafForest;
+    if (rainfall > 50) {
       return drainage > 66
         ? Biome.TropicalConiferousForest
         : Biome.TropicalDryBroadleafForest;
-    } else {
-      return Biome.Savanna;
     }
+    return Biome.Savanna;
   }
 
   if (rainfall > 66) {
     if (drainage < 33) return Biome.Marsh;
-    return temperature > 40
+
+    return temperature > 25
       ? Biome.TemperateBroadleafForest
       : Biome.TemperateConiferousForest;
   }
 
   if (rainfall < 45) {
-    if (drainage > 66) {
-      return temperature > 65
+    if (drainage > 75) {
+      return temperature > 80
         ? Biome.TropicalShrubland
         : Biome.TemperateShrubland;
     }
-    return Biome.Savanna;
+
+    return temperature > 55 ? Biome.Savanna : Biome.Grassland;
   }
 
   return Biome.Grassland;

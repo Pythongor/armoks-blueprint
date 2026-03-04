@@ -2,7 +2,7 @@ import { getMoralDescriptor, identifyBiome } from "@helpers/biomeResolver";
 
 import { LayerType } from "@store/paintSlice";
 
-export type WorldDataLayers = Record<LayerType, Uint16Array>;
+export type WorldDataLayers = Record<LayerType, Int16Array>;
 
 export class WorldManager {
   public gridSize: number = 129;
@@ -19,13 +19,13 @@ export class WorldManager {
 
   public createPreset(title: string, size: number, isActive: boolean = true) {
     const data: WorldDataLayers = {
-      elevation: new Uint16Array(size * size).fill(100),
-      rainfall: new Uint16Array(size * size).fill(50),
-      drainage: new Uint16Array(size * size).fill(50),
-      temperature: new Uint16Array(size * size).fill(50),
-      volcanism: new Uint16Array(size * size).fill(0),
-      savagery: new Uint16Array(size * size).fill(0),
-      alignment: new Uint16Array(size * size).fill(50),
+      elevation: new Int16Array(size * size).fill(100),
+      rainfall: new Int16Array(size * size).fill(50),
+      drainage: new Int16Array(size * size).fill(50),
+      temperature: new Int16Array(size * size).fill(50),
+      volcanism: new Int16Array(size * size).fill(0),
+      savagery: new Int16Array(size * size).fill(0),
+      alignment: new Int16Array(size * size).fill(50),
     };
 
     this.presets.set(title, data);
@@ -54,7 +54,7 @@ export class WorldManager {
     const snapshot: WorldDataLayers = {} as WorldDataLayers;
 
     (Object.keys(current) as LayerType[]).forEach((layer) => {
-      snapshot[layer] = new Uint16Array(current[layer]);
+      snapshot[layer] = new Int16Array(current[layer]);
     });
 
     this.undoStack.push(snapshot);
@@ -96,7 +96,7 @@ export class WorldManager {
     const clone: WorldDataLayers = {} as WorldDataLayers;
 
     (Object.keys(current) as LayerType[]).forEach((layer) => {
-      clone[layer] = new Uint16Array(current[layer]);
+      clone[layer] = new Int16Array(current[layer]);
     });
 
     return clone;

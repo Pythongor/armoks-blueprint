@@ -80,11 +80,12 @@ export class WorldGenToJson {
         const rowIndex = Math.floor(currentTotal / preset.size);
 
         params.forEach((val, xIndex) => {
-          const num = parseInt(val);
+          const trimmedVal = val.trim();
+          const num = parseInt(trimmedVal, 10);
+
           if (isNaN(num)) {
-            throw new Error(
-              `Non-numeric value "${val}" found in ${layerSuffix} at row ${rowIndex}`,
-            );
+            console.warn(`Mangled value in ${key}: "${val}"`);
+            return;
           }
 
           preset.mapData![layerSuffix].push({

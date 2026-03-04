@@ -9,11 +9,18 @@ export function BrushValueSlider() {
     (state: RootState) => state.paint,
   );
 
-  const maxRange = activeLayer === LayerType.Elevation ? 400 : 100;
+  const minRange = activeLayer === LayerType.Temperature ? -50 : 0;
+  const maxRange =
+    activeLayer === LayerType.Elevation
+      ? 400
+      : activeLayer === LayerType.Temperature
+        ? 120
+        : 100;
   const currentValue = layerValues[activeLayer];
 
   return (
     <Slider
+      min={minRange}
       max={maxRange}
       currentValue={currentValue}
       onChange={(value) =>

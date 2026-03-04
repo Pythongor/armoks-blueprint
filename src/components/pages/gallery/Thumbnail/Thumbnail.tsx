@@ -21,7 +21,7 @@ const drawThumbnail = (
     const point = {
       elevation: mapData.EL?.[i]?.v ?? 0,
       drainage: mapData.DR?.[i]?.v ?? 50,
-      temperature: mapData.TM?.[i]?.v ?? 50,
+      temperature: mapData.TP?.[i]?.v ?? 50,
       rainfall: mapData.RF?.[i]?.v ?? 50,
       volcanism: mapData.VL?.[i]?.v ?? 0,
       savagery: mapData.SV?.[i]?.v ?? 0,
