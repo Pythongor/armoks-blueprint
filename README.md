@@ -4,6 +4,9 @@
 
 **Armok's Blueprint** is a web-utility designed for the manual engraving of world-generation parameters for Dwarf Fortress. While the gods provide random chance, the Blueprint provides **intent**.
 
+![Editor Interface](./screenshots/bearded_one.png)
+
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Age: Age of Forging](https://img.shields.io/badge/Age-0.1.0-gold)](#)
 
@@ -13,7 +16,9 @@
 
 In the early ages, Overseers were forced to rely on the whims of the World Engine, hitting "Generate" and praying for a favorable embark. **Armok's Blueprint** changes the law of the land. 
 
-It is a **pixel-perfect map editor** that allows you to hand-paint Elevation, Rainfall, Savagery, and Volcanism directly onto a digital slab. It translates your art into the "Secret Language" of `world_gen.txt` tokens (the `PS_EL` signatures), allowing you to force the game to build exactly what you envisioned.
+It is a **pixel-perfect map editor** that allows you to hand-paint Elevation, Rainfall, Savagery, and Volcanism directly onto a digital slab. It translates your art into the "Secret Language" of `world_gen.txt` tokens, allowing you to force the game to build exactly what you envisioned.
+
+<table><tr><td><img src="./screenshots/bearded_one.png"></td><td><img src="./screenshots/ingame.png"></td></tr></table>
 
 ---
 
@@ -26,8 +31,6 @@ Why use the Armok's Blueprint instead of the old-world tools?
 | **Control** | Random / Seeded | Algorithmic Sliders | **Manual Pixel Painting** |
 | **Feedback** | Wait for Generation | Trial & Error | **Instant Visual Preview** |
 | **Precision** | Low (Global) | Medium (Regional) | **High (Tile-by-Tile)** |
-| **Portability** | In-Game Only | Local Executable | **Web-Based / No Install** |
-| **Legacy Support** | New Seeds Only | Heightmaps Only | **Import/Export Existing Files** |
 
 ---
 
@@ -38,7 +41,10 @@ The runes beneath the surface are organized for performance and reliability:
 * **The Skeleton (React & TypeScript):** Strictly typed logic to ensure no "Fractures" in the masonry.
 * **The Heart (Redux Toolkit):** Centralized state management for presets, coordinate tracking, and world parameters.
 * **The Canvas (Phaser 3 / HTML5 Canvas):** A high-performance rendering engine capable of handling up to 257x257 grids with real-time composite biome calculation.
-* **The Transmuter (Custom Parser):** A bi-directional logic engine that converts raw `world_gen.txt` strings into memory-efficient `Uint16Array` buffers and back again.
+* **The Transmuter (Custom Parser):** A bi-directional logic engine that converts raw `world_gen.txt` strings into memory-efficient `Int16Array` buffers and back again.
+
+
+<table><tr><td><img src="./screenshots/biome_view.png"></td><td><img src="./screenshots/elevation_view.png"></td><td><img src="./screenshots/temperature_view.png"></td></tr></table>
 
 ---
 
