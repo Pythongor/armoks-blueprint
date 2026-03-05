@@ -19,17 +19,15 @@ export const gallerySlice = createSlice({
   reducers: {
     setAvailableBlueprints: (
       state,
-      action: PayloadAction<WorldPresetWithLoading[]>,
+      { payload }: PayloadAction<WorldPresetWithLoading[]>,
     ) => {
-      state.availableBlueprints = action.payload;
-      if (action.payload.length > 0)
-        state.selectedTitles = [action.payload[0].title];
+      state.availableBlueprints = payload;
     },
-    addCustomBlueprint: (
+    addBlueprint: (
       state,
-      action: PayloadAction<WorldPresetWithLoading>,
+      { payload }: PayloadAction<WorldPresetWithLoading>,
     ) => {
-      const newPreset = action.payload;
+      const newPreset = payload;
       const index = state.availableBlueprints.findIndex(
         (b) => b.title === newPreset.title,
       );
@@ -66,6 +64,6 @@ export const gallerySlice = createSlice({
 export const {
   setAvailableBlueprints,
   toggleSelection,
-  addCustomBlueprint,
+  addBlueprint,
   setBlueprintLoading,
 } = gallerySlice.actions;

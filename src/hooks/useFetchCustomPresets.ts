@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 
 import { WorldGenToJson } from "@utils/WorldGenToJson";
-import { addCustomBlueprint } from "@store/gallerySlice";
+import { addBlueprint } from "@store/gallerySlice";
 import { useDispatch } from "react-redux";
 
 export const useFetchCustomPresets = () => {
@@ -22,7 +22,7 @@ export const useFetchCustomPresets = () => {
           const parsed = WorldGenToJson.parse(rawContent)[0];
 
           dispatch(
-            addCustomBlueprint({
+            addBlueprint({
               title: (parsed.title || name.replace(".txt", "")).toUpperCase(),
               size: parsed.size,
               settings: parsed.settings,
