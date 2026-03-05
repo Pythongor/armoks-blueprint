@@ -47,19 +47,15 @@ def normalize_to_df_temperature(tm_matrix, el_matrix):
     # --- LAND PROCESSING ---
     if np.any(land_mask):
         land_raw = tm_clean[land_mask]
-
-        # Linear map to 0.0 - 1.0 based on GLOBAL constants
-        # Anything colder than -54.5 becomes 0, hotter than 29.7 becomes 1.0
         norm = (land_raw - GLOBAL_TEMPERATURE_MIN) / \
             (GLOBAL_TEMPERATURE_MAX - GLOBAL_TEMPERATURE_MIN)
         norm = np.clip(norm, 0, 1)
 
-        # Apply Easing
-        # We want the 'Temperate' zone (0°C to 20°C) to be the most detailed.
-        # A power of 2.2 works well for global absolute scales.
+        # Apply Easing for terrestrial variation
         eased = np.power(norm, 2.2)
 
-        final[land_mask] = (eased * 100).astype(int)
+        # Map 0.0-1.0 to -50 to 120 range
+        final[land_mask] = (eased * 170 - 50).astype(int)
 
     # --- OCEAN PROCESSING ---
     if np.any(ocean_mask):
@@ -67,11 +63,11 @@ def normalize_to_df_temperature(tm_matrix, el_matrix):
         norm_o = (ocean_raw - GLOBAL_TEMPERATURE_MIN) / \
             (GLOBAL_TEMPERATURE_MAX - GLOBAL_TEMPERATURE_MIN)
         norm_o = np.clip(norm_o, 0, 1)
+        eased_o = np.power(norm_o, 1.5)
+        final[ocean_mask] = (eased_o * 170 - 50).astype(int)
 
-        # Oceans move in a tighter, more moderate range (20 to 70)
-        final[ocean_mask] = (norm_o * 50 + 20).astype(int)
-
-    return np.clip(final, 0, 100).astype(int)
+    # Final clip to ensure no stray values hit world_gen.txt
+    return np.clip(final, -50, 120).astype(int)
 
 
 def normalize_to_df_rainfall(matrix):
@@ -202,7 +198,7 @@ def format_as_world_gen(el, tm, rn, dr, vo, sv, title, size, config_path="script
             lines.append(f"[{tag}:{':'.join(map(str, row))}]")
 
     add_layer("PS_EL", el)  # Elevation
-    add_layer("PS_TM", tm)  # Temperature
+    add_layer("PS_TP", tm)  # Temperature
     add_layer("PS_RF", rn)  # Rainfall
     add_layer("PS_DR", dr)  # Drainage
     add_layer("PS_VL", vo)  # Volcanism
