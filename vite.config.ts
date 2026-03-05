@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/armoks-blueprint/",
   plugins: [react()],
   resolve: {
     alias: {

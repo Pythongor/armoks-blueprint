@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AboutPage } from "../pages/about/page";
 import { ExportPage } from "@components/pages/export/page";
@@ -19,7 +19,7 @@ export function App() {
   return (
     <>
       <ModalManager />
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route
             path="/"
@@ -37,7 +37,7 @@ export function App() {
             <Route path="/about" element={<AboutPage />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }
