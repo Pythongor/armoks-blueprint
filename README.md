@@ -5,7 +5,7 @@
 **Armok's Blueprint** is a web-utility designed for the manual engraving of world-generation parameters for Dwarf Fortress. While the gods provide random chance, the Blueprint provides **intent**.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Age: Age of Forging](https://img.shields.io/badge/Age-0.0.1-gold)](#)
+[![Age: Age of Forging](https://img.shields.io/badge/Age-0.1.0-gold)](#)
 
 ---
 

@@ -21,7 +21,7 @@ export function Footer() {
   const phrase = randomChoice(QUOTES);
   return (
     <footer className={styles.base}>
-      <span className={styles.version}>v0.0.1</span>
+      <span className={styles.version}>v0.1.0</span>
       <span className={styles.separator}> | </span>
       <span className={styles.qualityText}>"{phrase}"</span>
       <span className={styles.separator}> — </span>
