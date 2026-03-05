@@ -3,6 +3,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 export enum Modal {
   None,
   ResetDestructiveOptions,
+  Disclaimer,
 }
 
 interface UIState {
@@ -10,7 +11,7 @@ interface UIState {
 }
 
 export const initialState: UIState = {
-  modal: Modal.None,
+  modal: Modal.Disclaimer,
 };
 
 export const uiSlice = createSlice({

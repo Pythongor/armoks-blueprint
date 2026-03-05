@@ -5,7 +5,7 @@ import { ExportPage } from "@components/pages/export/page";
 import { GalleryPage } from "../pages/gallery/page";
 import { MainEditorLayout } from "@components/MainEditorLayout/MainEditorLayout";
 import { MapPage } from "@components/pages/map/page";
-import { ModalManager } from "../Modal/Modal";
+import { ModalManager } from "../Modal/ModalManager";
 import type { RootState } from "@store/index";
 import { StartPage } from "@components/pages/start/page";
 import { WorldSettingsPage } from "../pages/world-settings/page";

@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, setModal } from "@store/uiSlice";
 import { type RootState } from "@store/index";
-import { ResetDestructiveModal } from "./ResetDestructiveModal";
+import { ResetDestructiveModal } from "./ResetDestructiveModal/ResetDestructiveModal";
+import { DisclaimerModal } from "./DisclaimerModal/DisclaimerModal";
 import styles from "./Modal.module.scss";
 
 export const ModalManager = () => {
@@ -17,6 +18,9 @@ export const ModalManager = () => {
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {activeModal === Modal.ResetDestructiveOptions && (
           <ResetDestructiveModal onClose={closeModal} />
+        )}
+        {activeModal === Modal.Disclaimer && (
+          <DisclaimerModal onClose={closeModal} />
         )}
       </div>
     </div>

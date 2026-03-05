@@ -1,6 +1,6 @@
 import { applyDestructionSafetyDefaults } from "@store/worldSlice";
 import cn from "classnames";
-import styles from "./Modal.module.scss";
+import styles from "./ResetDestructiveModal.module.scss";
 import { useDispatch } from "react-redux";
 
 export const ResetDestructiveModal = ({ onClose }: { onClose: () => void }) => {
