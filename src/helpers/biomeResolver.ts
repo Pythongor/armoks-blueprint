@@ -32,7 +32,7 @@ export const lavaColor = 0xff4500;
 
 export const biomeMoralityMatrix: Record<
   SavageryTier,
-  Record<AlignmentTier, string>
+  Record<AlignmentTier, BiomeDescriptor>
 > = {
   [SavageryTier.Calm]: {
     [AlignmentTier.Good]: BiomeDescriptor.Serene,
@@ -139,10 +139,7 @@ export function getMoralTiers(savagery: number, alignment: number) {
   return { savageryTier, alignmentTier };
 }
 
-export function getMoralDescriptor(
-  savagery: number,
-  alignment: number,
-): string {
+export function getMoralDescriptor(savagery: number, alignment: number) {
   const { savageryTier, alignmentTier } = getMoralTiers(savagery, alignment);
 
   return biomeMoralityMatrix[savageryTier][alignmentTier];

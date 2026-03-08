@@ -1,4 +1,5 @@
-import type { BrushShape, LayerType, PaintMode } from "./slices/paintSlice";
+import type { BrushShape, PaintMode } from "./slices/paintSlice";
+import { LayerType } from "#types";
 import { type RootState } from "./store";
 
 export const selectActiveBrushValue = (state: RootState) => {

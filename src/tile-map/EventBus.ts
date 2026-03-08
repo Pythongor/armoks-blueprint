@@ -7,8 +7,6 @@ export enum BusEvent {
   LineEnd = "LineEnd",
   StrokeFinished = "StrokeFinished",
   UpdateCoords = "UpdateCoords",
-  UpdateBiome = "UpdateBiome",
-  UpdateBiomeDescriptor = "UpdateBiomeDescriptor",
   RequestRedraw = "RequestRedraw",
   PresetSwitched = "PresetSwitched",
 }

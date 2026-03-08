@@ -18,21 +18,12 @@ import {
   copyPreset,
   deletePreset,
 } from "./slices/worldSlice";
-import { setCoords, setBiome, setBiomeDescriptor } from "./slices/coordsSlice";
+import { setCoords, type CoordsState } from "./slices/coordsSlice";
 import { selectPaintSettings } from "./selectors";
-import type { Biome, BiomeDescriptor } from "#types";
 
 export const phaserMiddleware: Middleware = (store) => {
-  EventBus.on(BusEvent.UpdateCoords, (coords: { x: number; y: number }) => {
+  EventBus.on(BusEvent.UpdateCoords, (coords: Partial<CoordsState>) => {
     store.dispatch(setCoords(coords));
-  });
-
-  EventBus.on(BusEvent.UpdateBiome, (biome: Biome) => {
-    store.dispatch(setBiome(biome));
-  });
-
-  EventBus.on(BusEvent.UpdateBiomeDescriptor, (descriptor: BiomeDescriptor) => {
-    store.dispatch(setBiomeDescriptor(descriptor));
   });
 
   return (next) => (action) => {

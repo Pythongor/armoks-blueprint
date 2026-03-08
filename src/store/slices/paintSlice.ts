@@ -1,14 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-export enum LayerType {
-  Elevation = "elevation",
-  Rainfall = "rainfall",
-  Drainage = "drainage",
-  Temperature = "temperature",
-  Volcanism = "volcanism",
-  Savagery = "savagery",
-  Alignment = "alignment",
-}
+import { LayerType } from "#types";
 
 export enum PaintMode {
   Brush = "brush",

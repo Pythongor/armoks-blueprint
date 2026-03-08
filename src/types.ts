@@ -44,14 +44,24 @@ export enum BiomeDescriptor {
   Terrifying = "Terrifying",
 }
 
+export enum LayerType {
+  Elevation = "elevation",
+  Rainfall = "rainfall",
+  Drainage = "drainage",
+  Temperature = "temperature",
+  Volcanism = "volcanism",
+  Savagery = "savagery",
+  Alignment = "alignment",
+}
+
 export interface WorldPointData {
-  elevation: number;
-  rainfall: number;
-  drainage: number;
-  temperature: number;
-  volcanism: number;
-  savagery: number;
-  alignment: number;
+  [LayerType.Elevation]: number;
+  [LayerType.Rainfall]: number;
+  [LayerType.Drainage]: number;
+  [LayerType.Temperature]: number;
+  [LayerType.Volcanism]: number;
+  [LayerType.Savagery]: number;
+  [LayerType.Alignment]: number;
 }
 
 export type MapData = Record<

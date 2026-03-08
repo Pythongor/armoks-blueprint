@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { BusEvent, EventBus } from "../EventBus";
-import { LayerType, BrushShape } from "@store/slices/paintSlice";
+import { BrushShape } from "@store/slices/paintSlice";
+import { LayerType } from "#types";
 import { type PaintSettings } from "@store/selectors";
 import { worldManager } from "@tile-map/WorldManager";
 import { getBiomeColor } from "@helpers/biomeResolver";
@@ -135,7 +136,7 @@ export class GridScene extends Phaser.Scene {
   }
 
   private getTileColor(index: number): number {
-    const data = worldManager.getPointData(index);
+    const data = worldManager.getPointLayersData(index);
 
     if (this.viewMode === "biomes") {
       return getBiomeColor(worldManager.getBiome(index), data.volcanism > 90);

@@ -1,6 +1,7 @@
+import { LayerType } from "#types";
 import { getMoralDescriptor, identifyBiome } from "@helpers/biomeResolver";
 
-import { LayerType } from "@store/slices/paintSlice";
+import { type CoordsState } from "@store/slices/coordsSlice";
 
 export type WorldDataLayers = Record<LayerType, Int16Array>;
 
@@ -114,7 +115,7 @@ export class WorldManager {
     return this.presets.get(this.activePresetTitle)!;
   }
 
-  getPointData(index: number) {
+  getPointLayersData(index: number) {
     const data = this.worldData;
     return {
       elevation: data.elevation[index],
@@ -127,16 +128,28 @@ export class WorldManager {
     };
   }
 
+  getPointData(index: number): CoordsState {
+    const x = index % this.gridSize;
+    const y = Math.floor(index / this.gridSize);
+    return {
+      x,
+      y,
+      layerValues: this.getPointLayersData(index),
+      biome: this.getBiome(index),
+      biomeDescriptor: this.getBiomeDescriptor(index),
+    };
+  }
+
   updateTile(index: number, layer: LayerType, value: number) {
     this.worldData[layer][index] = value;
   }
 
   getBiome(index: number) {
-    return identifyBiome(this.getPointData(index));
+    return identifyBiome(this.getPointLayersData(index));
   }
 
   getBiomeDescriptor(index: number) {
-    const data = this.getPointData(index);
+    const data = this.getPointLayersData(index);
     return getMoralDescriptor(data.savagery, data.alignment);
   }
 

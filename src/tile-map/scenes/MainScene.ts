@@ -82,8 +82,13 @@ export class MainScene extends Phaser.Scene {
 
       if (coords.isValid) {
         const index = coords.ty * worldManager.gridSize + coords.tx;
-        EventBus.emit(BusEvent.UpdateCoords, { x: coords.tx, y: coords.ty });
-        EventBus.emit(BusEvent.UpdateBiome, worldManager.getBiome(index));
+        EventBus.emit(BusEvent.UpdateCoords, {
+          x: coords.tx,
+          y: coords.ty,
+          biome: worldManager.getBiome(index),
+          biomeDescriptor: worldManager.getBiomeDescriptor(index),
+          layerValues: worldManager.getPointLayersData(index),
+        });
       }
     });
 

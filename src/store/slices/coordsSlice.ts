@@ -1,11 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { Biome, BiomeDescriptor } from "#types";
+import { Biome, BiomeDescriptor, LayerType } from "#types";
 
-interface CoordsState {
+export interface Point {
   x: number;
   y: number;
+}
+
+export interface CoordsState extends Point {
   biome: Biome;
   biomeDescriptor: BiomeDescriptor;
+  layerValues: Record<LayerType, number> | null;
 }
 
 export const initialState: CoordsState = {
@@ -13,23 +17,17 @@ export const initialState: CoordsState = {
   y: 0,
   biome: Biome.Grassland,
   biomeDescriptor: BiomeDescriptor.Calm,
+  layerValues: null,
 };
 
 export const coordsSlice = createSlice({
   name: "coords",
   initialState,
   reducers: {
-    setCoords: (state, action: PayloadAction<{ x: number; y: number }>) => {
-      state.x = action.payload.x;
-      state.y = action.payload.y;
-    },
-    setBiome: (state, action: PayloadAction<Biome>) => {
-      state.biome = action.payload;
-    },
-    setBiomeDescriptor: (state, action: PayloadAction<BiomeDescriptor>) => {
-      state.biomeDescriptor = action.payload;
+    setCoords: (state, action: PayloadAction<Partial<CoordsState>>) => {
+      return { ...state, ...action.payload };
     },
   },
 });
 
-export const { setCoords, setBiome, setBiomeDescriptor } = coordsSlice.actions;
+export const { setCoords } = coordsSlice.actions;
