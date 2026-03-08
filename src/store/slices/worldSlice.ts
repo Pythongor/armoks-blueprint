@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { NON_DESTRUCTIVE_CONFIG } from "./configs";
+import { NON_DESTRUCTIVE_CONFIG } from "../configs";
 import { isArrayOfArrays } from "@helpers/typeGuards";
 
 export interface WorldPreset {

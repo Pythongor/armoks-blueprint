@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { type RootState } from "@store/index";
+import { type RootState } from "@/store/store";
 import { PresetsSidebar } from "./PresetsSidebar/PresetsSidebar";
 import { Header } from "./Header/Header";
 import { TokensGrid } from "./TokensGrid/TokensGrid";

@@ -2,7 +2,7 @@ import { BusEvent, EventBus } from "../EventBus";
 
 import type { BrushScene } from "./BrushScene";
 import type { GridScene } from "./GridScene";
-import { PaintMode } from "@store/paintSlice";
+import { PaintMode } from "@store/slices/paintSlice";
 import type { PaintSettings } from "@store/selectors";
 import Phaser from "phaser";
 import { worldManager } from "../WorldManager";

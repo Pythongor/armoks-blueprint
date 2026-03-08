@@ -1,5 +1,5 @@
 import { ProgressButton } from "@components/widgets/DownloadButton/ProgressButton";
-import type { RootState } from "@store/index";
+import type { RootState } from "@/store/store";
 import styles from "./ApplyButton.module.scss";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";

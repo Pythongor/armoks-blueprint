@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import cn from "classnames";
-import { type RootState } from "@store/index";
-import { setActiveLayer, LayerType } from "@/store/paintSlice";
+import { type RootState } from "@/store/store";
+import { setActiveLayer, LayerType } from "@store/slices/paintSlice";
 import styles from "./LayersRadioGroup.module.scss";
 
 const layers: Array<{ id: LayerType; label: string }> = [

@@ -1,5 +1,5 @@
 import { Selector } from "@components/widgets/Selector/Selector";
-import { updateActiveSetting } from "@store/worldSlice";
+import { updateActiveSetting } from "@store/slices/worldSlice";
 import { useDispatch } from "react-redux";
 
 export type PoleSelectorProps = {

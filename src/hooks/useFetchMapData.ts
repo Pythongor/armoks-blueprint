@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 import type { MapData } from "@/types";
 import { WorldGenToJson } from "@utils/WorldGenToJson";
-import { setBlueprintLoading } from "@store/gallerySlice";
+import { setBlueprintLoading } from "@store/slices/gallerySlice";
 import { useDispatch } from "react-redux";
 
 export const useFetchMapData = (filename: string) => {

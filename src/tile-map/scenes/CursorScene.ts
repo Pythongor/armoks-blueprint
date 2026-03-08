@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { BusEvent, EventBus } from "../EventBus";
-import { BrushShape, PaintMode } from "@store/paintSlice";
+import { BrushShape, PaintMode } from "@store/slices/paintSlice";
 import { type PaintSettings } from "@store/selectors";
 import type { GridScene } from "./GridScene";
 

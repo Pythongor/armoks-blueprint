@@ -1,6 +1,6 @@
-import { setPaintMode, PaintMode } from "@store/paintSlice";
+import { setPaintMode, PaintMode } from "@store/slices/paintSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { type RootState } from "@store/index";
+import { type RootState } from "@/store/store";
 import { InlineSelector } from "@components/widgets/InlineSelector/InlineSelector";
 import styles from "./Selectors.module.scss";
 

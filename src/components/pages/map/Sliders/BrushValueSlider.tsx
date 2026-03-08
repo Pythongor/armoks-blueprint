@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { type RootState } from "@store/index";
-import { setBrushValue, LayerType } from "@/store/paintSlice";
+import { type RootState } from "@/store/store";
+import { setBrushValue, LayerType } from "@store/slices/paintSlice";
 import { Slider } from "@components/widgets/Slider/Slider";
 
 export function BrushValueSlider() {

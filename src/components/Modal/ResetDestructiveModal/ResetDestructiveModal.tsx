@@ -1,4 +1,4 @@
-import { applyDestructionSafetyDefaults } from "@store/worldSlice";
+import { applyDestructionSafetyDefaults } from "@store/slices/worldSlice";
 import cn from "classnames";
 import styles from "./ResetDestructiveModal.module.scss";
 import { useDispatch } from "react-redux";

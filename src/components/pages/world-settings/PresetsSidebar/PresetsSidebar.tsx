@@ -1,6 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
-import { type RootState } from "@store/index";
-import { setActivePreset, copyPreset, deletePreset } from "@store/worldSlice";
+import { type RootState } from "@/store/store";
+import {
+  setActivePreset,
+  copyPreset,
+  deletePreset,
+} from "@store/slices/worldSlice";
 import { BusEvent, EventBus } from "@tile-map/EventBus";
 import { createTitleForCopy } from "@helpers/common";
 import cn from "classnames";

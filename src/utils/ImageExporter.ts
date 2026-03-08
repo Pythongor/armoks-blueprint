@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import { LayerType } from "@/store/paintSlice";
+import { LayerType } from "@store/slices/paintSlice";
 import { normalize } from "@helpers/common";
 import { worldManager } from "@tile-map/WorldManager";
 

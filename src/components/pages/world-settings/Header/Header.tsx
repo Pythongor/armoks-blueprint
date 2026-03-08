@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { type RootState } from "@store/index";
-import { renameActivePreset } from "@store/worldSlice";
-import { setModal, Modal } from "@store/uiSlice"; // Import Modal controls
+import { type RootState } from "@/store/store";
+import { renameActivePreset } from "@store/slices/worldSlice";
+import { setModal, Modal } from "@store/slices/uiSlice";
 import styles from "./Header.module.scss";
 
 export type HeaderProps = {

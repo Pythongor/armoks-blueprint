@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
 import cn from "classnames";
-import { resetWorld } from "@store/worldSlice";
+import { resetWorld } from "@store/slices/worldSlice";
 import styles from "./Navbar.module.scss";
 import { useDispatch } from "react-redux";
 

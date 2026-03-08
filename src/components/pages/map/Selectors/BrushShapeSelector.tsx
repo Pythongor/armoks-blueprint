@@ -1,8 +1,8 @@
-import { BrushShape, PaintMode, setBrushShape } from "@/store/paintSlice";
+import { BrushShape, PaintMode, setBrushShape } from "@store/slices/paintSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { InlineSelector } from "@components/widgets/InlineSelector/InlineSelector";
-import type { RootState } from "@store/index";
+import type { RootState } from "@/store/store";
 import styles from "./Selectors.module.scss";
 
 export function BrushShapeSelector() {

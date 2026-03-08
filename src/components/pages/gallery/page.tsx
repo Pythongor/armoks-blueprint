@@ -4,7 +4,7 @@ import { ApplyButton } from "./ApplyButton/ApplyButton";
 import { CardsGrid } from "./CardsGrid/CardsGrid";
 import { DEFAULT_CONFIG } from "@store/configs";
 import { isArrayOfArrays } from "@helpers/typeGuards";
-import { setAvailableBlueprints } from "@store/gallerySlice";
+import { setAvailableBlueprints } from "@store/slices/gallerySlice";
 import styles from "./page.module.scss";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";

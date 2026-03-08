@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { coordsSlice } from "./coordsSlice";
-import { gallerySlice } from "./gallerySlice";
-import { paintSlice } from "./paintSlice";
+import { coordsSlice } from "./slices/coordsSlice";
+import { gallerySlice } from "./slices/gallerySlice";
+import { paintSlice } from "./slices/paintSlice";
 import { phaserMiddleware } from "./phaserMiddleware";
-import { uiSlice } from "./uiSlice";
-import { worldSlice } from "./worldSlice";
+import { uiSlice } from "./slices/uiSlice";
+import { worldSlice } from "./slices/worldSlice";
 
 export const store = configureStore({
   reducer: {

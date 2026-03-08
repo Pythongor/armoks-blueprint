@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 
 import { WorldGenToJson } from "@utils/WorldGenToJson";
-import { addBlueprint } from "@store/gallerySlice";
+import { addBlueprint } from "@store/slices/gallerySlice";
 import { useDispatch } from "react-redux";
 
 export const useFetchCustomPresets = () => {

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, setModal } from "@store/uiSlice";
-import { type RootState } from "@store/index";
+import { Modal, setModal } from "@store/slices/uiSlice";
+import { type RootState } from "@/store/store";
 import { ResetDestructiveModal } from "./ResetDestructiveModal/ResetDestructiveModal";
 import { DisclaimerModal } from "./DisclaimerModal/DisclaimerModal";
 import styles from "./Modal.module.scss";

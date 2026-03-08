@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { type RootState } from "@store/index";
-import { setLockedToBiomes } from "@/store/paintSlice";
+import { type RootState } from "@/store/store";
+import { setLockedToBiomes } from "@store/slices/paintSlice";
 import styles from "./CompositeToggle.module.scss";
 
 export function CompositeToggle() {

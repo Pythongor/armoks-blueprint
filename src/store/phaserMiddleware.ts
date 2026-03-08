@@ -9,7 +9,7 @@ import {
   setBrushOpacity,
   setViewMode,
   setLockedToBiomes,
-} from "./paintSlice";
+} from "./slices/paintSlice";
 import { worldManager } from "@tile-map/WorldManager";
 import {
   setActivePreset,
@@ -17,8 +17,8 @@ import {
   addPreset,
   copyPreset,
   deletePreset,
-} from "./worldSlice";
-import { setCoords, setBiome, setBiomeDescriptor } from "./coordsSlice";
+} from "./slices/worldSlice";
+import { setCoords, setBiome, setBiomeDescriptor } from "./slices/coordsSlice";
 import { selectPaintSettings } from "./selectors";
 import type { Biome, BiomeDescriptor } from "@/types";
 

@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { BusEvent, EventBus } from "../EventBus";
-import { LayerType, BrushShape } from "@store/paintSlice";
+import { LayerType, BrushShape } from "@store/slices/paintSlice";
 import { type PaintSettings } from "@store/selectors";
 import { worldManager } from "@tile-map/WorldManager";
 import { getBiomeColor } from "@helpers/biomeResolver";
