@@ -10,7 +10,7 @@ export function Footer() {
       >
         [ STUDY THE SOURCE SCROLLS (GITHUB) ]
       </a>
-      <div className={styles.versionBadge}>VERSION 0.1.0</div>
+      <div className={styles.versionBadge}>VERSION {__APP_VERSION__}</div>
     </footer>
   );
 }

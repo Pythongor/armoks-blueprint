@@ -8,7 +8,7 @@
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Age: Age of Forging](https://img.shields.io/badge/Age-0.1.0-gold)](#)
+[![Age: Age of Forging](https://img.shields.io/github/package-json/v/Pythongor/armoks-blueprint?color=gold&label=Age)](https://github.com/Pythongor/armoks-blueprint)
 
 ---
 
