@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { type RootState } from "@/store/store";
+import { type RootState } from "@store/store";
 import { Category } from "../Category/Category";
 import { HIDDEN_TOKENS, TOKEN_CATEGORIES } from "../constants";
 import styles from "./TokensGrid.module.scss";

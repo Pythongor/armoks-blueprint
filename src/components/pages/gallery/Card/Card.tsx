@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 
-import type { RootState } from "@/store/store";
+import type { RootState } from "@store/store";
 import { Thumbnail } from "../Thumbnail/Thumbnail";
 import cn from "classnames";
 import styles from "./Card.module.scss";

@@ -1,5 +1,5 @@
 import { updateActiveSetting } from "@store/slices/worldSlice";
-import { type RootState } from "@/store/store";
+import { type RootState } from "@store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { Selector } from "@components/widgets/Selector/Selector";
 

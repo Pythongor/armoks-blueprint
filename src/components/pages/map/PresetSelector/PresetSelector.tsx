@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { BusEvent, EventBus } from "@tile-map/EventBus";
 import React from "react";
-import { type RootState } from "@/store/store";
+import { type RootState } from "@store/store";
 import { setActivePreset } from "@store/slices/worldSlice";
 import styles from "./PresetSelector.module.scss";
 

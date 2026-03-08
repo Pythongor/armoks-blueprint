@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import cn from "classnames";
-import { type RootState } from "@/store/store";
+import { type RootState } from "@store/store";
 import styles from "./StatusBar.module.scss";
 import { formatBiomeDescriptor, formatBiomeText } from "@helpers/biomeResolver";
 

@@ -1,4 +1,4 @@
-import { randomChoice } from "@/helpers/common";
+import { randomChoice } from "@helpers/common";
 import styles from "./Footer.module.scss";
 
 const QUOTES = [

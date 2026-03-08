@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import cn from "classnames";
-import { type RootState } from "@/store/store";
+import { type RootState } from "@store/store";
 import { setActiveLayer, LayerType } from "@store/slices/paintSlice";
 import styles from "./LayersRadioGroup.module.scss";
 

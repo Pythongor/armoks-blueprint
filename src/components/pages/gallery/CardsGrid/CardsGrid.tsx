@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import { Card } from "../Card/Card";
-import type { RootState } from "@/store/store";
+import type { RootState } from "@store/store";
 import styles from "./CardsGrid.module.scss";
 import { toggleSelection } from "@store/slices/gallerySlice";
 

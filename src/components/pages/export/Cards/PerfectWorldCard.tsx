@@ -1,5 +1,5 @@
 import { ImageExporter } from "@utils/ImageExporter";
-import { ProgressButton } from "@/components/widgets/DownloadButton/ProgressButton";
+import { ProgressButton } from "@components/widgets/DownloadButton/ProgressButton";
 import styles from "./Cards.module.scss";
 import { useState } from "react";
 

@@ -6,7 +6,7 @@ import { GalleryPage } from "../pages/gallery/page";
 import { MainEditorLayout } from "@components/MainEditorLayout/MainEditorLayout";
 import { MapPage } from "@components/pages/map/page";
 import { ModalManager } from "../Modal/ModalManager";
-import type { RootState } from "@/store/store";
+import type { RootState } from "@store/store";
 import { StartPage } from "@components/pages/start/page";
 import { WorldSettingsPage } from "../pages/world-settings/page";
 import { useSelector } from "react-redux";

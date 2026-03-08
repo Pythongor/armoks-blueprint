@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { type RootState } from "@/store/store";
+import { type RootState } from "@store/store";
 import { setBrushOpacity } from "@store/slices/paintSlice";
 import { Slider } from "@components/widgets/Slider/Slider";
 

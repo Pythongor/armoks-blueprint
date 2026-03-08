@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { WorldGenToJson } from "@/utils/WorldGenToJson";
+import { WorldGenToJson } from "@utils/WorldGenToJson";
 import cn from "classnames";
 import styles from "./Cards.module.scss";
 import { useNavigate } from "react-router-dom";

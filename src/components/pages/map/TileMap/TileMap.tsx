@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 
 import Phaser from "phaser";
-import type { RootState } from "@/store/store";
-import { createGame } from "@/tile-map/Game";
+import type { RootState } from "@store/store";
+import { createGame } from "@tile-map/Game";
 import { formatBiomeText } from "@helpers/biomeResolver";
 import styles from "./TileMap.module.scss";
 import { useSelector } from "react-redux";

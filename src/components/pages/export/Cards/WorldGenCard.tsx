@@ -1,6 +1,6 @@
 import { JsonToWorldGen } from "@utils/JsonToWorldGen";
 import { useSelector } from "react-redux";
-import { type RootState } from "@/store/store";
+import { type RootState } from "@store/store";
 import { useState } from "react";
 import { ProgressButton } from "@components/widgets/DownloadButton/ProgressButton";
 import styles from "./Cards.module.scss";
