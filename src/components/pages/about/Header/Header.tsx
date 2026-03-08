@@ -1,4 +1,4 @@
-import { LogoHeader } from "@components/LogoHeader/LogoHeader";
+import { LogoHeader } from "@components/main/LogoHeader/LogoHeader";
 import styles from "./Header.module.scss";
 
 export function Header() {

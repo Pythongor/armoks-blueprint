@@ -1,14 +1,14 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import { AboutPage } from "../pages/about/page";
+import { AboutPage } from "@components/pages/about/page";
 import { ExportPage } from "@components/pages/export/page";
-import { GalleryPage } from "../pages/gallery/page";
-import { MainEditorLayout } from "@components/MainEditorLayout/MainEditorLayout";
+import { GalleryPage } from "@components/pages/gallery/page";
+import { MainEditorLayout } from "@components/main/MainEditorLayout/MainEditorLayout";
 import { MapPage } from "@components/pages/map/page";
-import { ModalManager } from "../Modal/ModalManager";
+import { ModalManager } from "@components/modal/ModalManager";
 import type { RootState } from "@store/store";
 import { StartPage } from "@components/pages/start/page";
-import { WorldSettingsPage } from "../pages/world-settings/page";
+import { WorldSettingsPage } from "@components/pages/world-settings/page";
 import { useSelector } from "react-redux";
 
 export function App() {

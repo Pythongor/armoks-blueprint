@@ -2,7 +2,7 @@ import { ForgeNewWorldCard, ReclaimArchiveCard } from "./Cards";
 
 import { Description } from "./Description/Description";
 import { Footer } from "./Footer/Footer";
-import { LogoHeader } from "@components/LogoHeader/LogoHeader";
+import { LogoHeader } from "@components/main/LogoHeader/LogoHeader";
 import styles from "./page.module.scss";
 
 export function StartPage() {
