@@ -1,8 +1,8 @@
-import { BrushScene } from "./BrushScene";
-import { CursorScene } from "./CursorScene";
-import { GridScene } from "./GridScene";
-import { LineScene } from "./LineScene";
-import { MainScene } from "./MainScene";
+import { BrushScene } from "./scenes/BrushScene";
+import { CursorScene } from "./scenes/CursorScene";
+import { GridScene } from "./scenes/GridScene";
+import { LineScene } from "./scenes/LineScene";
+import { MainScene } from "./scenes/MainScene";
 
 export function createGame() {
   return new Phaser.Game({

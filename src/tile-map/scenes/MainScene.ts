@@ -1,11 +1,11 @@
-import { BusEvent, EventBus } from "./EventBus";
+import { BusEvent, EventBus } from "../EventBus";
 
 import type { BrushScene } from "./BrushScene";
 import type { GridScene } from "./GridScene";
 import { PaintMode } from "@store/paintSlice";
 import type { PaintSettings } from "@store/selectors";
 import Phaser from "phaser";
-import { worldManager } from "./WorldManager";
+import { worldManager } from "../WorldManager";
 
 export class MainScene extends Phaser.Scene {
   private isPanning: boolean = false;

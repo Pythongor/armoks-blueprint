@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { BusEvent, EventBus } from "./EventBus";
+import { BusEvent, EventBus } from "../EventBus";
 import { LayerType, BrushShape } from "@store/paintSlice";
 import { type PaintSettings } from "@store/selectors";
 import { worldManager } from "@tile-map/WorldManager";

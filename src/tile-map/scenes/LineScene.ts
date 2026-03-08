@@ -1,4 +1,4 @@
-import { BusEvent, EventBus } from "./EventBus";
+import { BusEvent, EventBus } from "../EventBus";
 
 import type { GridScene } from "./GridScene";
 import { PaintMode } from "@store/paintSlice";
