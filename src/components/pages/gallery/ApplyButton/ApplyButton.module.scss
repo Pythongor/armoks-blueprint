@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "@styles/variables" as *;
 @use "@styles/mixins" as *;
 
@@ -14,7 +15,7 @@
   font-weight: bold;
 
   &:hover:not(:disabled) {
-    background: lighten($ui-accent, 10%);
+    background: color.adjust($ui-accent, $lightness: 10%);
     box-shadow: 0 15px 40px rgba($ui-black, 0.6);
   }
 
