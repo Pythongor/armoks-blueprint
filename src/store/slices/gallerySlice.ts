@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { WorldPreset } from "@/types";
+import type { WorldPreset } from "#types";
 
 export type WorldPresetWithLoading = WorldPreset & { withLoading?: boolean };
 

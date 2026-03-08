@@ -1,4 +1,4 @@
-import type { WorldPreset, WorldSettings } from "@/types";
+import type { WorldPreset, WorldSettings } from "#types";
 
 import { ApplyButton } from "./ApplyButton/ApplyButton";
 import { CardsGrid } from "./CardsGrid/CardsGrid";

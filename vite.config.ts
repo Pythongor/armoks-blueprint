@@ -23,6 +23,7 @@ export default defineConfig({
       "@styles": path.resolve(__dirname, "./src/styles"),
       "@tile-map": path.resolve(__dirname, "./src/tile-map"),
       "@utils": path.resolve(__dirname, "./src/utils"),
+      "#types": path.resolve(__dirname, "./src/types.ts"),
     },
   },
 });

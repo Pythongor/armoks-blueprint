@@ -1,4 +1,4 @@
-import type { WorldPreset } from "@/types";
+import type { WorldPreset } from "#types";
 
 const tokenRegex = /\[([^\]]+)\]/g;
 

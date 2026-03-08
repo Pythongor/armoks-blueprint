@@ -18,7 +18,8 @@
       "@store/*": ["./src/store/*"],
       "@styles/*": ["./src/styles/*"],
       "@tile-map/*": ["./src/tile-map/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "#types": ["./src/types.ts"]
     },
 
     /* Bundler mode */

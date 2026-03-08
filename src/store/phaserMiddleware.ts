@@ -20,7 +20,7 @@ import {
 } from "./slices/worldSlice";
 import { setCoords, setBiome, setBiomeDescriptor } from "./slices/coordsSlice";
 import { selectPaintSettings } from "./selectors";
-import type { Biome, BiomeDescriptor } from "@/types";
+import type { Biome, BiomeDescriptor } from "#types";
 
 export const phaserMiddleware: Middleware = (store) => {
   EventBus.on(BusEvent.UpdateCoords, (coords: { x: number; y: number }) => {

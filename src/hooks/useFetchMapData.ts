@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import type { MapData } from "@/types";
+import type { MapData } from "#types";
 import { WorldGenToJson } from "@utils/WorldGenToJson";
 import { setBlueprintLoading } from "@store/slices/gallerySlice";
 import { useDispatch } from "react-redux";

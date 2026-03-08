@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 
 import { SuffixToLayer } from "@utils/JsonToWorldGen";
 import { WorldGenToJson } from "@utils/WorldGenToJson";
-import type { WorldPreset } from "@/types";
+import type { WorldPreset } from "#types";
 import { initializeWorld } from "@store/slices/worldSlice";
 import { useDispatch } from "react-redux";
 import { worldManager } from "@tile-map/WorldManager";

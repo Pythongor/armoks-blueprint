@@ -1,6 +1,6 @@
 import { getBiomeColor, identifyBiome } from "@helpers/biomeResolver";
 import { useEffect, useRef } from "react";
-import { type MapData } from "@/types";
+import { type MapData } from "#types";
 
 import styles from "./Thumbnail.module.scss";
 

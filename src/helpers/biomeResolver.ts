@@ -4,7 +4,7 @@ import {
   SavageryTier,
   BiomeDescriptor,
   type WorldPointData,
-} from "@/types";
+} from "#types";
 
 export const BiomeColorMap: Record<Biome, number> = {
   [Biome.Ocean]: 0x00008b,

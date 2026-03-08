@@ -1,5 +1,5 @@
 import { LayerType } from "@store/slices/paintSlice";
-import type { WorldPreset } from "@/types";
+import type { WorldPreset } from "#types";
 import { worldManager } from "@tile-map/WorldManager";
 
 export const LayerToSuffix: Record<LayerType, string> = {

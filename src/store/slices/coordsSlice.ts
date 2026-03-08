@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { Biome, BiomeDescriptor } from "@/types";
+import { Biome, BiomeDescriptor } from "#types";
 
 interface CoordsState {
   x: number;
