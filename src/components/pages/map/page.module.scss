@@ -5,7 +5,7 @@
   @include page;
   display: grid;
   grid-template-columns: 300px 1fr 300px;
-  grid-template-rows: 1fr 30px;
+  grid-template-rows: 1fr minmax(30px, auto);
   grid-template-areas:
     "left map right"
     "left status right";
@@ -13,4 +13,5 @@
   height: 100%;
   background-color: $bg-dark;
   font-family: "Courier New", Courier, monospace;
+  overflow: hidden;
 }
