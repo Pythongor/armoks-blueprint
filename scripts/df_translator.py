@@ -205,3 +205,57 @@ def format_as_world_gen(el, tm, rn, dr, vo, sv, title, size, config_path="script
     add_layer("PS_SV", sv)  # Savagery
 
     return "\n".join(lines)
+
+
+def generate_calibration_matrices(size=257):
+    el = np.zeros((size, size), dtype=int)
+    tm = np.full((size, size), 20, dtype=int)
+    rn = np.full((size, size), 0, dtype=int)
+    dr = np.full((size, size), 50, dtype=int)
+    vo = np.zeros((size, size), dtype=int)
+    sv = np.full((size, size), 50, dtype=int)
+
+    STEP = 5
+    t_range = np.arange(-50, 121, STEP)
+    d_range = np.arange(0, 101, STEP)
+    r_range = np.arange(0, 101, STEP)
+
+    RECT_W = len(t_range)
+    RECT_H = len(d_range)
+    GAP = 2
+
+    curr_x, curr_y = 2, 2
+
+    for r_val in r_range:
+        if curr_x + RECT_W >= size:
+            curr_x = 2
+            curr_y += RECT_H + GAP
+
+        if curr_y + RECT_H >= size:
+            break
+
+        for dy, d_val in enumerate(d_range):
+            for dx, t_val in enumerate(t_range):
+                target_x = curr_x + dx
+                target_y = curr_y + dy
+
+                el[target_y, target_x] = 150
+                tm[target_y, target_x] = t_val
+                rn[target_y, target_x] = r_val
+                dr[target_y, target_x] = d_val
+
+        curr_x += RECT_W + GAP
+
+    return el, tm, rn, dr, vo, sv
+
+
+if __name__ == "__main__":
+    SIZE = 257
+    el, tm, rn, dr, vo, sv = generate_calibration_matrices(SIZE)
+
+    output_text = format_as_world_gen(
+        el, tm, rn, dr, vo, sv, "CALIBRATION", SIZE
+    )
+
+    with open("public/presets/calibration.txt", "w") as f:
+        f.write(output_text)
