@@ -7,22 +7,28 @@ import {
 } from "#types";
 
 export const BiomeColorMap: Record<Biome, number> = {
-  [Biome.Ocean]: 0x00008b,
+  [Biome.TemperateOcean]: 0x00008b,
+  [Biome.ArcticOcean]: 0x3f008b,
+  [Biome.TropicalOcean]: 0x09517a,
   [Biome.Mountain]: 0x4b4b4b,
   [Biome.Glacier]: 0x70ffff,
-  [Biome.HotDesert]: 0xffd700,
+  [Biome.SandDesert]: 0xffd700,
   [Biome.Badlands]: 0xcd853f,
   [Biome.Tundra]: 0xb0e0e6,
-  [Biome.Swamp]: 0x2f4f4f,
-  [Biome.Marsh]: 0x4682b4,
+  [Biome.TemperateSwamp]: 0x2f4f4f,
+  [Biome.TropicalSwamp]: 0x37653f,
+  [Biome.MangroveSwamp]: 0x5f904c,
+  [Biome.TemperateMarsh]: 0x808000,
+  [Biome.TropicalMarsh]: 0x66cdaa,
   [Biome.Taiga]: 0x4e6e5d,
   [Biome.TemperateConiferousForest]: 0x2d5a27,
   [Biome.TemperateBroadleafForest]: 0x4f7942,
   [Biome.TropicalMoistBroadleafForest]: 0x004d00,
-  [Biome.TropicalDryBroadleafForest]: 0x556b2f,
   [Biome.TropicalConiferousForest]: 0x228b22,
   [Biome.Grassland]: 0x32cd32,
+  [Biome.TropicalGrassland]: 0x68cd32,
   [Biome.Savanna]: 0xadff2f,
+  [Biome.TropicalSavanna]: 0xcbff2f,
   [Biome.TemperateShrubland]: 0x8ba870,
   [Biome.TropicalShrubland]: 0xa3ad62,
   [Biome.RockyWasteland]: 0xa9a9a9,
@@ -54,55 +60,128 @@ export const biomeMoralityMatrix: Record<
 export function identifyBiome(data: WorldPointData): Biome {
   const { elevation, rainfall, temperature, drainage } = data;
 
-  if (elevation < 100) return Biome.Ocean;
-  if (elevation > 300) return Biome.Mountain;
-
-  if (temperature < -20) {
-    if (rainfall > 40) return Biome.Glacier;
-    return Biome.Tundra;
+  if (elevation >= 310) {
+    return Biome.Mountain;
   }
 
-  if (temperature < 0) {
-    if (rainfall > 35 && drainage > 33) return Biome.Taiga;
-    return Biome.Tundra;
-  }
-
-  if (drainage > 95 && elevation > 150) return Biome.RockyWasteland;
-
-  if (rainfall < 20) {
-    return temperature > 85 ? Biome.HotDesert : Biome.Badlands;
-  }
-
-  if (temperature > 80) {
-    if (rainfall > 66 && drainage < 33) return Biome.Swamp;
-    if (rainfall > 80) return Biome.TropicalMoistBroadleafForest;
-    if (rainfall > 50) {
-      return drainage > 66
-        ? Biome.TropicalConiferousForest
-        : Biome.TropicalDryBroadleafForest;
+  // Oceans
+  if (elevation < 100) {
+    if (temperature < 0) {
+      return Biome.ArcticOcean;
     }
+
+    if (temperature > 70 && rainfall < 65) {
+      return Biome.TropicalOcean;
+    }
+
+    return Biome.TemperateOcean;
+  }
+
+  // Cold biomes
+  if (temperature < 0) {
+    if (drainage > 70) {
+      return Biome.Glacier;
+    }
+
+    return Biome.Tundra;
+  }
+
+  // Dry biomes
+  if (rainfall < 10) {
+    if (drainage < 30) {
+      return Biome.SandDesert;
+    }
+
+    if (drainage < 60) {
+      return Biome.RockyWasteland;
+    }
+
+    return Biome.Badlands;
+  }
+
+  // Scarce rainfall biomes
+  if (rainfall < 20) {
+    if (temperature > 80) {
+      return Biome.TropicalGrassland;
+    }
+
+    return Biome.Grassland;
+  }
+
+  // Low rainfall biomes
+  if (rainfall < 35) {
+    if (temperature > 80) {
+      return Biome.TropicalSavanna;
+    }
+
     return Biome.Savanna;
   }
 
-  if (rainfall > 66) {
-    if (drainage < 33) return Biome.Marsh;
+  // Medium rainfall biomes
+  if (rainfall < 70) {
+    if (drainage < 30) {
+      if (temperature > 80) {
+        return Biome.TropicalMarsh;
+      }
 
-    return temperature > 25
-      ? Biome.TemperateBroadleafForest
-      : Biome.TemperateConiferousForest;
-  }
-
-  if (rainfall < 45) {
-    if (drainage > 75) {
-      return temperature > 80
-        ? Biome.TropicalShrubland
-        : Biome.TemperateShrubland;
+      return Biome.TemperateMarsh;
     }
 
-    return temperature > 55 ? Biome.Savanna : Biome.Grassland;
+    if (temperature > 80) {
+      return Biome.TropicalShrubland;
+    }
+
+    return Biome.TemperateShrubland;
   }
 
-  return Biome.Grassland;
+  // Swamps
+  if (drainage < 30) {
+    if (temperature > 80) {
+      if (drainage < 10 && rainfall < 85) {
+        return Biome.MangroveSwamp;
+      }
+
+      return Biome.TropicalSwamp;
+    }
+
+    return Biome.TemperateSwamp;
+  }
+
+  // Forests
+
+  if (temperature < 10) {
+    return Biome.Taiga;
+  }
+
+  if (temperature < 15) {
+    if (elevation < 230) {
+      return Biome.TemperateConiferousForest;
+    }
+
+    return Biome.Taiga;
+  }
+
+  if (temperature < 65) {
+    return Biome.TemperateConiferousForest;
+  }
+
+  if (temperature <= 80) {
+    if (rainfall < 75) {
+      return Biome.TemperateConiferousForest;
+    }
+
+    return Biome.TemperateBroadleafForest;
+  }
+
+  if (rainfall < 75) {
+    return Biome.TropicalConiferousForest;
+  }
+
+  if (rainfall < 85) {
+    return Biome.TropicalMoistBroadleafForest;
+  }
+
+  return Biome.TemperateBroadleafForest;
 }
 
 export function getBiomeColor(
