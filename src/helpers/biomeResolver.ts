@@ -15,11 +15,15 @@ export const BiomeColorMap: Record<Biome, number> = {
   [Biome.SandDesert]: 0xffd700,
   [Biome.Badlands]: 0xcd853f,
   [Biome.Tundra]: 0xb0e0e6,
-  [Biome.TemperateSwamp]: 0x2f4f4f,
-  [Biome.TropicalSwamp]: 0x37653f,
+  [Biome.FreshwaterTemperateSwamp]: 0x2f4f4f,
+  [Biome.SaltwaterTemperateSwamp]: 0x2f4f4f,
+  [Biome.FreshwaterTropicalSwamp]: 0x37653f,
+  [Biome.SaltwaterTropicalSwamp]: 0x37653f,
   [Biome.MangroveSwamp]: 0x5f904c,
-  [Biome.TemperateMarsh]: 0x808000,
-  [Biome.TropicalMarsh]: 0x66cdaa,
+  [Biome.FreshwaterTemperateMarsh]: 0x808000,
+  [Biome.SaltwaterTemperateMarsh]: 0x808000,
+  [Biome.FreshwaterTropicalMarsh]: 0x66cdaa,
+  [Biome.SaltwaterTropicalMarsh]: 0x66cdaa,
   [Biome.Taiga]: 0x4e6e5d,
   [Biome.TemperateConiferousForest]: 0x2d5a27,
   [Biome.TemperateBroadleafForest]: 0x4f7942,
@@ -57,7 +61,10 @@ export const biomeMoralityMatrix: Record<
   },
 };
 
-export function identifyBiome(data: WorldPointData): Biome {
+export function identifyBiome(
+  data: WorldPointData,
+  coast: boolean = false,
+): Biome {
   const { elevation, rainfall, temperature, drainage } = data;
 
   if (elevation >= 310) {
@@ -121,10 +128,14 @@ export function identifyBiome(data: WorldPointData): Biome {
   if (rainfall < 70) {
     if (drainage < 30) {
       if (temperature > 80) {
-        return Biome.TropicalMarsh;
+        return coast
+          ? Biome.SaltwaterTropicalMarsh
+          : Biome.FreshwaterTropicalMarsh;
       }
 
-      return Biome.TemperateMarsh;
+      return coast
+        ? Biome.SaltwaterTemperateMarsh
+        : Biome.FreshwaterTemperateMarsh;
     }
 
     if (temperature > 80) {
@@ -138,13 +149,17 @@ export function identifyBiome(data: WorldPointData): Biome {
   if (drainage < 30) {
     if (temperature > 80) {
       if (drainage < 10 && rainfall < 85) {
-        return Biome.MangroveSwamp;
+        return coast ? Biome.MangroveSwamp : Biome.FreshwaterTropicalSwamp;
       }
 
-      return Biome.TropicalSwamp;
+      return coast
+        ? Biome.SaltwaterTropicalSwamp
+        : Biome.FreshwaterTropicalSwamp;
     }
 
-    return Biome.TemperateSwamp;
+    return coast
+      ? Biome.SaltwaterTemperateSwamp
+      : Biome.FreshwaterTemperateSwamp;
   }
 
   // Forests

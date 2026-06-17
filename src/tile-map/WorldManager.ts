@@ -115,7 +115,7 @@ export class WorldManager {
     return this.presets.get(this.activePresetTitle)!;
   }
 
-  getPointLayersData(index: number) {
+  getPointLayersData(index: number): Record<LayerType, number> {
     const data = this.worldData;
     return {
       elevation: data.elevation[index],
@@ -128,7 +128,7 @@ export class WorldManager {
     };
   }
 
-  getPointData(index: number): CoordsState {
+  getPointData(index: number): CoordsState | Omit<CoordsState, "biome"> {
     const x = index % this.gridSize;
     const y = Math.floor(index / this.gridSize);
     return {
@@ -140,12 +140,31 @@ export class WorldManager {
     };
   }
 
+  getPointNeighbours(index: number): Record<LayerType, number>[] {
+    const neighbours: Record<LayerType, number>[] = [];
+    const size = this.gridSize;
+    const x = index % size;
+    const y = Math.floor(index / size);
+    if (x > 0) neighbours.push(this.getPointLayersData(index - 1));
+    if (x < size - 1) neighbours.push(this.getPointLayersData(index + 1));
+    if (y > 0) neighbours.push(this.getPointLayersData(index - size));
+    if (y < size - 1) neighbours.push(this.getPointLayersData(index + size));
+    return neighbours;
+  }
+
+  isNearWater(index: number) {
+    const neighbours = this.getPointNeighbours(index);
+    return neighbours.some((neighbour) => neighbour.elevation < 100);
+  }
+
   updateTile(index: number, layer: LayerType, value: number) {
     this.worldData[layer][index] = value;
   }
 
   getBiome(index: number) {
-    return identifyBiome(this.getPointLayersData(index));
+    const coast = this.isNearWater(index);
+    const point = this.getPointLayersData(index);
+    return identifyBiome(point, coast);
   }
 
   getBiomeDescriptor(index: number) {
