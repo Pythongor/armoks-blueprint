@@ -9,10 +9,12 @@ export interface Point {
 export interface CoordsState extends Point {
   biome: Biome;
   biomeDescriptor: BiomeDescriptor;
-  layerValues: Record<LayerType, number> | null;
+  layerValues: Record<LayerType, number>;
 }
 
-export const initialState: CoordsState = {
+export const initialState: Omit<CoordsState, "layerValues"> & {
+  layerValues: null | Record<LayerType, number>;
+} = {
   x: 0,
   y: 0,
   biome: Biome.Grassland,
