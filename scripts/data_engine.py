@@ -27,10 +27,10 @@ def extract_elevation_matrix(bounds, target_size):
     from geo_utils import get_required_tiff_filenames
 
     files = [f for f in get_required_tiff_filenames(
-        bounds) if os.path.exists(f)]
+        "gebco_2026", bounds) if os.path.exists(f)]
     if not files:
         raise FileNotFoundError(
-            "Missing GEBCO .tif files for the requested area.")
+            f"Missing GEBCO .tif files for the requested area {bounds}.")
 
     src_files = [rasterio.open(f) for f in files]
     mosaic, out_trans = merge(src_files)

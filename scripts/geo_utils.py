@@ -14,23 +14,25 @@ def calculate_square_bounds(lat, lon, km_range):
     return (lon - lon_step, lat - lat_step, lon + lon_step, lat + lat_step)
 
 
-def get_required_tiff_filenames(bounds):
+def get_required_tiff_filenames(dataset, bounds):
     """Determines which GEBCO octants are needed based on bounds."""
     min_lon, min_lat, max_lon, max_lat = bounds
     octants = [
         {"n": 90, "s": 0, "w": -180, "e": -90}, {"n": 90, "s": 0, "w": -90, "e": 0},
-        {"n": 90, "s": 0, "w": 0, "e": 90},    {
-            "n": 90, "s": 0, "w": 90, "e": 180},
-        {"n": 0, "s": -90, "w": -180, "e": -
-            90}, {"n": 0, "s": -90, "w": -90, "e": 0},
+        {"n": 90, "s": 0, "w": 0, "e": 90},    {"n": 90, "s": 0, "w": 90, "e": 180},
+        {"n": 0, "s": -90, "w": -180, "e": -90}, {"n": 0, "s": -90, "w": -90, "e": 0},
         {"n": 0, "s": -90, "w": 0, "e": 90},   {"n": 0, "s": -90, "w": 90, "e": 180}
     ]
+
+    suffix = "_geotiff" if "2026" in dataset else ""
 
     required = []
     for oct in octants:
         if not (max_lon < oct["w"] or min_lon > oct["e"] or
                 max_lat < oct["s"] or min_lat > oct["n"]):
-            filename = f"gebco_2025_sub_ice_n{float(oct['n'])}_s{float(oct['s'])}_w{float(oct['w'])}_e{float(oct['e'])}.tif"
-            file_path = os.path.join("data", "gebco", filename)
+            
+            filename = f"{dataset}_n{float(oct['n'])}_s{float(oct['s'])}_w{float(oct['w'])}_e{float(oct['e'])}{suffix}.tif"
+            file_path = os.path.join("data", "gebco", dataset, filename)
             required.append(file_path)
+            
     return required
