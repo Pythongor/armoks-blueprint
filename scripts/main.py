@@ -44,8 +44,13 @@ def main():
     # Geo Logic
     if args.name == "world":
         # The absolute bounds of the GEBCO dataset
-        bounds = (-180.0, -90.0, 180.0, 90.0)
+        bounds = (-180.0, -90.0, 195.0, 90.0)
         title = args.title or "THE_WHOLE_WORLD"
+
+    elif args.name == "world_one_continent":
+        bounds = (-385.0, -90.0, -15.0, 90.0)
+        title = args.title or "WORLD_ONE_CONTINENT"
+
     elif args.name:
         bounds = calculate_square_bounds(lat, lon, km_range)
 

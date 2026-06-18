@@ -2,6 +2,7 @@
 # Format: "key": (latitude, longitude, km_range)
 REGIONS = {
     "world": (0, 0, 0),
+    "world_one_continent": (0, -165, 40075),
     "japan": (40, 138.72, 2500),
     "europe": (54.0, 20.0, 4500),
     "alps": (46.5, 10, 700),
