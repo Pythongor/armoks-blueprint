@@ -247,6 +247,7 @@ def format_as_world_gen(el, tm, rn, dr, vo, sv, title, size, config_path="script
 
 
 def generate_calibration_matrices(size=257):
+    # Standard initialization (0 = Ocean Background)
     el = np.zeros((size, size), dtype=int)
     tm = np.full((size, size), 20, dtype=int)
     rn = np.full((size, size), 0, dtype=int)
@@ -254,36 +255,66 @@ def generate_calibration_matrices(size=257):
     vo = np.zeros((size, size), dtype=int)
     sv = np.full((size, size), 50, dtype=int)
 
+    # CLIMATE SLABS
     STEP = 5
     t_range = np.arange(-50, 121, STEP)
     d_range = np.arange(0, 101, STEP)
     r_range = np.arange(0, 101, STEP)
+    e_tiers = [100, 150, 200]
 
-    RECT_W = len(t_range)
-    RECT_H = len(d_range)
-    GAP = 2
-
+    RECT_W, RECT_H, GAP = 35, 21, 1
     curr_x, curr_y = 2, 2
 
-    for r_val in r_range:
-        if curr_x + RECT_W >= size:
-            curr_x = 2
-            curr_y += RECT_H + GAP
+    for e_val in e_tiers:
+        curr_x = 2
+        if e_val != e_tiers[0]:
+            curr_y += RECT_H + 2
 
-        if curr_y + RECT_H >= size:
+        for r_val in r_range:
+            if curr_x + RECT_W >= 235:
+                curr_x = 2
+                curr_y += RECT_H + GAP
+
+            if curr_y + RECT_H >= size:
+                break
+
+            el[curr_y:curr_y+RECT_H, curr_x:curr_x+RECT_W] = e_val
+            # Fill gradients inside slab
+            for dy, d_val in enumerate(d_range):
+                for dx, t_val in enumerate(t_range):
+                    tm[curr_y + dy, curr_x + dx] = t_val
+                    rn[curr_y + dy, curr_x + dx] = r_val
+                    dr[curr_y + dy, curr_x + dx] = d_val
+            curr_x += RECT_W + GAP
+
+    # THE ALTITUDE STRIPS
+    STEP_T = 10
+    STEP_E = 10
+    t_range_alt = np.arange(-50, 121, STEP_T)
+    e_range_alt = np.arange(0, 401, STEP_E)
+
+    variations = [
+        (0, 0), (50, 0), (100, 0),     # Low Drainage group
+        (100, 0), (100, 50), (100, 100)  # Maximum Rainfall group
+    ]
+
+    STRIP_W, STRIP_H = 17, 41
+    start_x_alt = 238
+    curr_y_alt = 1
+
+    for r_val, d_val in variations:
+        if curr_y_alt + STRIP_H >= size:
             break
 
-        for dy, d_val in enumerate(d_range):
-            for dx, t_val in enumerate(t_range):
-                target_x = curr_x + dx
-                target_y = curr_y + dy
+        for dy, e_val in enumerate(e_range_alt):
+            for dx, t_val in enumerate(t_range_alt):
+                tx, ty = start_x_alt + dx, curr_y_alt + dy
+                el[ty, tx] = e_val
+                tm[ty, tx] = t_val
+                rn[ty, tx] = r_val
+                dr[ty, tx] = d_val
 
-                el[target_y, target_x] = 150
-                tm[target_y, target_x] = t_val
-                rn[target_y, target_x] = r_val
-                dr[target_y, target_x] = d_val
-
-        curr_x += RECT_W + GAP
+        curr_y_alt += STRIP_H + 1
 
     return el, tm, rn, dr, vo, sv
 
