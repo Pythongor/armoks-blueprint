@@ -1,7 +1,7 @@
 import json
 import os
 
-from scipy.ndimage import laplace, generic_filter
+from scipy.ndimage import laplace, generic_filter, distance_transform_edt, gaussian_filter
 import numpy as np
 
 GLOBAL_TEMPERATURE_MIN = -54.5
@@ -36,37 +36,76 @@ def normalize_to_df_elevation(matrix):
     return final
 
 
-def normalize_to_df_temperature(tm_matrix, el_matrix):
-    # 1. Clean the 'NoData' spikes before they hit the math
+def normalize_to_df_temperature(tm_matrix, el_matrix, bounds, blend_radius=8, noise_seed=42):
+    """
+    Normalizes temperatures into Dwarf Fortress scales (-50 to 120), smoothly
+    extrapolating coastal land temperatures into shallow water tiles to prevent
+    artificial thermal drops along the shoreline.
+    """
+    min_lon, min_lat, max_lon, max_lat = bounds
+    H, W = tm_matrix.shape
+
+    # 1. Clean standard edge noise anomalies
     tm_clean = clean_coastal_noise(tm_matrix, invalid_val=-1000)
 
-    final = np.zeros_like(tm_clean, dtype=int)
+    # 2. Set up our geospatial land mask
     land_mask = el_matrix >= 100
-    ocean_mask = el_matrix < 100
 
-    # --- LAND PROCESSING ---
-    if np.any(land_mask):
-        land_raw = tm_clean[land_mask]
-        norm = (land_raw - GLOBAL_TEMPERATURE_MIN) / \
-            (GLOBAL_TEMPERATURE_MAX - GLOBAL_TEMPERATURE_MIN)
-        norm = np.clip(norm, 0, 1)
+    # 3. THERMAL DIFFUSION (Extrapolate landward temperatures out to sea)
+    # Isolate landmass thermal values and fill the ocean spaces with zeros
+    land_only_tm = np.where(land_mask, tm_clean, 0.0)
+    
+    # Smoothly blur both the mask and the values to create a fallback blend map
+    mask_blur = gaussian_filter(land_mask.astype(float), sigma=max(1, blend_radius / 2))
+    tm_blur = gaussian_filter(land_only_tm, sigma=max(1, blend_radius / 2))
+    
+    # Divide blurred values by blurred weights to extend true coastal trends outward
+    land_extended_tm = np.where(mask_blur > 1e-5, tm_blur / np.maximum(mask_blur, 1e-5), tm_clean)
 
-        # Apply Easing for terrestrial variation
-        eased = np.power(norm, 2.2)
+    # 4. GENERATE PLANETARY CURRENT GRADIENTS (Domain Warped Cosine Field)
+    rng = np.random.default_rng(noise_seed)
+    raw_noise = rng.normal(0, 1, size=(H, W))
+    current_noise = gaussian_filter(raw_noise, sigma=max(4, H / 12))
+    current_noise = (current_noise - current_noise.min()) / (current_noise.max() - current_noise.min()) * 2.0 - 1.0
 
-        # Map 0.0-1.0 to -50 to 120 range
-        final[land_mask] = (eased * 170 - 50).astype(int)
+    lats_base = np.linspace(max_lat, min_lat, H)
+    lats_grid = np.repeat(lats_base[:, np.newaxis], W, axis=1)
 
-    # --- OCEAN PROCESSING ---
-    if np.any(ocean_mask):
-        ocean_raw = tm_clean[ocean_mask]
-        norm_o = (ocean_raw - GLOBAL_TEMPERATURE_MIN) / \
-            (GLOBAL_TEMPERATURE_MAX - GLOBAL_TEMPERATURE_MIN)
-        norm_o = np.clip(norm_o, 0, 1)
-        eased_o = np.power(norm_o, 1.5)
-        final[ocean_mask] = (eased_o * 170 - 50).astype(int)
+    latitude_warp_amplitude = 12.0
+    warped_lats = lats_grid + (current_noise * latitude_warp_amplitude)
+    warped_lats = np.clip(warped_lats, -90, 90)
 
-    # Final clip to ensure no stray values hit world_gen.txt
+    ocean_synthetic = GLOBAL_TEMPERATURE_MIN + np.cos(np.radians(warped_lats)) * (GLOBAL_TEMPERATURE_MAX - GLOBAL_TEMPERATURE_MIN)
+    ocean_synthetic += current_noise * 4.0
+
+    # 5. REVOLUTIONIZED MARITIME BLENDING
+    dist_to_land = distance_transform_edt(~land_mask)
+    ocean_blend_weight = np.clip(dist_to_land / blend_radius, 0, 1)
+
+    tm_final = tm_clean.copy()
+    
+    # MAGIC SHIFT: Instead of blending raw ocean data, we blend our organic 
+    # extended coastal data with the deep-sea current model!
+    tm_final[~land_mask] = (
+        (1.0 - ocean_blend_weight[~land_mask]) * land_extended_tm[~land_mask] + 
+        ocean_blend_weight[~land_mask] * ocean_synthetic[~land_mask]
+    )
+
+    # 6. VARIABLE EXPONENT MATRIX (Maintains the seamless power easing curve)
+    dist_to_ocean = distance_transform_edt(land_mask)
+    weight_matrix = np.zeros_like(el_matrix, dtype=float)
+    weight_matrix[land_mask] = 0.5 + 0.5 * np.clip(dist_to_ocean[land_mask] / blend_radius, 0, 1)
+    weight_matrix[~land_mask] = 0.5 * (1.0 - np.clip(dist_to_land[~land_mask] / blend_radius, 0, 1))
+    
+    easing_powers = 1.5 + (2.2 - 1.5) * weight_matrix
+
+    # 7. UNIFIED MATRIX PARSING RUN
+    norm = (tm_final - GLOBAL_TEMPERATURE_MIN) / (GLOBAL_TEMPERATURE_MAX - GLOBAL_TEMPERATURE_MIN)
+    norm = np.clip(norm, 0, 1)
+    eased = np.power(norm, easing_powers)
+
+    final = (eased * 170 - 50).astype(int)
+
     return np.clip(final, -50, 120).astype(int)
 
 
