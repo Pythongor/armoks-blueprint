@@ -1,6 +1,27 @@
 import math
 import os
 
+def get_antimeridian_segments(bounds):
+    """
+    Checks if a bounding box crosses the antimeridian seam (-180/180).
+    Returns a tuple of (is_wrapped, left_bounds, right_bounds).
+    """
+    min_lon, min_lat, max_lon, max_lat = bounds
+    
+    # Seam cross on the western hemisphere boundary (-180)
+    if min_lon < -180 and max_lon > -180:
+        left = (min_lon + 360, min_lat, 180.0, max_lat)
+        right = (-180.0, min_lat, max_lon, max_lat)
+        return True, left, right
+        
+    # Seam cross on the eastern hemisphere boundary (180)
+    elif max_lon > 180 and min_lon < 180:
+        left = (min_lon, min_lat, 180.0, max_lat)
+        right = (-180.0, min_lat, max_lon - 360, max_lat)
+        return True, left, right
+        
+    return False, bounds, None
+
 
 def calculate_square_bounds(lat, lon, km_range):
     """Calculates Lon/Lat bounds to ensure a 1:1 physical aspect ratio."""

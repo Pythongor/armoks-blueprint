@@ -42,7 +42,7 @@ def normalize_to_df_temperature(tm_matrix, el_matrix, bounds, blend_radius=8, no
     extrapolating coastal land temperatures into shallow water tiles to prevent
     artificial thermal drops along the shoreline.
     """
-    min_lon, min_lat, max_lon, max_lat = bounds
+    _, min_lat, __, max_lat = bounds
     H, W = tm_matrix.shape
 
     # 1. Clean standard edge noise anomalies
@@ -116,34 +116,105 @@ def normalize_to_df_rainfall(matrix):
     return np.interp(matrix, [0, 3000], [0, 100]).astype(int)
 
 
-def calculate_drainage_advanced(raw_el, raw_tm, raw_rn):
-    # Clean inputs so they don't break the slope/climate balance
-    tm_c = clean_coastal_noise(raw_tm, invalid_val=-1000)
-    rn_c = clean_coastal_noise(raw_rn, invalid_val=-1)
+def normalize_to_df_drainage(matrix, el_matrix, nodata_val=-32768, blend_radius=8, fallback_drainage=50):
+    """
+    Normalizes SoilGrids Volumetric Water Content (wv0010) to Dwarf Fortress Drainage (0-100).
+    Smoothly extrapolates missing coastal data cells using the elevation matrix.
+    """
+    # 1. Establish a boolean mask for legitimate soil data cells
+    # SoilGrids utilizes -32768 for unmapped regions
+    valid_mask = (matrix != nodata_val) & (matrix >= 0)
+    
+    # --- COASTAL EDGE-CASE CODES ---
+    # Identify land pixels that are completely missing from the drainage matrix
+    land_mask = el_matrix >= 100
+    fringe_mask = land_mask & ~valid_mask
+    source_mask = land_mask & valid_mask
+    
+    working_matrix = matrix.copy().astype(float)
+    process_mask = valid_mask.copy()
+    
+    # Only run diffusion logic if there are coastal missing pixels and valid land to copy from
+    if np.any(fringe_mask) and np.any(source_mask):
+        land_only_vwc = np.where(source_mask, matrix, 0.0)
+        
+        mask_blur = gaussian_filter(source_mask.astype(float), sigma=max(1, blend_radius / 2))
+        vwc_blur = gaussian_filter(land_only_vwc, sigma=max(1, blend_radius / 2))
+        
+        # Diffuse adjacent land characteristics into ocean-fringe anomalies
+        extended_vwc = np.where(mask_blur > 1e-5, vwc_blur / np.maximum(mask_blur, 1e-5), 250.0)
+        
+        # Apply changes ONLY to the fringe pixels
+        working_matrix[fringe_mask] = extended_vwc[fringe_mask]
+        process_mask[fringe_mask] = True
+    # -------------------------------
+    
+    # 2. Populate the default output array with your fallback value
+    df_drainage = np.full(matrix.shape, fallback_drainage, dtype=np.uint8)
+    
+    # Short-circuit handle if the tile is completely blank (e.g., deep ocean or poles)
+    if not np.any(process_mask):
+        return df_drainage
+        
+    valid_vwc = working_matrix[process_mask]
+    
+    # 3. Define operational parameters based on soil science properties
+    # 50  = 5% VWC  -> Highly porous desert sand profiles
+    # 450 = 45% VWC -> Highly reflective, fluid-retaining clay/wetland profiles
+    vmin = 50
+    vmax = 450
+    
+    # Clamp extreme outlier variances to protect our scale boundaries
+    clipped_vwc = np.clip(valid_vwc, vmin, vmax)
+    
+    # 4. Apply inverse linear scaling: High Water Capacity equals Low Drainage Speed
+    # Formula transforms vmax into 0.0 and vmin into 1.0
+    normalized = (vmax - clipped_vwc) / (vmax - vmin)
+    
+    # Translate relative decimal float scales to the 0-100 integer grid
+    df_values = normalized * 100
+    
+    # 5. Overwrite the valid data indices into our output matrix
+    df_drainage[process_mask] = np.round(df_values).astype(np.uint8)
+    
+    return df_drainage
 
-    # 1. Slope (Topography)
-    slope_raw = np.abs(laplace(raw_el.astype(float)))
-    land_mask = raw_el >= 0
 
-    l_slope = slope_raw[land_mask]
-    l_slope_log = np.log1p(l_slope)
-
-    # Clip only the top 0.5% to stop coastal cliffs from ruining the scale
-    p1, p99_5 = np.percentile(l_slope_log, [0.5, 99.5])
-    slope_norm = np.interp(l_slope_log, [p1, p99_5], [10, 80])
-
-    # 2. Climate balance
-    l_tm = tm_c[land_mask] / 10.0
-    l_rn = rn_c[land_mask]
-    climate_factor = (l_tm * 1.5) - (l_rn / 40.0)
-
-    combined = slope_norm + climate_factor
-
-    final = np.full(raw_el.shape, 50, dtype=int)
-    final[land_mask] = np.interp(
-        combined, [combined.min(), combined.max()], [0, 100])
-
-    return final.astype(int)
+def map_to_df_climate(rainfall_array, geological_drainage_array, swamp_mitigation_gamma=0.65, drainage_floor=10):
+    """
+    Translates processed Earth data into 0-100 DF matrix values.
+    Includes gamma correction to clear out excessive wetlands and preserves sand deserts.
+    
+    Parameters:
+    - rainfall_array: Scaled 0-100 rainfall matrix
+    - geological_drainage_array: Scaled 0-100 raw drainage matrix from SoilGrids
+    - swamp_mitigation_gamma: Values < 1.0 push low values up, shrinking the 0-32 swamp bracket.
+                              Try 0.6 to 0.7 to drastically reduce swamps.
+    - drainage_floor: The absolute lowest drainage allowed outside of deserts.
+    """
+    df_rainfall = rainfall_array.copy()
+    
+    # 1. Normalize drainage to 0.0 - 1.0 to perform power-curve math safely
+    norm_drainage = np.clip(geological_drainage_array / 100.0, 0.0, 1.0)
+    
+    # 2. Apply Gamma Correction to thin out the lower brackets
+    # Example: if raw drainage is 15 (0.15 normalized), 0.15**0.65 = 0.29 (29 DF drainage)
+    # This pushes it right up to the edge of turning into a normal forest instead of a swamp!
+    calibrated_drainage = np.power(norm_drainage, swamp_mitigation_gamma) * 100.0
+    
+    # 3. Apply a defensive drainage floor for non-desert areas
+    # This prevents total stagnation in heavy clay/wet soil zones
+    calibrated_drainage = np.clip(calibrated_drainage, drainage_floor, 100)
+    
+    # 4. Re-apply the Hyper-Arid Desert Rule (DF Rainfall < 10)
+    # We use the UNTOUCHED raw geological drainage here so the Sahara remains a pure 0-32 Sand Desert
+    desert_mask = df_rainfall < 10
+    calibrated_drainage[desert_mask] = 32 - (geological_drainage_array[desert_mask] * 0.32)
+    
+    # Final boundary check
+    df_drainage = np.clip(calibrated_drainage, 0, 100).astype(np.int32)
+    
+    return df_rainfall, df_drainage
 
 
 def normalize_to_df_savagery(pop_matrix, el_matrix):

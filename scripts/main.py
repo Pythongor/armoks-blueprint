@@ -2,8 +2,8 @@ import argparse
 import os
 import sys
 from geo_utils import calculate_square_bounds
-from data_engine import extract_layer_from_single_tif, extract_elevation_matrix, extract_volcano_coords
-from df_translator import calculate_drainage_advanced, generate_volcano_layer, normalize_to_df_rainfall, normalize_to_df_savagery, normalize_to_df_temperature, normalize_to_df_elevation, format_as_world_gen, normalize_to_df_temperature
+from data_engine import extract_layer_from_single_tif, extract_elevation_matrix, extract_volcano_coords, extract_soilgrids_layer
+from df_translator import normalize_to_df_drainage, generate_volcano_layer, normalize_to_df_rainfall, normalize_to_df_savagery, normalize_to_df_temperature, normalize_to_df_elevation, format_as_world_gen, normalize_to_df_temperature, map_to_df_climate
 from library import get_region_data
 
 
@@ -68,6 +68,11 @@ def main():
     rain_tif = os.path.join("data", "worldclim", "wc2.1_30s_bio_12.tif")
     raw_rn = extract_layer_from_single_tif(bounds, args.size, rain_tif)
 
+    # Drainage (ISRIC SoilGrids250m 2.0)
+    print("🫗 Extracting drainage data...")
+    drainage_tif = os.path.join("data", "isric", "wv0010_0-5cm_mean.tif")
+    raw_dr = extract_soilgrids_layer(bounds, args.size, drainage_tif)
+
     # Volcanoes (HDX GVM GeoJSON)
     print("🌋 Extracting volcano data...")
     volcano_json = os.path.join("data", "gvm", "volcano.json")
@@ -84,9 +89,11 @@ def main():
     df_el = normalize_to_df_elevation(raw_el)
     df_tm = normalize_to_df_temperature(raw_tm, raw_el, bounds)
     df_rn = normalize_to_df_rainfall(raw_rn)
-    df_dr = calculate_drainage_advanced(raw_el, raw_tm, raw_rn)
+    df_dr = normalize_to_df_drainage(raw_dr, raw_el)
     df_vo = generate_volcano_layer(v_coords, args.size)
     df_sv = normalize_to_df_savagery(raw_pop, raw_el)
+    
+    df_rn, df_dr = map_to_df_climate(df_rn, df_dr)
 
     # Export
     output_text = format_as_world_gen(

@@ -3,9 +3,12 @@ import os
 import rasterio
 from rasterio.merge import merge
 from rasterio.mask import mask
+from rasterio.windows import from_bounds
+from rasterio.warp import reproject, Resampling
+from rasterio.transform import from_bounds as transform_from_bounds
 from shapely.geometry import box
 from scipy.ndimage import zoom
-from rasterio.windows import from_bounds
+from geo_utils import get_antimeridian_segments
 import numpy as np
 
 
@@ -97,45 +100,78 @@ def extract_elevation_matrix(bounds, target_size):
 
 def extract_layer_from_single_tif(bounds, target_size, tif_path):
     """Reads a specific area from a single global TIFF (Temp/Rain), handling antimeridian wrap."""
-    min_lon, min_lat, max_lon, max_lat = bounds
+    is_wrapped, part1, part2 = get_antimeridian_segments(bounds)
     
     with rasterio.open(tif_path) as src:
-        if min_lon < -180:
-            # LEFT HALF OF CANVAS: Asia / Australia (Shifted into standard [10, 180] space)
-            left_bounds = (min_lon + 360, min_lat, 180.0, max_lat)
-            left_window = from_bounds(*left_bounds, transform=src.transform)
-            left_data = src.read(1, window=left_window, boundless=True, fill_value=-9999)
+        if is_wrapped:
+            window1 = from_bounds(*part1, transform=src.transform)
+            data1 = src.read(1, window=window1, boundless=True, fill_value=-9999)
             
-            # RIGHT HALF OF CANVAS: Americas / Atlantic (Standard [-180, 10] space)
-            right_bounds = (-180.0, min_lat, max_lon, max_lat)
-            right_window = from_bounds(*right_bounds, transform=src.transform)
-            right_data = src.read(1, window=right_window, boundless=True, fill_value=-9999)
+            window2 = from_bounds(*part2, transform=src.transform)
+            data2 = src.read(1, window=window2, boundless=True, fill_value=-9999)
             
-            data = np.hstack((left_data, right_data))
-            
-        elif max_lon > 180:
-            # Left Half of canvas
-            left_bounds = (min_lon, min_lat, 180.0, max_lat)
-            left_window = from_bounds(*left_bounds, transform=src.transform)
-            left_data = src.read(1, window=left_window, boundless=True, fill_value=-9999)
-            
-            # Right Half of canvas
-            right_bounds = (-180.0, min_lat, max_lon - 360, max_lat)
-            right_window = from_bounds(*right_bounds, transform=src.transform)
-            right_data = src.read(1, window=right_window, boundless=True, fill_value=-9999)
-            
-            data = np.hstack((left_data, right_data))
+            data = np.hstack((data1, data2))
         else:
-            # Standard map within flat [-180, 180] limits
             window = from_bounds(*bounds, transform=src.transform)
             data = src.read(1, window=window, boundless=True, fill_value=-9999)
 
-    # Resample compiled data matrix to your exact canvas size
+    # Resample compiled data matrix to exact canvas size
     h, w = data.shape
     resampled = zoom(data, (target_size / h, target_size / w),
                      order=1, mode='grid-constant', grid_mode=True)
 
     return resampled[:target_size, :target_size]
+
+
+def extract_soilgrids_layer(bounds, target_size, tif_path):
+    """
+    Specialized extractor for SoilGrids Homolosine TIFFs.
+    Directly reprojects the coordinate system to WGS84 (EPSG:4326) and 
+    resamples to the target canvas size in a single, stable step.
+    """
+    min_lon, min_lat, max_lon, max_lat = bounds
+    total_lon_span = max_lon - min_lon
+    
+    is_wrapped, left_bounds, right_bounds = get_antimeridian_segments(bounds)
+    
+    with rasterio.open(tif_path) as src:
+        
+        def project_bounds_to_array(bbox, out_shape):
+            dst_crs = 'EPSG:4326'
+            dst_transform = transform_from_bounds(*bbox, out_shape[1], out_shape[0])
+            destination = np.full(out_shape, -9999, dtype=src.meta['dtype'])
+            
+            reproject(
+                source=rasterio.band(src, 1),
+                destination=destination,
+                src_transform=src.transform,
+                src_crs=src.crs,
+                dst_transform=dst_transform,
+                dst_crs=dst_crs,
+                resampling=Resampling.bilinear,
+                dst_nodata=-9999
+            )
+            return destination
+
+        if is_wrapped:
+            # Notice that for both left and right wraps, left_span translates to 180.0 - left_bounds[0]
+            left_span = 180.0 - left_bounds[0]
+            
+            left_w = int(round(target_size * (left_span / total_lon_span)))
+            left_w = max(1, min(target_size - 1, left_w)) # Defensive boundary guard
+            right_w = target_size - left_w
+            
+            left_data = project_bounds_to_array(left_bounds, (target_size, left_w))
+            right_data = project_bounds_to_array(right_bounds, (target_size, right_w))
+            
+            return np.hstack((left_data, right_data))
+        else:
+            # Standard map or fully shifted bounding boxes that don't cross the line but are offset
+            if min_lon < -180 or max_lon > 180:
+                norm_min_lon = ((min_lon + 180) % 360) - 180
+                bounds = (norm_min_lon, min_lat, norm_min_lon + total_lon_span, max_lat)
+                
+            return project_bounds_to_array(bounds, (target_size, target_size))
 
 
 def extract_volcano_coords(bounds, target_size, file_path, km_range=1000):
